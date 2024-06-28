@@ -1,5 +1,6 @@
 package ru.bluewater.centralbankopencodeproject.entity;
 
+import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
@@ -11,7 +12,11 @@ import java.util.Date;
 import java.util.UUID;
 
 @XmlAccessorType(XmlAccessType.FIELD)
+@Entity
 public class ParticipantInfo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID uuid;
     @XmlAttribute(name = "NameP")
     private String nameP;
     @XmlAttribute(name = "CntrCd")
@@ -40,6 +45,8 @@ public class ParticipantInfo {
     @XmlAttribute(name = "ParticipantStatus")
     private String participantStatus;
     @XmlAttribute(name = "RstrList")
+    @OneToOne
+    @JoinColumn(name = "rstr_list_uuid")
     private RstrList rstrList;
 
 }
