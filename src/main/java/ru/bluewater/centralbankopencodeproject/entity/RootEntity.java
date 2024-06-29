@@ -1,7 +1,7 @@
 package ru.bluewater.centralbankopencodeproject.entity;
 
 import jakarta.persistence.*;
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 import jakarta.xml.bind.annotation.*;
 import lombok.*;
 import ru.bluewater.centralbankopencodeproject.util.ValidateRootEntityUtil;

@@ -1,25 +1,25 @@
 package ru.bluewater.centralbankopencodeproject.util;
 
 public class ValidateRootEntityUtil {
-    public static String ED_AUTHOR_INVALID =
+    private final static String ED_AUTHOR_INVALID =
             "EDAuthor should be in 999999999 to 9999999999";
-    public static String ED_NO_INVALID =
+    private final static String ED_NO_INVALID =
             "number of electronic message (EDNo) should be in 0 to 999999999 range";
-    public static String CREATION_REASON_INVALID =
+    private final static String CREATION_REASON_INVALID =
             "creation reason code (CreationReason) length should be 4";
-    public static String INFO_TYPE_CODE_INVALID =
+    private final static String INFO_TYPE_CODE_INVALID =
             "type of information presentation code (InfoTypeCode) length should be 4";
-    public static String DIRECTORY_VERSION_INVALID =
+    private final static String DIRECTORY_VERSION_INVALID =
             "directory BIC Version (DirectoryVersion) should be in range 0 to 99";
-    public static IllegalArgumentException EDAuthorException =
+    public final static IllegalArgumentException EDAuthorException =
             new IllegalArgumentException(ED_AUTHOR_INVALID);
-    public static IllegalArgumentException EDNoException =
+    public final static IllegalArgumentException EDNoException =
             new IllegalArgumentException(ED_NO_INVALID);
-    public static IllegalArgumentException creationReasonException =
+    public final static IllegalArgumentException creationReasonException =
             new IllegalArgumentException(CREATION_REASON_INVALID);
-    public static IllegalArgumentException infoTypeCodeException =
+    public final static IllegalArgumentException infoTypeCodeException =
             new IllegalArgumentException(INFO_TYPE_CODE_INVALID);
-    public static IllegalArgumentException directoryVersionException =
+    public final static IllegalArgumentException directoryVersionException =
             new IllegalArgumentException(DIRECTORY_VERSION_INVALID);
     public static boolean isEDNumberType(int value){
         return value >= 0 && value <= 999999999;
