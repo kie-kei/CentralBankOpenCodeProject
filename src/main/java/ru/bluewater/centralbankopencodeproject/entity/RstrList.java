@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
@@ -20,6 +21,7 @@ public class RstrList {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     @XmlAttribute(name = "Rstr")
+    @Size(min = 4, max = 4, message = "Rstr length should be 4")
     private String rstr;
     @XmlAttribute(name = "RstrDate")
     @XmlSchemaType(name = "date")

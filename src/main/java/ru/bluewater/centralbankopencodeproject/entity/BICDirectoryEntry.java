@@ -1,7 +1,10 @@
 package ru.bluewater.centralbankopencodeproject.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
@@ -16,6 +19,9 @@ public class BICDirectoryEntry {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     @XmlAttribute(name = "BIC")
+    @JsonProperty("BIC")
+    @Min(value = 100000000)
+    @Max(value = 999999999)
     private String BIC;
     @XmlAttribute(name = "ParticipantInfo")
     @OneToOne
