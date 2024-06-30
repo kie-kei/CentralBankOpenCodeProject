@@ -9,5 +9,4 @@ import java.util.UUID;
 
 @Validated
 public interface RootEntityRepository extends JpaRepository<RootEntity, UUID> {
-
 }

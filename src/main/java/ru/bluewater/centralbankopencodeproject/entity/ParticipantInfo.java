@@ -1,29 +1,32 @@
 package ru.bluewater.centralbankopencodeproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlSchemaType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import lombok.*;
+import org.springframework.cglib.core.Local;
+import ru.bluewater.centralbankopencodeproject.util.adapter.LocalDateAdapter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@EqualsAndHashCode(exclude = "bicDirectoryEntry")
+@Entity(name = "participant_info")
 public class ParticipantInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @XmlTransient
     private UUID uuid;
 
     @XmlAttribute(name = "NameP")
@@ -65,12 +68,14 @@ public class ParticipantInfo {
 
     @XmlAttribute(name = "DateIn")
     @XmlSchemaType(name = "date")
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
     @NotNull(message = "dateIn should be not null")
-    private Date dateIn;
+    private LocalDate dateIn;
 
     @XmlAttribute(name = "DateOut")
     @XmlSchemaType(name = "date")
-    private Date dateOut;
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private LocalDate dateOut;
 
     @XmlAttribute(name = "PtType")
     @Size(min = 1, max = 2, message = "PtType length should be from 1 to 2")
@@ -98,8 +103,13 @@ public class ParticipantInfo {
     @Size(max = 4, message = "ParticipantStatus length should be 4")
     private String participantStatus;
 
-    @XmlAttribute(name = "RstrList")
-    @OneToOne
-    @JoinColumn(name = "rstr_list_uuid")
+    @XmlElement(name = "RstrList")
+    @OneToOne(mappedBy = "participantInfo")
     private RstrList rstrList;
+
+    @JsonIgnore
+    @XmlTransient
+    @OneToOne
+    @JoinColumn(name = "participant_info_uuid")
+    private BICDirectoryEntry bicDirectoryEntry;
 }

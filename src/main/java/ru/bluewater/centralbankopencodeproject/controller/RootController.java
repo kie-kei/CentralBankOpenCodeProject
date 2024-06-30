@@ -13,6 +13,7 @@ import ru.bluewater.centralbankopencodeproject.respository.AccountsRepository;
 import ru.bluewater.centralbankopencodeproject.respository.ParticipantInfoRepository;
 import ru.bluewater.centralbankopencodeproject.service.RootService;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @RestController
@@ -46,8 +47,8 @@ public class RootController {
                 .accountCBRBIC("dsa")
                 .accountStatus("asd")
                 .CK("das")
-                .dateOut(new Date())
-                .dateIn(new Date())
+                .dateOut(LocalDate.now())
+                .dateIn(LocalDate.now())
                 .regulationAccountType("dsa")
                 .build();
         accountsRepository.save(test);

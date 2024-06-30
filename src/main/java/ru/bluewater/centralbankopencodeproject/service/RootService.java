@@ -8,6 +8,8 @@ import org.springframework.validation.annotation.Validated;
 import ru.bluewater.centralbankopencodeproject.entity.RootEntity;
 import ru.bluewater.centralbankopencodeproject.respository.RootEntityRepository;
 
+import java.util.UUID;
+
 @Service
 @Validated
 public class RootService {
@@ -21,5 +23,9 @@ public class RootService {
     @Transactional
     public RootEntity saveRootEntity(@Valid RootEntity rootEntity){
         return repository.save(rootEntity);
+    }
+    @Transactional
+    public RootEntity findRootByUuid(UUID uuid){
+        return repository.findById(uuid).get();
     }
 }

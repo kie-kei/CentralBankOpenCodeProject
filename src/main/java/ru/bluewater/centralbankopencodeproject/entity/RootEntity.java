@@ -1,5 +1,6 @@
 package ru.bluewater.centralbankopencodeproject.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -7,32 +8,34 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import lombok.*;
+import ru.bluewater.centralbankopencodeproject.util.adapter.LocalDateAdapter;
+import ru.bluewater.centralbankopencodeproject.util.adapter.ZonedDateTimeAdapter;
 
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 
-@XmlRootElement(name = "ED807")
+@XmlRootElement(name = "ED807", namespace = "urn:cbr-ru:ed:v2.0")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity(name = "ed807")
 public class RootEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @XmlTransient
     private UUID uuid;
 
-    @XmlAttribute(name = "BicDirectoryEntry")
-    @OneToMany
-    @JoinColumn(name = "bic_directory_entry_uuid")
+    @XmlElement(name = "BICDirectoryEntry")
+    @OneToMany(mappedBy = "rootEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<BICDirectoryEntry> bicDirectoryEntry;
-
-    @XmlAttribute(name = "xmlns")
-    private String xmlns;
 
     @JsonProperty("EDNo")
     @XmlAttribute(name = "EDNo")
@@ -46,7 +49,8 @@ public class RootEntity {
     @XmlSchemaType(name = "date")
     @Temporal(TemporalType.DATE)
     @NotNull(message = "EDDate should be not null")
-    private Date EDDate; // dateOfCompilationElectronicMessage format YYYY-MM-DD
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private LocalDate EDDate; // dateOfCompilationElectronicMessage format YYYY-MM-DD
 
     @JsonProperty("EDAuthor")
     @XmlAttribute(name = "EDAuthor")
@@ -62,9 +66,9 @@ public class RootEntity {
 
     @XmlAttribute(name = "CreationDateTime")
     @XmlSchemaType(name = "dateTime")
-    @Temporal(TemporalType.TIMESTAMP)
+    @XmlJavaTypeAdapter(ZonedDateTimeAdapter.class)
     @NotNull(message = "creationDateTime should be not null")
-    private Date creationDateTime; // electronicMessageCreationDateTime format YYYY-MM-DDThh:mm:ssZ
+    private ZonedDateTime creationDateTime; // electronicMessageCreationDateTime format YYYY-MM-DDThh:mm:ssZ
 
     @XmlAttribute(name = "InfoTypeCode")
     @Column(nullable = false, length = 4)
@@ -73,9 +77,10 @@ public class RootEntity {
 
     @XmlAttribute(name = "BusinessDay")
     @XmlSchemaType(name = "date")
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
     @Temporal(TemporalType.DATE)
     @NotNull(message = "businessDay should be not null")
-    private Date businessDay; // format YYYY-MM-DD
+    private LocalDate businessDay; // format YYYY-MM-DD
 
     @XmlAttribute(name = "DirectoryVersion")
     @Column

@@ -1,33 +1,31 @@
 package ru.bluewater.centralbankopencodeproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlSchemaType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import lombok.*;
+import ru.bluewater.centralbankopencodeproject.util.adapter.LocalDateAdapter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 @XmlAccessorType(XmlAccessType.FIELD)
-@Data
+@Getter
+@Setter
 @Builder
+@EqualsAndHashCode(exclude = "bicDirectoryEntry")
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "accounts")
 public class Accounts {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @XmlTransient
     private UUID uuid;
 
     @XmlAttribute(name = "Account")
@@ -52,15 +50,23 @@ public class Accounts {
 
     @XmlAttribute(name = "DateIn")
     @XmlSchemaType(name = "date")
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
     @NotNull(message = "DateIn should be not null")
-    private Date dateIn;
+    private LocalDate dateIn;
 
     @XmlAttribute(name = "DateOut")
     @XmlSchemaType(name = "date")
-    private Date dateOut;
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private LocalDate dateOut;
 
     @XmlAttribute(name = "AccountStatus")
     @Size(min = 4, max = 4, message = "AccountStatus length should be 4")
     private String accountStatus;
+
+    @XmlTransient
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "bic_directory_entry_uuid")
+    private BICDirectoryEntry bicDirectoryEntry;
 
 }
