@@ -33,6 +33,9 @@ public class RootEntity {
     @XmlTransient
     private UUID uuid;
 
+    @XmlTransient
+    private String fileName;
+
     @XmlElement(name = "BICDirectoryEntry")
     @OneToMany(mappedBy = "rootEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<BICDirectoryEntry> bicDirectoryEntry;

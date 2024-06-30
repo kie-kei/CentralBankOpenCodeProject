@@ -11,6 +11,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import ru.bluewater.centralbankopencodeproject.api.dto.response.FileUploadResponseDTO;
+import ru.bluewater.centralbankopencodeproject.api.dto.service.FileResourceWithNameDTO;
 import ru.bluewater.centralbankopencodeproject.entity.Accounts;
 import ru.bluewater.centralbankopencodeproject.entity.BICDirectoryEntry;
 import ru.bluewater.centralbankopencodeproject.entity.ParticipantInfo;
@@ -42,9 +44,9 @@ public class FileService {
     }
 
     @Transactional
-    public void createRootFromFile(MultipartFile multipartFile) throws JAXBException, IOException {
+    public FileUploadResponseDTO createRootFromFile(MultipartFile multipartFile) throws JAXBException, IOException {
         RootEntity rootEntity = XmlParser.fromXmlFile(multipartFile.getInputStream());
-        
+        rootEntity.setFileName(multipartFile.getOriginalFilename());
         logger.info("rootEntity saved");
 
         for (BICDirectoryEntry entry : rootEntity.getBicDirectoryEntry()) {
@@ -62,8 +64,10 @@ public class FileService {
             }
             bicDirectoryEntryService.createBICDirectoryEntry(entry);
         }
-        
+
         rootService.saveRootEntity(rootEntity);
+
+        return new FileUploadResponseDTO(rootEntity.getUuid());
     }
 
     public RootEntity getFileContentByUuid(UUID uuid){
@@ -72,10 +76,10 @@ public class FileService {
         return rootEntity;
     }
     @SneakyThrows
-    public Resource getFileByUuid(UUID uuid) {
+    public FileResourceWithNameDTO getFileByUuid(UUID uuid) {
         var rootEntity = rootService.findRootByUuid(uuid);
         var content = XmlParser.toXml(rootEntity);
         var resource = new ByteArrayResource(content.getBytes());
-        return resource;
+        return new FileResourceWithNameDTO(resource, rootEntity.getFileName());
     }
 }

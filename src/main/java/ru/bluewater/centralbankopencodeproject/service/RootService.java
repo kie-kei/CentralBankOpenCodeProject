@@ -21,11 +21,11 @@ public class RootService {
     }
 
     @Transactional
-    public RootEntity saveRootEntity(@Valid RootEntity rootEntity){
+    public RootEntity saveRootEntity(@Valid RootEntity rootEntity) {
         return repository.save(rootEntity);
     }
     @Transactional
-    public RootEntity findRootByUuid(UUID uuid){
+    public RootEntity findRootByUuid(UUID uuid) {
         return repository.findById(uuid).get();
     }
 }

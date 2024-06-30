@@ -17,7 +17,6 @@ public class BICDirectoryEntryService {
         this.bicDirectoryEntryRepository = bicDirectoryEntryRepository;
     }
     @Transactional
-
     public void createBICDirectoryEntry(BICDirectoryEntry bicDirectoryEntry){
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
         log.debug(bicDirectoryEntry + "saved");

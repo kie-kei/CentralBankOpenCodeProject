@@ -30,7 +30,7 @@ public class RootController {
         this.participantInfoRepository = participantInfoRepository;
     }
     @GetMapping
-    public ResponseEntity<?> test(){
+    public ResponseEntity<?> test() {
 //        var test = RootEntity.builder()
 //                .EDDate(new Date())
 //                .creationReason("123")
@@ -55,7 +55,7 @@ public class RootController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<?> createRoot(@Valid @RequestBody ParticipantInfo rootEntity){
+    public ResponseEntity<?> createRoot(@Valid @RequestBody ParticipantInfo rootEntity) {
 //        rootService.saveRootEntity(rootEntity);
 //        accountsRepository.save(rootEntity);
         participantInfoRepository.save(rootEntity);
