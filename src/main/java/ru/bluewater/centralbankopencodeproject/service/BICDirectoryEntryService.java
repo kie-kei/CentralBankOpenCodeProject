@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bluewater.centralbankopencodeproject.entity.BICDirectoryEntry;
+import ru.bluewater.centralbankopencodeproject.entity.BICDirectoryEntryEntity;
 import ru.bluewater.centralbankopencodeproject.respository.BICDirectoryEntryRepository;
 
 @Service
@@ -17,8 +17,8 @@ public class BICDirectoryEntryService {
         this.bicDirectoryEntryRepository = bicDirectoryEntryRepository;
     }
     @Transactional
-    public void createBICDirectoryEntry(BICDirectoryEntry bicDirectoryEntry){
-        bicDirectoryEntryRepository.save(bicDirectoryEntry);
-        log.debug(bicDirectoryEntry + "saved");
+    public void createBICDirectoryEntry(BICDirectoryEntryEntity bicDirectoryEntryEntity){
+        bicDirectoryEntryRepository.save(bicDirectoryEntryEntity);
+        log.debug(bicDirectoryEntryEntity + "saved");
     }
 }

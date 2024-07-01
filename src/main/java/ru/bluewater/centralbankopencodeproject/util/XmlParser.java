@@ -1,35 +1,33 @@
 package ru.bluewater.centralbankopencodeproject.util;
 
 import jakarta.xml.bind.*;
-import org.glassfish.jaxb.core.marshaller.CharacterEscapeHandler;
-import org.glassfish.jaxb.core.marshaller.DumbEscapeHandler;
-import ru.bluewater.centralbankopencodeproject.entity.RootEntity;
+import ru.bluewater.centralbankopencodeproject.entity.xml.ED807;
 
 import java.io.*;
 
 public class XmlParser {
 
     private static JAXBContext getContext() throws JAXBException {
-        return JAXBContext.newInstance(RootEntity.class);
+            return JAXBContext.newInstance(ED807.class);
     }
 
-    public static String toXml(RootEntity rootEntity) throws JAXBException {
+    public static String toXml(ED807 ed807) throws JAXBException {
         JAXBContext context = getContext();
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
 
         StringWriter writer = new StringWriter();
-        marshaller.marshal(rootEntity, writer);
+        marshaller.marshal(ed807, writer);
         String xmlString = writer.toString();
 
         return xmlString.replace("&quot;", "\"") ;
     }
 
-    public static RootEntity fromXmlFile(InputStream inputStream) throws JAXBException {
+    public static ED807 fromXmlFile(InputStream inputStream) throws JAXBException {
         JAXBContext context = getContext();
         Unmarshaller unmarshaller = context.createUnmarshaller();
 
-        return (RootEntity) unmarshaller.unmarshal(inputStream);
+        return (ED807) unmarshaller.unmarshal(inputStream);
     }
 }

@@ -1,13 +1,9 @@
 package ru.bluewater.centralbankopencodeproject.entity;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import jakarta.xml.bind.annotation.*;
+
 import lombok.*;
 
 import java.util.List;
@@ -20,29 +16,30 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"rootEntity"})
-@XmlAccessorType(XmlAccessType.FIELD)
-public class BICDirectoryEntry {
+public class BICDirectoryEntryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @XmlTransient
     private UUID uuid;
 
-    @XmlAttribute(name = "BIC")
-    @JsonProperty("BIC")
     @Size(min = 9, max = 9, message = "BIC length should be 9")
+    @NotNull(message = "BIC should be not null")
     private String BIC;
 
-    @XmlElement(name = "ParticipantInfo")
+    @Size(min = 4, max = 4, message = "changeType length should be 4")
+    private String changeType;
+
+    @NotNull(message = "participantInfo should be not null")
     @OneToOne(mappedBy = "bicDirectoryEntry", cascade = CascadeType.ALL)
-    private ParticipantInfo participantInfo;
+    private ParticipantInfoEntity participantInfo;
 
     @OneToMany(mappedBy = "bicDirectoryEntry", cascade = CascadeType.ALL)
-    @XmlElement(name = "Accounts")
-    private List<Accounts> accounts;
+    private List<AccountsEntity> accounts;
 
-    @JsonIgnore
-    @XmlTransient
+    @OneToMany(mappedBy = "bicDirectoryEntry", cascade = CascadeType.ALL)
+    private List<SWBICSEntity> swbics;
+
     @ManyToOne
     @JoinColumn(name = "root_entity_uuid", referencedColumnName = "uuid")
     private RootEntity rootEntity;
+
 }

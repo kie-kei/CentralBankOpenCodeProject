@@ -6,21 +6,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.bluewater.centralbankopencodeproject.api.dto.response.FileUploadResponseDTO;
+import ru.bluewater.centralbankopencodeproject.api.dto.response.RootResponseDTO;
 import ru.bluewater.centralbankopencodeproject.api.dto.service.FileResourceWithNameDTO;
-import ru.bluewater.centralbankopencodeproject.entity.Accounts;
-import ru.bluewater.centralbankopencodeproject.entity.BICDirectoryEntry;
-import ru.bluewater.centralbankopencodeproject.entity.ParticipantInfo;
 import ru.bluewater.centralbankopencodeproject.entity.RootEntity;
+import ru.bluewater.centralbankopencodeproject.entity.xml.ED807;
+import ru.bluewater.centralbankopencodeproject.mapper.entity.RootEntityMapper;
+import ru.bluewater.centralbankopencodeproject.mapper.xml.ED807Mapper;
 import ru.bluewater.centralbankopencodeproject.util.XmlParser;
 
 import java.io.IOException;
-import java.util.List;
+import java.net.URI;
 import java.util.UUID;
 
 @Service
@@ -29,56 +30,45 @@ public class FileService {
     private final RootService rootService;
     private final ParticipantInfoService participantInfoService;
     private final BICDirectoryEntryService bicDirectoryEntryService;
-    private final AccountsService accountsService;
-    private final RstrListService rstrListService;
-    
+
+    private final ED807Mapper ed807Mapper;
+    private final RootEntityMapper rootEntityMapper;
+    private final URI centralBankURI = URI.create("https://cbr.ru/s/newbik");
+
+    @Value("${destination.dir}")
+    private String destinationToZip;
     private Logger logger = LoggerFactory.getLogger("fileService logger");
 
     @Autowired
-    public FileService(RootService rootService, ParticipantInfoService participantInfoService, BICDirectoryEntryService bicDirectoryEntryService, AccountsService accountsService, RstrListService rstrListService) {
+    public FileService(RootService rootService, ParticipantInfoService participantInfoService, BICDirectoryEntryService bicDirectoryEntryService, ED807Mapper ed807Mapper, RootEntityMapper rootEntityMapper) {
         this.rootService = rootService;
         this.participantInfoService = participantInfoService;
         this.bicDirectoryEntryService = bicDirectoryEntryService;
-        this.accountsService = accountsService;
-        this.rstrListService = rstrListService;
+        this.ed807Mapper = ed807Mapper;
+        this.rootEntityMapper = rootEntityMapper;
     }
 
     @Transactional
     public FileUploadResponseDTO createRootFromFile(MultipartFile multipartFile) throws JAXBException, IOException {
-        RootEntity rootEntity = XmlParser.fromXmlFile(multipartFile.getInputStream());
+        ED807 ed807 = XmlParser.fromXmlFile(multipartFile.getInputStream());
+        RootEntity rootEntity = ed807Mapper.toRootEntity(ed807);
         rootEntity.setFileName(multipartFile.getOriginalFilename());
         logger.info("rootEntity saved");
-
-        for (BICDirectoryEntry entry : rootEntity.getBicDirectoryEntry()) {
-            entry.setRootEntity(rootEntity);
-            ParticipantInfo participantInfo = entry.getParticipantInfo();
-            List<Accounts> accounts = entry.getAccounts();
-            if (participantInfo != null && participantInfo.getUuid() == null) {
-                participantInfo.setBicDirectoryEntry(entry);
-                participantInfoService.createParticipantInfo(participantInfo);
-            }
-            if(accounts != null){
-                for(Accounts acc: accounts){
-                    acc.setBicDirectoryEntry(entry);
-                }
-            }
-            bicDirectoryEntryService.createBICDirectoryEntry(entry);
-        }
 
         rootService.saveRootEntity(rootEntity);
 
         return new FileUploadResponseDTO(rootEntity.getUuid());
     }
 
-    public RootEntity getFileContentByUuid(UUID uuid){
+    public RootResponseDTO getFileContentByUuid(UUID uuid){
         RootEntity rootEntity = rootService.findRootByUuid(uuid);
         logger.info(rootEntity.getBicDirectoryEntry().toString());
-        return rootEntity;
+        return rootEntityMapper.toRootResponseDTO(rootEntity);
     }
     @SneakyThrows
     public FileResourceWithNameDTO getFileByUuid(UUID uuid) {
         var rootEntity = rootService.findRootByUuid(uuid);
-        var content = XmlParser.toXml(rootEntity);
+        var content = XmlParser.toXml(ed807Mapper.toED807(rootEntity));
         var resource = new ByteArrayResource(content.getBytes());
         return new FileResourceWithNameDTO(resource, rootEntity.getFileName());
     }

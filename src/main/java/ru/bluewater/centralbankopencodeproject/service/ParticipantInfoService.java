@@ -3,9 +3,11 @@ package ru.bluewater.centralbankopencodeproject.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bluewater.centralbankopencodeproject.entity.ParticipantInfo;
-import ru.bluewater.centralbankopencodeproject.entity.RstrList;
+import ru.bluewater.centralbankopencodeproject.entity.ParticipantInfoEntity;
+import ru.bluewater.centralbankopencodeproject.entity.RstrListEntity;
 import ru.bluewater.centralbankopencodeproject.respository.ParticipantInfoRepository;
+
+import java.util.List;
 
 @Service
 public class ParticipantInfoService {
@@ -19,11 +21,12 @@ public class ParticipantInfoService {
     }
 
     @Transactional
-    public ParticipantInfo createParticipantInfo(ParticipantInfo participantInfo){
-        RstrList rstrList = participantInfo.getRstrList();
-        if (rstrList != null && rstrList.getUuid() == null) {
-            rstrListService.createRstrList(rstrList);
+    public ParticipantInfoEntity createParticipantInfo(ParticipantInfoEntity participantInfoEntity){
+        List<RstrListEntity> list = participantInfoEntity.getRstrList();
+        if (list != null) {
+            for(RstrListEntity rstrList: list)
+                rstrListService.createRstrList(rstrList);
         }
-        return repository.save(participantInfo);
+        return repository.save(participantInfoEntity);
     }
 }

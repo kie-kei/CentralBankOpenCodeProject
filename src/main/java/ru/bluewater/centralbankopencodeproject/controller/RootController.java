@@ -1,20 +1,17 @@
 package ru.bluewater.centralbankopencodeproject.controller;
 
-import jakarta.persistence.criteria.Root;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.bluewater.centralbankopencodeproject.entity.Accounts;
-import ru.bluewater.centralbankopencodeproject.entity.ParticipantInfo;
-import ru.bluewater.centralbankopencodeproject.entity.RootEntity;
+import ru.bluewater.centralbankopencodeproject.entity.AccountsEntity;
+import ru.bluewater.centralbankopencodeproject.entity.ParticipantInfoEntity;
 import ru.bluewater.centralbankopencodeproject.respository.AccountsRepository;
 import ru.bluewater.centralbankopencodeproject.respository.ParticipantInfoRepository;
 import ru.bluewater.centralbankopencodeproject.service.RootService;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/v1/root")
@@ -42,7 +39,7 @@ public class RootController {
 //                .creationDateTime(new Date())
 //                .build();
 //        rootService.saveRootEntity(test);
-        var test = Accounts.builder()
+        var test = AccountsEntity.builder()
                 .account("sdfa")
                 .accountCBRBIC("dsa")
                 .accountStatus("asd")
@@ -55,7 +52,7 @@ public class RootController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<?> createRoot(@Valid @RequestBody ParticipantInfo rootEntity) {
+    public ResponseEntity<?> createRoot(@Valid @RequestBody ParticipantInfoEntity rootEntity) {
 //        rootService.saveRootEntity(rootEntity);
 //        accountsRepository.save(rootEntity);
         participantInfoRepository.save(rootEntity);
