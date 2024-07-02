@@ -23,10 +23,10 @@ public class ParticipantInfoService {
     @Transactional
     public ParticipantInfoEntity createParticipantInfo(ParticipantInfoEntity participantInfoEntity){
         List<RstrListEntity> list = participantInfoEntity.getRstrList();
-        if (list != null) {
-            for(RstrListEntity rstrList: list)
-                rstrListService.createRstrList(rstrList);
-        }
+
+        if (list != null)
+            list.forEach(rstrListService::createRstrList);
+
         return repository.save(participantInfoEntity);
     }
 }

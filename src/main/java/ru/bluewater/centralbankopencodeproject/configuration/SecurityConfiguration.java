@@ -55,16 +55,13 @@ public class SecurityConfiguration {
 
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/v1/").permitAll();
+                    auth.requestMatchers("/**").permitAll(); // Разрешить доступ к консоли H2
+                    auth.anyRequest().authenticated();
+                })
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
-                    auth.anyRequest().permitAll();
-
-                });
-
-        http.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
-        http.sessionManagement(
-                session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        );
 
         return http.build();
     }

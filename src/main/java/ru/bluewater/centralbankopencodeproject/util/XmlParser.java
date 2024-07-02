@@ -19,9 +19,8 @@ public class XmlParser {
 
         StringWriter writer = new StringWriter();
         marshaller.marshal(ed807, writer);
-        String xmlString = writer.toString();
 
-        return xmlString.replace("&quot;", "\"") ;
+        return writer.toString();
     }
 
     public static ED807 fromXmlFile(InputStream inputStream) throws JAXBException {

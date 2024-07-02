@@ -40,6 +40,12 @@ public class FileController {
             return ResponseEntity.status(500).body("Error parsing XML file: " + e.getMessage());
         }
     }
+
+    @PostMapping("/cbr")
+    public ResponseEntity<FileUploadResponseDTO> uploadXmlFromCBR() {
+        return ResponseEntity.ok(fileService.createRootFromCBR());
+    }
+
     @GetMapping("/download/{uuid}")
     public ResponseEntity<Resource> getFile(@PathVariable("uuid") UUID uuid) {
         FileResourceWithNameDTO fileResourceWithNameDTO = fileService.getFileByUuid(uuid);
