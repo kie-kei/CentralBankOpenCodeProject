@@ -1,12 +1,10 @@
 package ru.bluewater.centralbankrestsrc.service;
 
 import jakarta.xml.bind.JAXBException;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +14,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import ru.bluewater.centralbankrestapi.api.dto.request.FileRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.FileUploadResponseDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.RootResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.service.FileResourceWithNameDTO;
 import ru.bluewater.centralbankrestapi.api.exception.CbrException;
-import ru.bluewater.centralbankrestapi.api.exception.FileNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.IncorrectFileTypeException;
 import ru.bluewater.centralbankrestsrc.entity.RootEntity;
 import ru.bluewater.centralbankrestsrc.entity.xml.ED807;
@@ -31,8 +28,6 @@ import ru.bluewater.centralbankrestsrc.util.XmlParser;
 import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
-import java.time.LocalDate;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -63,7 +58,7 @@ public class FileService {
             JAXBException, IOException, IncorrectFileTypeException
     {
         RootEntity rootEntity = rootFromMultipart(requestDTO.getFile());
-        rootService.saveRootEntity(rootEntity, principal);
+        rootService.createRootEntity(rootEntity, principal);
 
         return FileUploadResponseDTO.builder()
                 .uuid(rootEntity.getUuid())
@@ -82,14 +77,10 @@ public class FileService {
         return rootEntity;
     }
 
-    public RootResponseDTO getFileContentByUuid(UUID uuid) throws FileNotFoundException {
-        RootEntity rootEntity = rootService.findRootByUuid(uuid);
-        return rootEntityMapper.toRootResponseDTO(rootEntity);
-    }
 
-    public FileResourceWithNameDTO getFileByUuid(UUID uuid) throws FileNotFoundException, JAXBException {
+    public FileResourceWithNameDTO getFileByRootUuid(UUID uuid) throws RootNotFoundException, JAXBException {
         var rootEntity = rootService.findRootByUuid(uuid);
-        var content = XmlParser.toXml(ed807Mapper.toED807(rootEntity));
+        var content = XmlParser.toXml(ed807Mapper.dtoToED807(rootEntity));
         var resource = new ByteArrayResource(content.getBytes());
         return new FileResourceWithNameDTO(resource, rootEntity.getFileName());
     }
@@ -108,7 +99,7 @@ public class FileService {
         MultipartFile xmlFile = fileUtil.extractXMLMultipartFileFromZIPByteArray(response.getBody());
 
         RootEntity rootEntity = rootFromMultipart(xmlFile);
-        rootService.saveRootEntity(rootEntity, principal);
+        rootService.createRootEntity(rootEntity, principal);
 
         return FileUploadResponseDTO.builder()
                 .uuid(rootEntity.getUuid())

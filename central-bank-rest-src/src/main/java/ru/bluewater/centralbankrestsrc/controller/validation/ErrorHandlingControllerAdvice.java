@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.bluewater.centralbankrestapi.api.dto.response.error.ErrorResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.CbrException;
-import ru.bluewater.centralbankrestapi.api.exception.FileNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.IncorrectFileTypeException;
 import ru.bluewater.centralbankrestapi.api.exception.UsernameAlreadyExistsException;
 import ru.bluewater.centralbankrestapi.api.dto.response.error.ValidationErrorResponse;
@@ -75,10 +75,10 @@ public class ErrorHandlingControllerAdvice {
         return new ErrorResponseDTO(e.getMessage());
     }
 
-    @ExceptionHandler(FileNotFoundException.class)
+    @ExceptionHandler(RootNotFoundException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponseDTO onFileNotFoundException(FileNotFoundException e){
+    public ErrorResponseDTO onFileNotFoundException(RootNotFoundException e){
         return ErrorResponseDTO.builder()
                 .message(e.getMessage())
                 .build();

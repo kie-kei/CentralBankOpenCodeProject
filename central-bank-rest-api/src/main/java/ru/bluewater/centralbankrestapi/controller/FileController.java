@@ -1,7 +1,6 @@
 package ru.bluewater.centralbankrestapi.controller;
 
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,7 +16,7 @@ import ru.bluewater.centralbankrestapi.api.dto.request.FileRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.*;
 import ru.bluewater.centralbankrestapi.api.dto.response.error.ErrorResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.CbrException;
-import ru.bluewater.centralbankrestapi.api.exception.FileNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.IncorrectFileTypeException;
 
 import java.io.IOException;
@@ -76,19 +75,7 @@ public interface FileController {
                     content = @Content(mediaType = "text/plain"))})
     @GetMapping("/download/{uuid}")
     ResponseEntity<Resource> getFile(@PathVariable("uuid") UUID uuid)
-            throws FileNotFoundException, JAXBException;
+            throws RootNotFoundException, JAXBException;
 
-    @Operation(summary = "Get data by uuid")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Data is updated",
-                    content = { @Content(mediaType = "application/hal+json",
-                            schema = @Schema(implementation = FileUploadResponseDTO.class)) }),
-            @ApiResponse(responseCode = "404", description = "File by uuid not found",
-                    content =  { @Content(mediaType = "application/hal+json",
-                            schema = @Schema(implementation = ErrorResponseDTO.class)) }),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = @Content(mediaType = "text/plain"))})
-    @GetMapping(value = "/{uuid}")
-    RootResponseDTO getFileContent(@PathVariable("uuid") UUID uuid) throws FileNotFoundException;
 
 }

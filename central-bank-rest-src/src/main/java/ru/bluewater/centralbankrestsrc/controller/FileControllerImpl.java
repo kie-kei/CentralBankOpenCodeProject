@@ -10,7 +10,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.FileUploadResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.RootResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.service.FileResourceWithNameDTO;
 import ru.bluewater.centralbankrestapi.api.exception.CbrException;
-import ru.bluewater.centralbankrestapi.api.exception.FileNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.IncorrectFileTypeException;
 import ru.bluewater.centralbankrestapi.controller.FileController;
 import ru.bluewater.centralbankrestsrc.service.FileService;
@@ -46,17 +46,13 @@ public class FileControllerImpl implements FileController {
 
     @GetMapping("/download/{uuid}")
     public ResponseEntity<Resource> getFile(@PathVariable("uuid") UUID uuid) throws
-            FileNotFoundException, JAXBException
+            RootNotFoundException, JAXBException
     {
-        FileResourceWithNameDTO fileResourceWithNameDTO = fileService.getFileByUuid(uuid);
+        FileResourceWithNameDTO fileResourceWithNameDTO = fileService.getFileByRootUuid(uuid);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_XML)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileResourceWithNameDTO.getFileName() + "\"")
                 .body(fileResourceWithNameDTO.getResource());
     }
 
-    @GetMapping(value = "/{uuid}")
-    public RootResponseDTO getFileContent(@PathVariable("uuid") UUID uuid) throws FileNotFoundException {
-        return fileService.getFileContentByUuid(uuid);
-    }
 }

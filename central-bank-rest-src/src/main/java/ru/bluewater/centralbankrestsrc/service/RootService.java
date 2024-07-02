@@ -1,11 +1,12 @@
 package ru.bluewater.centralbankrestsrc.service;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import ru.bluewater.centralbankrestapi.api.exception.FileNotFoundException;
+import ru.bluewater.centralbankrestapi.api.dto.response.RootResponseDTO;
+import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
+import ru.bluewater.centralbankrestsrc.mapper.entity.RootEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.RootRepository;
 import ru.bluewater.centralbankrestsrc.entity.*;
 
@@ -23,19 +24,23 @@ public class RootService {
     private final AccountsService accountsService;
     private final InitialEDService initialEDService;
     private final PartInfoService partInfoService;
+    private final RootEntityMapper rootEntityMapper;
+    private final RstrListService rstrListService;
 
     @Autowired
-    public RootService(RootRepository repository, ParticipantInfoService participantInfoService, BICDirectoryEntryService bicDirectoryEntryService, AccountsService accountsService, InitialEDService initialEDService, PartInfoService partInfoService) {
+    public RootService(RootRepository repository, ParticipantInfoService participantInfoService, BICDirectoryEntryService bicDirectoryEntryService, AccountsService accountsService, InitialEDService initialEDService, PartInfoService partInfoService, RootEntityMapper rootEntityMapper, RstrListService rstrListService) {
         this.rootRepository = repository;
         this.participantInfoService = participantInfoService;
         this.bicDirectoryEntryService = bicDirectoryEntryService;
         this.accountsService = accountsService;
         this.initialEDService = initialEDService;
         this.partInfoService = partInfoService;
+        this.rootEntityMapper = rootEntityMapper;
+        this.rstrListService = rstrListService;
     }
 
     @Transactional
-    public RootEntity saveRootEntity(RootEntity rootEntity, Principal principal) {
+    public RootEntity createRootEntity(RootEntity rootEntity, Principal principal) {
         InitialEDEntity initialEDEntity = rootEntity.getInitialED();
         PartInfoEntity partInfoEntity = rootEntity.getPartInfo();
 
@@ -60,6 +65,17 @@ public class RootService {
             if (participantInfoEntity != null && participantInfoEntity.getUuid() == null) {
                 participantInfoEntity.setBicDirectoryEntry(entry);
                 participantInfoService.createParticipantInfo(participantInfoEntity);
+                List<RstrListEntity> rstrListEntities = participantInfoEntity.getRstrList();
+
+                if(rstrListEntities != null && !rstrListEntities.isEmpty()){
+                    rstrListEntities.forEach(
+                            rstrListEntity -> {
+                                rstrListEntity.setParticipantInfo(participantInfoEntity);
+                                rstrListService.createRstrList(rstrListEntity);
+                            }
+                    );
+                }
+
             }
 
             if(accounts != null) {
@@ -75,9 +91,9 @@ public class RootService {
         return rootRepository.save(rootEntity);
     }
 
-    @Transactional
-    public RootEntity findRootByUuid(UUID uuid) throws FileNotFoundException {
-        return rootRepository.findById(uuid).orElseThrow(() -> new FileNotFoundException(uuid));
+    public RootResponseDTO findRootByUuid(UUID uuid) throws RootNotFoundException {
+        RootEntity rootEntity = rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
+        return rootEntityMapper.toRootResponseDTO(rootEntity);
     }
 
     private void setAuditFieldsOnCreateRootEntity(RootEntity rootEntity, Principal principal){
