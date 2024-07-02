@@ -1,0 +1,11 @@
+package ru.bluewater.centralbankrestsrc.respository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import ru.bluewater.centralbankrestsrc.entity.AuthorityEntity;
+
+import java.util.Optional;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+@RepositoryRestResource(exported = false)
+public interface AuthorityRepository extends JpaRepository<AuthorityEntity, Integer> {
+    Optional<AuthorityEntity> findByAuthority(String authority);
+}
