@@ -16,10 +16,12 @@ import ru.bluewater.centralbankrestapi.controller.FileController;
 import ru.bluewater.centralbankrestsrc.service.FileService;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/file")
+@CrossOrigin
 public class FileControllerImpl implements FileController {
     private final FileService fileService;
 
@@ -29,21 +31,23 @@ public class FileControllerImpl implements FileController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<FileUploadResponseDTO> uploadXml(FileRequestDTO file) throws
+    public ResponseEntity<FileUploadResponseDTO> uploadXml(FileRequestDTO file, Principal principal) throws
             JAXBException, IOException, IncorrectFileTypeException
     {
-        return ResponseEntity.ok(fileService.createRootFromFile(file));
+        return ResponseEntity.ok(fileService.createRootFromFile(file, principal));
     }
 
     @PostMapping("/cbr")
-    public ResponseEntity<FileUploadResponseDTO> uploadXmlFromCBR() throws
+    public ResponseEntity<FileUploadResponseDTO> uploadXmlFromCBR(Principal principal) throws
             JAXBException, IOException, CbrException, IncorrectFileTypeException
     {
-        return ResponseEntity.ok(fileService.createRootFromCBR());
+        return ResponseEntity.ok(fileService.createRootFromCBR(principal));
     }
 
     @GetMapping("/download/{uuid}")
-    public ResponseEntity<Resource> getFile(@PathVariable("uuid") UUID uuid) throws FileNotFoundException, JAXBException {
+    public ResponseEntity<Resource> getFile(@PathVariable("uuid") UUID uuid) throws
+            FileNotFoundException, JAXBException
+    {
         FileResourceWithNameDTO fileResourceWithNameDTO = fileService.getFileByUuid(uuid);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_XML)

@@ -21,7 +21,18 @@ public class RootEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
+    @NotNull
     private String fileName;
+
+    @NotNull
+    private LocalDate createdAt;
+
+    @NotNull
+    private String createdBy;
+
+    private LocalDate updatedAt;
+
+    private String updatedBy;
 
     @OneToMany(mappedBy = "rootEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<BICDirectoryEntryEntity> bicDirectoryEntry;

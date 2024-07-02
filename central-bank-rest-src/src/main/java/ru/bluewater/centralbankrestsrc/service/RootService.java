@@ -9,6 +9,8 @@ import ru.bluewater.centralbankrestapi.api.exception.FileNotFoundException;
 import ru.bluewater.centralbankrestsrc.respository.RootRepository;
 import ru.bluewater.centralbankrestsrc.entity.*;
 
+import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,9 +35,11 @@ public class RootService {
     }
 
     @Transactional
-    public RootEntity saveRootEntity(@Valid RootEntity rootEntity) {
+    public RootEntity saveRootEntity(RootEntity rootEntity, Principal principal) {
         InitialEDEntity initialEDEntity = rootEntity.getInitialED();
         PartInfoEntity partInfoEntity = rootEntity.getPartInfo();
+
+        setAuditFieldsOnCreateRootEntity(rootEntity, principal);
 
         if (initialEDEntity != null) {
             initialEDEntity.setRootEntity(rootEntity);
@@ -74,5 +78,15 @@ public class RootService {
     @Transactional
     public RootEntity findRootByUuid(UUID uuid) throws FileNotFoundException {
         return rootRepository.findById(uuid).orElseThrow(() -> new FileNotFoundException(uuid));
+    }
+
+    private void setAuditFieldsOnCreateRootEntity(RootEntity rootEntity, Principal principal){
+        rootEntity.setCreatedBy(principal.getName());
+        rootEntity.setCreatedAt(LocalDate.now());
+    }
+
+    private void setAuditFieldsOnUpdateRootEntity(RootEntity rootEntity, Principal principal){
+        rootEntity.setUpdatedAt(LocalDate.now());
+        rootEntity.setUpdatedBy(principal.getName());
     }
 }

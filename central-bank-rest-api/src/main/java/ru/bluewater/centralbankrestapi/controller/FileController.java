@@ -1,7 +1,9 @@
 package ru.bluewater.centralbankrestapi.controller;
 
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,6 +21,7 @@ import ru.bluewater.centralbankrestapi.api.exception.FileNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.IncorrectFileTypeException;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.UUID;
 
 @RestController
@@ -40,7 +43,7 @@ public interface FileController {
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "xml File upload request",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = FileRequestDTO.class)))
-             FileRequestDTO fileRequestDTO) throws
+             FileRequestDTO fileRequestDTO, @Parameter(hidden = true) Principal principal) throws
             JAXBException, IOException, IncorrectFileTypeException;
 
     @Operation(summary = "Update data from cbr")
@@ -54,13 +57,13 @@ public interface FileController {
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "text/plain"))})
     @PostMapping("/cbr")
-    ResponseEntity<FileUploadResponseDTO> uploadXmlFromCBR() throws
+    ResponseEntity<FileUploadResponseDTO> uploadXmlFromCBR(@Parameter(hidden = true) Principal principal) throws
             JAXBException, IOException, CbrException, IncorrectFileTypeException;
 
 
     @Operation(summary = "Get xml file by uuid")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Data is updated",
+            @ApiResponse(responseCode = "200", description = "XML received",
                     content = { @Content(mediaType = "application/hal+json",
                             schema = @Schema(implementation = Resource.class)) }),
             @ApiResponse(responseCode = "400", description = "Invalid parse data to xml",

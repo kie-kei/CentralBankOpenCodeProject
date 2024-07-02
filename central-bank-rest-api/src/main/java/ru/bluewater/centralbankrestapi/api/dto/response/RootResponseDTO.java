@@ -19,6 +19,10 @@ import java.util.UUID;
 public class RootResponseDTO {
     private UUID uuid;
     private String fileName;
+    private LocalDate createdAt;
+    private String createdBy;
+    private LocalDate updatedAt;
+    private String updatedBy;
     private List<BICDirectoryEntryResponseDTO> bicDirectoryEntry;
     private PartInfoResponseDTO partInfo;
     private InitialEDResponseDTO initialED;

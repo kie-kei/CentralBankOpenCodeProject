@@ -33,6 +33,16 @@ public class SecurityConfiguration {
     public SecurityConfiguration(RSAKeyProperties keys){
         this.keys = keys;
     }
+
+    private final String[] ACCESS_URLS = {
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/api-docs/**",
+            "/api-docs",
+            "/h2-console/**",
+            "/v3/api-docs/**",
+    };
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -55,7 +65,10 @@ public class SecurityConfiguration {
 
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/**").permitAll(); // Разрешить доступ к консоли H2
+                    auth.requestMatchers("/api/v1/auth/login").permitAll();
+                    auth.requestMatchers("/api/v1/auth/register").permitAll();
+                    auth.requestMatchers("/api/v1/auth").permitAll();
+                    auth.requestMatchers(ACCESS_URLS).permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))

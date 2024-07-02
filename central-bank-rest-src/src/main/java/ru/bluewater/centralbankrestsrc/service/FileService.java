@@ -30,6 +30,8 @@ import ru.bluewater.centralbankrestsrc.util.XmlParser;
 
 import java.io.IOException;
 import java.net.URI;
+import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -57,11 +59,12 @@ public class FileService {
     }
 
     @Transactional
-    public FileUploadResponseDTO createRootFromFile(FileRequestDTO requestDTO) throws
+    public FileUploadResponseDTO createRootFromFile(FileRequestDTO requestDTO, Principal principal) throws
             JAXBException, IOException, IncorrectFileTypeException
     {
         RootEntity rootEntity = rootFromMultipart(requestDTO.getFile());
-        rootService.saveRootEntity(rootEntity);
+        rootService.saveRootEntity(rootEntity, principal);
+
         return FileUploadResponseDTO.builder()
                 .uuid(rootEntity.getUuid())
                 .build();
@@ -93,7 +96,7 @@ public class FileService {
 
 
     @Transactional
-    public FileUploadResponseDTO createRootFromCBR() throws CbrException, IOException, JAXBException, IncorrectFileTypeException {
+    public FileUploadResponseDTO createRootFromCBR(Principal principal) throws CbrException, IOException, JAXBException, IncorrectFileTypeException {
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<byte[]> response = restTemplate.exchange(
@@ -105,10 +108,11 @@ public class FileService {
         MultipartFile xmlFile = fileUtil.extractXMLMultipartFileFromZIPByteArray(response.getBody());
 
         RootEntity rootEntity = rootFromMultipart(xmlFile);
-        rootService.saveRootEntity(rootEntity);
+        rootService.saveRootEntity(rootEntity, principal);
 
         return FileUploadResponseDTO.builder()
                 .uuid(rootEntity.getUuid())
                 .build();
     }
+
 }
