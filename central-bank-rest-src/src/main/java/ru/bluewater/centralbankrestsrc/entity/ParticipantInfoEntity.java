@@ -77,7 +77,7 @@ public class ParticipantInfoEntity {
     @Size(max = 4, message = "ParticipantStatus length should be 4")
     private String participantStatus;
 
-    @OneToMany(mappedBy = "participantInfo")
+    @OneToMany(mappedBy = "participantInfo", cascade = CascadeType.ALL)
     private List<RstrListEntity> rstrList;
 
     @OneToOne

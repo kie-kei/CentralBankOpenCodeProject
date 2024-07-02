@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class RstrListEntity {
     private String rstr;
 
     @NotNull(message = "rstrDate should be not null")
-    private Date rstrDate;
+    private LocalDate rstrDate;
 
     @ManyToOne
     @JoinColumn(name = "participant_info_uuid")

@@ -37,10 +37,10 @@ public class RootEntity {
     @OneToMany(mappedBy = "rootEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<BICDirectoryEntryEntity> bicDirectoryEntry;
 
-    @OneToOne(mappedBy = "rootEntity")
+    @OneToOne(mappedBy = "rootEntity", cascade = CascadeType.ALL)
     private PartInfoEntity partInfo;
 
-    @OneToOne(mappedBy = "rootEntity")
+    @OneToOne(mappedBy = "rootEntity", cascade = CascadeType.ALL)
     private InitialEDEntity initialED;
 
     @Column(nullable = false)

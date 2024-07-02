@@ -26,9 +26,10 @@ public class RootService {
     private final PartInfoService partInfoService;
     private final RootEntityMapper rootEntityMapper;
     private final RstrListService rstrListService;
+    private final AccRstrListService accRstrListService;
 
     @Autowired
-    public RootService(RootRepository repository, ParticipantInfoService participantInfoService, BICDirectoryEntryService bicDirectoryEntryService, AccountsService accountsService, InitialEDService initialEDService, PartInfoService partInfoService, RootEntityMapper rootEntityMapper, RstrListService rstrListService) {
+    public RootService(RootRepository repository, ParticipantInfoService participantInfoService, BICDirectoryEntryService bicDirectoryEntryService, AccountsService accountsService, InitialEDService initialEDService, PartInfoService partInfoService, RootEntityMapper rootEntityMapper, RstrListService rstrListService, AccRstrListService accRstrListService) {
         this.rootRepository = repository;
         this.participantInfoService = participantInfoService;
         this.bicDirectoryEntryService = bicDirectoryEntryService;
@@ -37,6 +38,7 @@ public class RootService {
         this.partInfoService = partInfoService;
         this.rootEntityMapper = rootEntityMapper;
         this.rstrListService = rstrListService;
+        this.accRstrListService = accRstrListService;
     }
 
     @Transactional
@@ -48,12 +50,12 @@ public class RootService {
 
         if (initialEDEntity != null) {
             initialEDEntity.setRootEntity(rootEntity);
-            initialEDService.createInitialED(initialEDEntity);
+//            initialEDService.createInitialED(initialEDEntity);
         }
 
         if (partInfoEntity != null) {
             partInfoEntity.setRootEntity(rootEntity);
-            partInfoService.createPartInfo(partInfoEntity);
+//            partInfoService.createPartInfo(partInfoEntity);
         }
 
         rootEntity.getBicDirectoryEntry().forEach(entry -> {
@@ -62,16 +64,25 @@ public class RootService {
             ParticipantInfoEntity participantInfoEntity = entry.getParticipantInfo();
             List<AccountsEntity> accounts = entry.getAccounts();
 
+            List<SWBICSEntity> swbicsEntities = entry.getSwbics(); // не факт
+
+            if(swbicsEntities != null && !swbicsEntities.isEmpty()){
+                swbicsEntities.forEach(
+                        swbicsEntity -> {
+                            swbicsEntity.setBicDirectoryEntry(entry);
+                        });
+            }
+
             if (participantInfoEntity != null && participantInfoEntity.getUuid() == null) {
                 participantInfoEntity.setBicDirectoryEntry(entry);
-                participantInfoService.createParticipantInfo(participantInfoEntity);
+//                participantInfoService.createParticipantInfo(participantInfoEntity);
                 List<RstrListEntity> rstrListEntities = participantInfoEntity.getRstrList();
 
                 if(rstrListEntities != null && !rstrListEntities.isEmpty()){
                     rstrListEntities.forEach(
                             rstrListEntity -> {
                                 rstrListEntity.setParticipantInfo(participantInfoEntity);
-                                rstrListService.createRstrList(rstrListEntity);
+//                                rstrListService.createRstrList(rstrListEntity);
                             }
                     );
                 }
@@ -81,7 +92,16 @@ public class RootService {
             if(accounts != null) {
                 accounts.forEach(acc -> {
                     acc.setBicDirectoryEntry(entry);
-                    accountsService.createAccounts(acc);
+//                    accountsService.createAccounts(acc);
+                    List<AccRstrListEntity> accRstrListEntities = acc.getAccRstrList(); //убрать начиная отсюда вроде без этого работает
+                    if(accRstrListEntities != null && !accRstrListEntities.isEmpty()){
+                        accRstrListEntities.forEach(
+                                accRstrListEntity -> {
+                                    accRstrListEntity.setAccounts(acc);
+//                                    accRstrListService.createAccRstrList(accRstrListEntity);
+
+                                });
+                    }
                 });
             }
 
