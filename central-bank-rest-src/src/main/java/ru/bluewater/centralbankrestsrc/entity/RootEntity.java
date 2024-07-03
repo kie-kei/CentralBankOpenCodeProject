@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.UUID;
 
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,13 +36,13 @@ public class RootEntity {
 
     private String updatedBy;
 
-    @OneToMany(mappedBy = "rootEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "rootEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BICDirectoryEntryEntity> bicDirectoryEntry;
 
-    @OneToOne(mappedBy = "rootEntity", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "rootEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private PartInfoEntity partInfo;
 
-    @OneToOne(mappedBy = "rootEntity", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "rootEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private InitialEDEntity initialED;
 
     @Column(nullable = false)
@@ -85,4 +86,27 @@ public class RootEntity {
     @Max(value = 99, message = "directory BIC Version (DirectoryVersion) should be in range 0 to 99")
     private Integer directoryVersion; // directoryBICVersion, nullable since [0..1]
 
+    @Override
+    public String toString() {
+        return "RootEntity{" +
+                "uuid=" + uuid +
+                ", fileName='" + fileName + '\'' +
+                ", createdAt=" + createdAt +
+                ", createdBy='" + createdBy + '\'' +
+                ", updatedAt=" + updatedAt +
+                ", updatedBy='" + updatedBy + '\'' +
+                ", bicDirectoryEntry=" + bicDirectoryEntry +
+                ", partInfo=" + partInfo +
+                ", initialED=" + initialED +
+                ", edNo=" + edNo +
+                ", edDate=" + edDate +
+                ", edAuthor=" + edAuthor +
+                ", edReceiver=" + edReceiver +
+                ", creationReason='" + creationReason + '\'' +
+                ", creationDateTime=" + creationDateTime +
+                ", infoTypeCode='" + infoTypeCode + '\'' +
+                ", businessDay=" + businessDay +
+                ", directoryVersion=" + directoryVersion +
+                '}';
+    }
 }

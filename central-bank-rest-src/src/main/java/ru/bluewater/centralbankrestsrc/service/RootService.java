@@ -1,10 +1,14 @@
 package ru.bluewater.centralbankrestsrc.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import ru.bluewater.centralbankrestapi.api.dto.request.RootRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.update.RootUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.RootResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.update.RootUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import ru.bluewater.centralbankrestsrc.mapper.entity.RootEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.RootRepository;
@@ -110,6 +114,15 @@ public class RootService {
 
         return rootRepository.save(rootEntity);
     }
+
+    @Transactional
+    public RootUpdateResponseDTO updateRoot(UUID uuid, RootUpdateRequestDTO requestDTO) throws RootNotFoundException {
+        var rootEntity = rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
+        rootEntityMapper.updateFromDto(requestDTO, rootEntity);
+        return rootEntityMapper.toRootUpdateResponseDTO(rootEntity);
+
+    }
+
 
     public RootResponseDTO findRootByUuid(UUID uuid) throws RootNotFoundException {
         RootEntity rootEntity = rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
