@@ -23,12 +23,14 @@ public class ParticipantInfoEntity {
 
     @Size(min = 1, max = 160, message = "NameP length should be from 1 to 160")
     @NotNull(message = "nameP should be not null")
+    @Column(name = "name_p")
     private String nameP;
 
     @Size(min = 1, max = 140, message = "EnglName should be from 1 to 140")
     private String englName;
 
     @Size(min = 1, max = 9, message = "RegN length should be from 1 to 9")
+    @Column(name = "reg_n")
     private String regN;
 
     @Size(min = 2, max = 2, message = "CntrCd length should be 2")
@@ -51,6 +53,7 @@ public class ParticipantInfoEntity {
     private String adr;
 
     @Size(min = 9, max = 9, message = "prntBIC length should be 9")
+    @Column(name = "prnt_bic")
     private String prntBIC;
 
     @NotNull(message = "dateIn should be not null")
@@ -81,6 +84,6 @@ public class ParticipantInfoEntity {
     private List<RstrListEntity> rstrList;
 
     @OneToOne
-    @JoinColumn(name = "participant_info_uuid")
+    @JoinColumn(name = "bic_directory_entry_uuid")
     private BICDirectoryEntryEntity bicDirectoryEntry;
 }

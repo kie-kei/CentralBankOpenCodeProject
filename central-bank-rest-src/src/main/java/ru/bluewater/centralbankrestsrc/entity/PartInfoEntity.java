@@ -36,9 +36,10 @@ public class PartInfoEntity {
 
     @Digits(integer = 27, fraction = 0)
     @NotNull(message = "partAggregateID should be not null")
+    @Column(name = "part_aggregate_id")
     private BigDecimal partAggregateID;
 
     @OneToOne
-    @JoinColumn(name = "root_entity_uuid")
+    @JoinColumn(name = "ed807_uuid")
     private RootEntity rootEntity;
 }

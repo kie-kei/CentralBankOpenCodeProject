@@ -39,7 +39,7 @@ public class BICDirectoryEntryEntity {
     private List<SWBICSEntity> swbics;
 
     @ManyToOne
-    @JoinColumn(name = "root_entity_uuid", referencedColumnName = "uuid")
+    @JoinColumn(name = "ed807_uuid", referencedColumnName = "uuid")
     private RootEntity rootEntity;
 
 }

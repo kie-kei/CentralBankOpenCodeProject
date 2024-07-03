@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import lombok.*;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ public class SWBICSEntity {
     private String swbic;
 
     @NotNull(message = "defaultSWBIC should be not null")
+    @Column(name = "default_swbic")
     private Boolean defaultSWBIC;
 
     @ManyToOne

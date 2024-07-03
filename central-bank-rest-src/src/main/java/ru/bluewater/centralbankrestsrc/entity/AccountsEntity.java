@@ -37,6 +37,7 @@ public class AccountsEntity {
 
     @Size(min = 9, max = 9, message = "AccountCBRBIC length should be 9")
     @NotNull(message = "accountCBRBIC should be not null")
+    @Column(name = "account_CBRBIC")
     private String accountCBRBIC;
 
     @NotNull(message = "DateIn should be not null")

@@ -105,7 +105,7 @@ public class RootService {
                 });
             }
 
-            bicDirectoryEntryService.createBICDirectoryEntry(entry);
+//            bicDirectoryEntryService.createBICDirectoryEntry(entry);
         });
 
         return rootRepository.save(rootEntity);

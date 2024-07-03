@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.time.LocalDate;
@@ -34,6 +35,7 @@ public class AccRstrListEntity {
 
     @Min(value = 100000000, message = "successorBIC range should be from 100000000 to 999999999")
     @Max(value = 999999999, message = "successorBIC range should be from 100000000 to 999999999")
+    @Column(name = "successor_bic")
     private Integer successorBIC;
 
     @ManyToOne

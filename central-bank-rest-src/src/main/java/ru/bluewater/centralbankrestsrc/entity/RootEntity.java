@@ -19,6 +19,7 @@ import java.util.UUID;
 public class RootEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+//    @Column(name = "ed807_uuid")
     private UUID uuid;
 
     @NotNull

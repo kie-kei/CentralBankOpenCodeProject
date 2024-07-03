@@ -37,6 +37,6 @@ public class InitialEDEntity {
     private Long edAuthor; // electronicMessageAuthorId unique
 
     @OneToOne
-    @JoinColumn(name = "root_entity_uuid")
+    @JoinColumn(name = "ed807_uuid")
     private RootEntity rootEntity;
 }
