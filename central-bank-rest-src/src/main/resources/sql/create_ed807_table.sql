@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS ed807
     updated_by         VARCHAR,
     ed_no              INTEGER                  NOT NULL,
     ed_date            DATE                     NOT NULL,
-    ed_author          BIGINT UNIQUE            NOT NULL,
+    ed_author          BIGINT                   NOT NULL,
     ed_receiver        BIGINT,
     creation_reason    CHAR(4)                  NOT NULL,
     creation_date_time TIMESTAMP WITH TIME ZONE NOT NULL,

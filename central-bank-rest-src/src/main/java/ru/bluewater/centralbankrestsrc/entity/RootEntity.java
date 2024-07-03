@@ -56,7 +56,6 @@ public class RootEntity {
     @NotNull(message = "EDDate should be not null")
     private LocalDate edDate; // dateOfCompilationElectronicMessage format YYYY-MM-DD
 
-    @Column(unique = true)
     @NotNull(message = "EDAuthor should be not null")
     @Min(value = 1000000000L, message = "EDAuthor should be in 1000000000 to 9999999999")
     @Max(value = 9999999999L, message = "EDAuthor should be in 1000000000 to 9999999999")
