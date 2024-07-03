@@ -1,10 +1,13 @@
 package ru.bluewater.centralbankrestsrc.util;
 
-import jakarta.xml.bind.*;
-import org.springframework.data.domain.Sort;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import ru.bluewater.centralbankrestsrc.entity.xml.ED807;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.StringWriter;
 
 public class XmlParser {
 

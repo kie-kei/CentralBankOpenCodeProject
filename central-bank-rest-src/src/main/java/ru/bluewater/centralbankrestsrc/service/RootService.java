@@ -1,18 +1,16 @@
 package ru.bluewater.centralbankrestsrc.service;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import ru.bluewater.centralbankrestapi.api.dto.request.RootRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.RootUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.RootResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.RootUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
+import ru.bluewater.centralbankrestsrc.entity.*;
 import ru.bluewater.centralbankrestsrc.mapper.entity.RootEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.RootRepository;
-import ru.bluewater.centralbankrestsrc.entity.*;
 
 import java.security.Principal;
 import java.time.LocalDate;

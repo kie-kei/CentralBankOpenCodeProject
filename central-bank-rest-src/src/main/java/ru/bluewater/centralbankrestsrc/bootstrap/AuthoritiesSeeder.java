@@ -38,7 +38,7 @@ public class AuthoritiesSeeder implements ApplicationListener<ContextRefreshedEv
         try {
             this.loadSuperAdminUser();
         } catch (UsernameAlreadyExistsException e) {
-            System.out.println("Unluck bratan");;
+            System.out.println("Unluck bratan");
         }
     }
 

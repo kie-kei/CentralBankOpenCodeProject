@@ -1,13 +1,11 @@
 package ru.bluewater.centralbankrestsrc.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.bluewater.centralbankrestapi.api.dto.request.RootRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.RootUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.RootResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.RootUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import ru.bluewater.centralbankrestapi.controller.RootController;
-import ru.bluewater.centralbankrestsrc.entity.RootEntity;
 import ru.bluewater.centralbankrestsrc.service.RootService;
 
 import java.util.UUID;

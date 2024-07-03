@@ -16,8 +16,8 @@ import ru.bluewater.centralbankrestapi.api.dto.request.FileRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.FileUploadResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.service.FileResourceWithNameDTO;
 import ru.bluewater.centralbankrestapi.api.exception.CbrException;
-import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.IncorrectFileTypeException;
+import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.RootEntity;
 import ru.bluewater.centralbankrestsrc.entity.xml.ED807;
 import ru.bluewater.centralbankrestsrc.mapper.entity.RootEntityMapper;
@@ -40,7 +40,7 @@ public class FileService {
     private final ED807Mapper ed807Mapper;
     private final RootEntityMapper rootEntityMapper;
     private final URI centralBankURI = URI.create("https://cbr.ru/s/newbik");
-    private Logger logger = LoggerFactory.getLogger("fileService logger");
+    private final Logger logger = LoggerFactory.getLogger("fileService logger");
 
 
     @Autowired
