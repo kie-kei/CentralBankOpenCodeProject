@@ -1,17 +1,14 @@
 package ru.bluewater.centralbankrestsrc.entity;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
 import lombok.*;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+
 @Getter
 @Setter
 @Builder

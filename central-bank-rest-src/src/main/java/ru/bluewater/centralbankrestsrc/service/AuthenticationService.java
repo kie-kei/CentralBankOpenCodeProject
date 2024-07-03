@@ -18,6 +18,7 @@ import ru.bluewater.centralbankrestsrc.respository.AuthorityRepository;
 import ru.bluewater.centralbankrestsrc.respository.UserRepository;
 
 import java.util.HashSet;
+
 @Service
 public class AuthenticationService {
     private final UserRepository userRepository;
@@ -26,6 +27,7 @@ public class AuthenticationService {
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
     private final AuthorityRepository authorityRepository;
+
     @Autowired
     public AuthenticationService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, TokenService tokenService, AuthenticationManager authenticationManager, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
@@ -42,7 +44,6 @@ public class AuthenticationService {
             throw new UsernameAlreadyExistsException();
         }
 
-        System.out.println(request.getUsername());
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         request.setPassword(encodedPassword);
 
@@ -56,6 +57,7 @@ public class AuthenticationService {
         userRepository.save(userEntity);
         return new RegistrationResponseDTO(userEntity.getUsername());
     }
+
     public LoginResponseDTO loginUser(String username, String password) throws AuthenticationException {
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)

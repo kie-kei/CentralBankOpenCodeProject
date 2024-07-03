@@ -33,5 +33,5 @@ public class ParticipantInfoRequestDTO {
     private String xchType;
     private String uid;
     private String participantStatus;
-    private List<RstrListResponseDTO> rstrList;
+    private List<RstrListRequestDTO> rstrList;
 }

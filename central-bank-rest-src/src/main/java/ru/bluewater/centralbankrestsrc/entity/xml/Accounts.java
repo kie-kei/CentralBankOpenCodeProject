@@ -3,7 +3,6 @@ package ru.bluewater.centralbankrestsrc.entity.xml;
 import jakarta.xml.bind.annotation.*;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import lombok.Data;
-
 import ru.bluewater.centralbankrestsrc.util.adapter.LocalDateAdapter;
 
 import java.time.LocalDate;

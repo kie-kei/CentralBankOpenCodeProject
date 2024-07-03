@@ -1,21 +1,19 @@
 package ru.bluewater.centralbankrestsrc.service;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import ru.bluewater.centralbankrestapi.api.dto.request.RootRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.RootUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.RootResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.RootUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
+import ru.bluewater.centralbankrestsrc.entity.*;
 import ru.bluewater.centralbankrestsrc.mapper.entity.RootEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.RootRepository;
-import ru.bluewater.centralbankrestsrc.entity.*;
 
 import java.security.Principal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +22,6 @@ import java.util.UUID;
 public class RootService {
     private final RootRepository rootRepository;
     private final ParticipantInfoService participantInfoService;
-    private final BICDirectoryEntryService bicDirectoryEntryService;
     private final AccountsService accountsService;
     private final InitialEDService initialEDService;
     private final PartInfoService partInfoService;
@@ -33,10 +30,9 @@ public class RootService {
     private final AccRstrListService accRstrListService;
 
     @Autowired
-    public RootService(RootRepository repository, ParticipantInfoService participantInfoService, BICDirectoryEntryService bicDirectoryEntryService, AccountsService accountsService, InitialEDService initialEDService, PartInfoService partInfoService, RootEntityMapper rootEntityMapper, RstrListService rstrListService, AccRstrListService accRstrListService) {
+    public RootService(RootRepository repository, ParticipantInfoService participantInfoService, AccountsService accountsService, InitialEDService initialEDService, PartInfoService partInfoService, RootEntityMapper rootEntityMapper, RstrListService rstrListService, AccRstrListService accRstrListService) {
         this.rootRepository = repository;
         this.participantInfoService = participantInfoService;
-        this.bicDirectoryEntryService = bicDirectoryEntryService;
         this.accountsService = accountsService;
         this.initialEDService = initialEDService;
         this.partInfoService = partInfoService;
@@ -54,12 +50,10 @@ public class RootService {
 
         if (initialEDEntity != null) {
             initialEDEntity.setRootEntity(rootEntity);
-//            initialEDService.createInitialED(initialEDEntity);
         }
 
         if (partInfoEntity != null) {
             partInfoEntity.setRootEntity(rootEntity);
-//            partInfoService.createPartInfo(partInfoEntity);
         }
 
         rootEntity.getBicDirectoryEntry().forEach(entry -> {
@@ -70,7 +64,7 @@ public class RootService {
 
             List<SWBICSEntity> swbicsEntities = entry.getSwbics(); // не факт
 
-            if(swbicsEntities != null && !swbicsEntities.isEmpty()){
+            if (swbicsEntities != null && !swbicsEntities.isEmpty()) {
                 swbicsEntities.forEach(
                         swbicsEntity -> {
                             swbicsEntity.setBicDirectoryEntry(entry);
@@ -79,37 +73,30 @@ public class RootService {
 
             if (participantInfoEntity != null && participantInfoEntity.getUuid() == null) {
                 participantInfoEntity.setBicDirectoryEntry(entry);
-//                participantInfoService.createParticipantInfo(participantInfoEntity);
                 List<RstrListEntity> rstrListEntities = participantInfoEntity.getRstrList();
 
-                if(rstrListEntities != null && !rstrListEntities.isEmpty()){
+                if (rstrListEntities != null && !rstrListEntities.isEmpty()) {
                     rstrListEntities.forEach(
                             rstrListEntity -> {
                                 rstrListEntity.setParticipantInfo(participantInfoEntity);
-//                                rstrListService.createRstrList(rstrListEntity);
                             }
                     );
                 }
 
             }
 
-            if(accounts != null) {
+            if (accounts != null) {
                 accounts.forEach(acc -> {
                     acc.setBicDirectoryEntry(entry);
-//                    accountsService.createAccounts(acc);
                     List<AccRstrListEntity> accRstrListEntities = acc.getAccRstrList(); //убрать начиная отсюда вроде без этого работает
-                    if(accRstrListEntities != null && !accRstrListEntities.isEmpty()){
+                    if (accRstrListEntities != null && !accRstrListEntities.isEmpty()) {
                         accRstrListEntities.forEach(
                                 accRstrListEntity -> {
                                     accRstrListEntity.setAccounts(acc);
-//                                    accRstrListService.createAccRstrList(accRstrListEntity);
-
                                 });
                     }
                 });
             }
-
-//            bicDirectoryEntryService.createBICDirectoryEntry(entry);
         });
 
         return rootRepository.save(rootEntity);
@@ -129,13 +116,17 @@ public class RootService {
         return rootEntityMapper.toRootResponseDTO(rootEntity);
     }
 
-    private void setAuditFieldsOnCreateRootEntity(RootEntity rootEntity, Principal principal){
-        rootEntity.setCreatedBy(principal.getName());
-        rootEntity.setCreatedAt(LocalDate.now());
+    public RootEntity findRootEntityByUuid(UUID uuid) throws RootNotFoundException {
+        return rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
     }
 
-    private void setAuditFieldsOnUpdateRootEntity(RootEntity rootEntity, Principal principal){
-        rootEntity.setUpdatedAt(LocalDate.now());
+    private void setAuditFieldsOnCreateRootEntity(RootEntity rootEntity, Principal principal) {
+        rootEntity.setCreatedBy(principal.getName());
+        rootEntity.setCreatedAt(LocalDateTime.now());
+    }
+
+    public void setAuditFieldsOnUpdateRootEntity(RootEntity rootEntity, Principal principal) {
+        rootEntity.setUpdatedAt(LocalDateTime.now());
         rootEntity.setUpdatedBy(principal.getName());
     }
 }

@@ -18,13 +18,14 @@ public class TokenService {
     private final JwtEncoder jwtEncoder;
 
     private final JwtDecoder jwtDecoder;
+
     @Autowired
     public TokenService(JwtEncoder jwtEncoder, JwtDecoder jwtDecoder) {
         this.jwtEncoder = jwtEncoder;
         this.jwtDecoder = jwtDecoder;
     }
 
-    public String generateJwt(Authentication auth){
+    public String generateJwt(Authentication auth) {
 
         Instant now = Instant.now();
 

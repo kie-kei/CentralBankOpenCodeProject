@@ -1,13 +1,12 @@
 package ru.bluewater.centralbankrestsrc.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.bluewater.centralbankrestapi.api.dto.request.RootRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.RootUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.RootResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.RootUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import ru.bluewater.centralbankrestapi.controller.RootController;
-import ru.bluewater.centralbankrestsrc.entity.RootEntity;
 import ru.bluewater.centralbankrestsrc.service.RootService;
 
 import java.util.UUID;
@@ -16,6 +15,7 @@ import java.util.UUID;
 public class RootControllerImpl implements RootController {
     private final RootService rootService;
 
+    @Autowired
     public RootControllerImpl(RootService rootService) {
         this.rootService = rootService;
     }

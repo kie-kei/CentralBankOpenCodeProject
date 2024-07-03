@@ -8,6 +8,8 @@ import ru.bluewater.centralbankrestsrc.entity.xml.ED807;
 @Mapper(componentModel = "spring")
 public interface ED807Mapper {
     RootEntity toRootEntity(ED807 ed807);
+
     ED807 entityToED807(RootEntity rootEntity);
+
     ED807 dtoToED807(RootResponseDTO rootResponseDTO);
 }

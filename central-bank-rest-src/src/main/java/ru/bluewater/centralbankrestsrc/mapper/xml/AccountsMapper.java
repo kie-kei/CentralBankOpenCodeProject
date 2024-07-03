@@ -7,5 +7,6 @@ import ru.bluewater.centralbankrestsrc.entity.xml.Accounts;
 @Mapper(componentModel = "spring")
 public interface AccountsMapper {
     AccountsEntity toAccountsEntity(Accounts accounts);
+
     Accounts toAccounts(AccountsEntity accountsEntity);
 }

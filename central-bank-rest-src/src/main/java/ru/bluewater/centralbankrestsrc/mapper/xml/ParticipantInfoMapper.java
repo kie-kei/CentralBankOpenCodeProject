@@ -7,5 +7,6 @@ import ru.bluewater.centralbankrestsrc.entity.xml.ParticipantInfo;
 @Mapper(componentModel = "spring")
 public interface ParticipantInfoMapper {
     ParticipantInfoEntity toParticipantInfoEntity(ParticipantInfo participantInfo);
+
     ParticipantInfo toParticipantInfo(ParticipantInfoEntity participantInfoEntity);
 }

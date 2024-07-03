@@ -10,6 +10,7 @@ import ru.bluewater.centralbankrestsrc.respository.UserRepository;
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;

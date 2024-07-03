@@ -7,5 +7,6 @@ import ru.bluewater.centralbankrestsrc.entity.xml.AccRstrList;
 @Mapper(componentModel = "spring")
 public interface AccRstrListMapper {
     AccRstrListEntity toAccRstrListEntity(AccRstrList accRstrList);
+
     AccRstrList toAccRstrList(AccRstrListEntity accRstrListEntity);
 }

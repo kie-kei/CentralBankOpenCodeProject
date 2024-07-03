@@ -7,5 +7,6 @@ import ru.bluewater.centralbankrestsrc.entity.xml.InitialED;
 @Mapper(componentModel = "spring")
 public interface InitialEDMapper {
     InitialED toInitialED(InitialEDEntity initialEDEntity);
+
     InitialEDEntity toInitialEDEntity(InitialED initialED);
 }

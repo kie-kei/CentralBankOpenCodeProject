@@ -2,8 +2,6 @@ package ru.bluewater.centralbankrestsrc.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -22,13 +20,13 @@ public class PartInfoEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
-//    @Min(1)
+    //    @Min(1)
 //    @Max(999999)
     @Digits(integer = 6, fraction = 0, message = "partNo should be up to 6 digits")
     @NotNull(message = "partNo should be not null")
     private Integer partNo;
 
-//    @Min(1)
+    //    @Min(1)
 //    @Max(999999)
     @Digits(integer = 6, fraction = 0, message = "partNo should be up to 6 digits")
     @NotNull(message = "partQuantity should be not null")

@@ -9,6 +9,7 @@ import ru.bluewater.centralbankrestsrc.respository.InitialEDRepository;
 @Service
 public class InitialEDService {
     private final InitialEDRepository repository;
+
     @Autowired
     public InitialEDService(InitialEDRepository repository) {
         this.repository = repository;

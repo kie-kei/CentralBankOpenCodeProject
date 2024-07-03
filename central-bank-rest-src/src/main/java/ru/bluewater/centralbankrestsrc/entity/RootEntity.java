@@ -2,10 +2,10 @@ package ru.bluewater.centralbankrestsrc.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -27,12 +27,12 @@ public class RootEntity {
     private String fileName;
 
     @NotNull
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @NotNull
     private String createdBy;
 
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
     private String updatedBy;
 
