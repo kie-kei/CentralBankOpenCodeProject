@@ -36,7 +36,7 @@ public class RootEntity {
 
     private String updatedBy;
 
-    @OneToMany(mappedBy = "rootEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "rootEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BICDirectoryEntryEntity> bicDirectoryEntry;
 
     @OneToOne(mappedBy = "rootEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
