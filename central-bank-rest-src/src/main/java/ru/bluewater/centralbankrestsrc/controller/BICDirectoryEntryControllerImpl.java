@@ -9,6 +9,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.create.BicDirectoryEntry
 import ru.bluewater.centralbankrestapi.api.dto.response.update.BicDirectoryEntryUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
+import ru.bluewater.centralbankrestapi.controller.BICDirectoryEntryController;
 import ru.bluewater.centralbankrestsrc.service.BICDirectoryEntryService;
 
 import java.security.Principal;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/bicDirectoryEntry")
 @CrossOrigin
-public class BICDirectoryEntryControllerImpl {
+public class BICDirectoryEntryControllerImpl implements BICDirectoryEntryController {
 
     private final BICDirectoryEntryService bicDirectoryEntryService;
 
