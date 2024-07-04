@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/04-07-2024/create_centralbankdb_schemas.yaml
+  - include:
+      file: db/changelog/changeset/04-07-2024/create_ed807_table.yaml
+  - include:
+      file: db/changelog/changeset/04-07-2024/create_bic_directory_entry_table.yaml
+  - include:
+      file: db/changelog/changeset/04-07-2024/create_participant_info_table.yaml
+  - include:
+      file: db/changelog/changeset/04-07-2024/create_part_info_table.yaml
+  - include:
+      file: db/changelog/changeset/04-07-2024/create_accounts_table.yaml
+  - include:
+      file: db/changelog/changeset/04-07-2024/create_acc_rstr_list_table.yaml
+  - include:
+      file: db/changelog/changeset/04-07-2024/create_initial_ed_table.yaml
+  - include:
+      file: db/changelog/changeset/04-07-2024/create_rstr_list_table.yaml
+  - include:
+      file: db/changelog/changeset/04-07-2024/create_swbics_table.yaml
+  - include:
+      file: db/changelog/changeset/04-07-2024/create_users_table.yaml
+  - include:
+      file: db/changelog/changeset/04-07-2024/create_authorities_table.yaml
+  - include:
+      file: db/changelog/changeset/04-07-2024/create_user_authority_function_table.yaml

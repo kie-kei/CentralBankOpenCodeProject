@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: sklnrr
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: centralbankdb
+                tableName: bic_directory_entry
+      changes:
+        - sqlFile:
+            relativeToChangelogFile: true
+            path: create_bic_directory_entry_table.sql
