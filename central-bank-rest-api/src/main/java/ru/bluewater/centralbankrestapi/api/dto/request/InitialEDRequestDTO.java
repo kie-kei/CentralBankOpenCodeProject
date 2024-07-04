@@ -1,16 +1,11 @@
 package ru.bluewater.centralbankrestapi.api.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 public class InitialEDRequestDTO {
     private UUID uuid;
     private Integer edNo; // numberOfElectronicMessage

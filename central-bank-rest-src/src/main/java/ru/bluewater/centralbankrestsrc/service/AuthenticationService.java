@@ -55,7 +55,9 @@ public class AuthenticationService {
                 }}
         );
         userRepository.save(userEntity);
-        return new RegistrationResponseDTO(userEntity.getUsername());
+        return RegistrationResponseDTO.builder().
+                username(userEntity.getUsername())
+                .build();
     }
 
     public LoginResponseDTO loginUser(String username, String password) throws AuthenticationException {
@@ -67,6 +69,10 @@ public class AuthenticationService {
 
         UserEntity userEntity = userRepository.findByUsername(username).get();
 
-        return new LoginResponseDTO(userEntity.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(), token);
+        return LoginResponseDTO.builder()
+                .authorities(userEntity.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+                .jwt(token)
+                .build();
+        //return new LoginResponseDTO(userEntity.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(), token);
     }
 }

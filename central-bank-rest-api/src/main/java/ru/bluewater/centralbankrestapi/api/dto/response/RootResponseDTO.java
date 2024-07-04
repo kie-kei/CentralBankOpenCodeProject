@@ -1,10 +1,7 @@
 package ru.bluewater.centralbankrestapi.api.dto.response;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -12,10 +9,8 @@ import java.util.List;
 import java.util.UUID;
 
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class RootResponseDTO {
     private UUID uuid;
     private String fileName;

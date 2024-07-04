@@ -81,7 +81,10 @@ public class FileService {
         var rootEntity = rootService.findRootByUuid(uuid);
         var content = XmlParser.toXml(ed807Mapper.dtoToED807(rootEntity));
         var resource = new ByteArrayResource(content.getBytes());
-        return new FileResourceWithNameDTO(resource, rootEntity.getFileName());
+        return FileResourceWithNameDTO.builder()
+                .resource(resource)
+                .fileName(rootEntity.getFileName())
+                .build();
     }
 
 

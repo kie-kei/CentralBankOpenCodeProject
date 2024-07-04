@@ -61,7 +61,7 @@ public class AuthoritiesSeeder implements ApplicationListener<ContextRefreshedEv
         }
 
         RegistrationResponseDTO registrationResponseDTO = authenticationService.registerUser(
-                new RegistrationRequestDTO("admin", "admin"));
+                RegistrationRequestDTO.builder().username("admin").password("admin").build());
 
         UserEntity userEntity = userRepository.findByUsername(registrationResponseDTO.getUsername()).get();
 

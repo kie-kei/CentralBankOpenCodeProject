@@ -1,14 +1,9 @@
 package ru.bluewater.centralbankrestapi.api.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@Getter
+@Setter
 public class LoginRequestDTO {
     private String username;
     private String password;

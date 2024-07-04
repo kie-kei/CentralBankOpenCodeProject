@@ -1,9 +1,6 @@
 package ru.bluewater.centralbankrestapi.api.dto.response.update;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.bluewater.centralbankrestapi.api.dto.response.BICDirectoryEntryResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.InitialEDResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.PartInfoResponseDTO;
@@ -12,10 +9,8 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class RootUpdateResponseDTO {
     private String fileName;
     private LocalDate createdAt;
