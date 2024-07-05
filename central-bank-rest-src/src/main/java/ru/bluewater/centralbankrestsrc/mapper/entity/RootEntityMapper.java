@@ -6,8 +6,12 @@ import org.mapstruct.MappingTarget;
 import ru.bluewater.centralbankrestapi.api.dto.request.RootRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.RootUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.RootResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.list.RootListResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.read.RootGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.RootUpdateResponseDTO;
 import ru.bluewater.centralbankrestsrc.entity.RootEntity;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface RootEntityMapper {
@@ -19,4 +23,7 @@ public interface RootEntityMapper {
     void updateFromDto(RootUpdateRequestDTO updateRequestDTO, @MappingTarget RootEntity rootEntity);
 
     RootUpdateResponseDTO toRootUpdateResponseDTO(RootEntity rootEntity);
+
+    List<RootGetResponseDTO> toListRootGetResponseDTO(List<RootEntity> rootEntityList);
+
 }

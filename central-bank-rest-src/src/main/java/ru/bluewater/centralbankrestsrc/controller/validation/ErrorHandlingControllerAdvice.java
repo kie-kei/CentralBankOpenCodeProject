@@ -79,37 +79,27 @@ public class ErrorHandlingControllerAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponseDTO onFileNotFoundException(RootNotFoundException e){
-        return ErrorResponseDTO.builder()
-                .message(e.getMessage())
-                .build();
+        return new ErrorResponseDTO(e.getMessage());
     }
 
     @ExceptionHandler({JAXBException.class, IOException.class})
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDTO onJAXBException(Exception e){
-        return ErrorResponseDTO.builder()
-                .message("error parsing xml")
-                .build();
+        return new ErrorResponseDTO("error parsing xml");
     }
 
     @ExceptionHandler(CbrException.class)
     public ResponseEntity<ErrorResponseDTO> onCbrException(CbrException e){
         return ResponseEntity.status(e.getCbrStatusCode())
-                .body(
-                        ErrorResponseDTO.builder()
-                                .message(e.getMessage())
-                                .build()
-                );
+                .body(new ErrorResponseDTO(e.getMessage()));
     }
 
     @ExceptionHandler(IncorrectFileTypeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorResponseDTO onIncorrectFileTypeException(IncorrectFileTypeException e){
-        return ErrorResponseDTO.builder()
-                .message(e.getMessage())
-                .build();
+        return new ErrorResponseDTO(e.getMessage());
     }
 
 }

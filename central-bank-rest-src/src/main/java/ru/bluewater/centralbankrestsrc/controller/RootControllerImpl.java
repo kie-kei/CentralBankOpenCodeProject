@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.RootUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.RootResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.list.RootListResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.RootUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import ru.bluewater.centralbankrestapi.controller.RootController;
 import ru.bluewater.centralbankrestsrc.service.RootService;
 
+import java.util.List;
 import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/root")
@@ -30,5 +32,9 @@ public class RootControllerImpl implements RootController {
             throws RootNotFoundException
     {
         return rootService.updateRoot(uuid, requestDTO);
+    }
+    @GetMapping
+    public RootListResponseDTO findRootList(){ // public List<RootGetResponseDTO> findRootList() hz kak pravil`no
+        return rootService.findRootList();
     }
 }

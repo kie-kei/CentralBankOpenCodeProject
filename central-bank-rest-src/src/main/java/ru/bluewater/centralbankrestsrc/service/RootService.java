@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.RootUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.RootResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.list.RootListResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.read.RootGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.RootUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.*;
@@ -118,6 +120,12 @@ public class RootService {
 
     public RootEntity findRootEntityByUuid(UUID uuid) throws RootNotFoundException {
         return rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
+    }
+
+    public RootListResponseDTO findRootList(){
+        var list = rootRepository.findAll();
+        List<RootGetResponseDTO> rootGetResponseDTOS = rootEntityMapper.toListRootGetResponseDTO(list);
+        return new RootListResponseDTO(rootGetResponseDTOS);
     }
 
     private void setAuditFieldsOnCreateRootEntity(RootEntity rootEntity, Principal principal) {
