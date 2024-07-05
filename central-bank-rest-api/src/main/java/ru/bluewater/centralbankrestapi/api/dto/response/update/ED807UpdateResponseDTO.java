@@ -1,17 +1,18 @@
-package ru.bluewater.centralbankrestapi.api.dto.request.update;
+package ru.bluewater.centralbankrestapi.api.dto.response.update;
 
 import lombok.*;
-import ru.bluewater.centralbankrestapi.api.dto.response.BICDirectoryEntryResponseDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.InitialEDResponseDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.PartInfoResponseDTO;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Getter
 @Setter
-public class RootUpdateRequestDTO {
+public class ED807UpdateResponseDTO {
+    private String fileName;
+    private LocalDate createdAt;
+    private String createdBy;
+    private LocalDate updatedAt;
+    private String updatedBy;
     private Integer edNo; // numberOfElectronicMessage
     private LocalDate edDate; // dateOfCompilationElectronicMessage format YYYY-MM-DD
     private Long edAuthor; // electronicMessageAuthorId unique

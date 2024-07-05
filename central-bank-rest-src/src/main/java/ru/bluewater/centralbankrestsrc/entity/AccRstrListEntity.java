@@ -36,8 +36,4 @@ public class AccRstrListEntity {
     @Max(value = 999999999, message = "successorBIC range should be from 100000000 to 999999999")
     @Column(name = "successor_bic")
     private Integer successorBIC;
-
-    @ManyToOne
-    @JoinColumn(name = "accounts_uuid")
-    private AccountsEntity accounts;
 }

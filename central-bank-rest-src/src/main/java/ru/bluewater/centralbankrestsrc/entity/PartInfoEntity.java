@@ -11,7 +11,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@EqualsAndHashCode(exclude = "rootEntity")
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "part_info")
@@ -39,5 +38,5 @@ public class PartInfoEntity {
 
     @OneToOne
     @JoinColumn(name = "ed807_uuid")
-    private RootEntity rootEntity;
+    private ED807Entity ed807Entity;
 }

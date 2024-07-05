@@ -12,7 +12,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@EqualsAndHashCode(exclude = "bicDirectoryEntry")
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "accounts")
@@ -45,11 +44,9 @@ public class AccountsEntity {
     @Size(min = 4, max = 4, message = "AccountStatus length should be 4")
     private String accountStatus;
 
-    @OneToMany(mappedBy = "accounts", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "accounts_uuid")
     private List<AccRstrListEntity> accRstrList;
 
-    @ManyToOne
-    @JoinColumn(name = "bic_directory_entry_uuid")
-    private BICDirectoryEntryEntity bicDirectoryEntry;
 
 }

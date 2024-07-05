@@ -1,6 +1,8 @@
 package ru.bluewater.centralbankrestsrc.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +13,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.update.BicDirectoryEntry
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
-import ru.bluewater.centralbankrestsrc.entity.RootEntity;
+import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.entity.SWBICSEntity;
 import ru.bluewater.centralbankrestsrc.mapper.entity.BICDirectoryEntryEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.BICDirectoryEntryRepository;
@@ -29,6 +31,7 @@ public class BICDirectoryEntryService {
     private final BICDirectoryEntryEntityMapper bicDirectoryEntryEntityMapper;
     private final AccountsService accountsService;
     private final RootService rootService;
+    private final Logger logger = LoggerFactory.getLogger(BICDirectoryEntryService.class);
     @Autowired
     public BICDirectoryEntryService(BICDirectoryEntryRepository bicDirectoryEntryRepository, SWBICSService swbicsService, ParticipantInfoService participantInfoService, BICDirectoryEntryEntityMapper bicDirectoryEntryEntityMapper, AccountsService accountsService, RootService rootService) {
         this.bicDirectoryEntryRepository = bicDirectoryEntryRepository;
@@ -40,45 +43,37 @@ public class BICDirectoryEntryService {
     }
     @Transactional
     public void createBICDirectoryEntry(BICDirectoryEntryEntity bicDirectoryEntryEntity) {
-        List<SWBICSEntity> swbicsEntityList = bicDirectoryEntryEntity.getSwbics();
-
-        if (swbicsEntityList != null)
-            swbicsEntityList.forEach(swbicsEntity -> {
-                swbicsEntity.setBicDirectoryEntry(bicDirectoryEntryEntity);
-                swbicsService.createSWBICS(swbicsEntity);
-            });
-
         bicDirectoryEntryRepository.save(bicDirectoryEntryEntity);
-        log.debug(bicDirectoryEntryEntity + "saved");
     }
 
     @Transactional
     public BicDirectoryEntryUpdateResponseDTO updateBicDirectoryEntry
             (UUID uuid, BicDirectoryEntryUpdateRequestDTO requestDTO, Principal principal) throws BicDirectoryEntryNotFoundException, RootNotFoundException {
+
+        logger.debug("updateBicDirectoryEntry start");
+
         BICDirectoryEntryEntity existingBicDirectoryEntry = bicDirectoryEntryRepository.findById(uuid)
                 .orElseThrow(() -> new BicDirectoryEntryNotFoundException(uuid));
 
         bicDirectoryEntryEntityMapper.updateFromDto(requestDTO, existingBicDirectoryEntry);
 
-        if (requestDTO.getParticipantInfo() != null) {
-            participantInfoService.updateParticipantInfo(existingBicDirectoryEntry, requestDTO.getParticipantInfo());
-        }
+//        if (requestDTO.getParticipantInfo() != null) {
+//            participantInfoService.updateParticipantInfo(existingBicDirectoryEntry, requestDTO.getParticipantInfo());
+//        }
+//
+//        if (requestDTO.getAccounts() != null) {
+//            existingBicDirectoryEntry.setAccounts(accountsService
+//                    .createNewAccountsEntityList(existingBicDirectoryEntry, requestDTO.getAccounts()));
+//        }
+//
+//        if (requestDTO.getSwbics() != null) {
+//            existingBicDirectoryEntry.setSwbics(swbicsService
+//                    .createSWBICSList(existingBicDirectoryEntry, requestDTO.getSwbics()));
+//        }
 
-        if (requestDTO.getAccounts() != null) {
-            existingBicDirectoryEntry.setAccounts(accountsService
-                    .createNewAccountsEntityList(existingBicDirectoryEntry, requestDTO.getAccounts()));
-        }
-
-        if (requestDTO.getSwbics() != null) {
-            existingBicDirectoryEntry.setSwbics(swbicsService
-                    .createSWBICSList(existingBicDirectoryEntry, requestDTO.getSwbics()));
-        }
-
-        RootEntity rootEntity = rootService.findRootEntityByUuid(existingBicDirectoryEntry.getRootEntity().getUuid());
-        rootService.setAuditFieldsOnUpdateRootEntity(rootEntity, principal);
         BICDirectoryEntryEntity updatedBicDirectoryEntry = bicDirectoryEntryRepository.save(existingBicDirectoryEntry);
 
-        log.debug(updatedBicDirectoryEntry + "updated");
+        logger.debug("updateBicDirectoryEntry finish");
 
         return bicDirectoryEntryEntityMapper.toUpdateResponse(updatedBicDirectoryEntry);
     }
@@ -86,7 +81,9 @@ public class BICDirectoryEntryService {
     @Transactional
     public BicDirectoryEntryCreateResponseDTO createBICDirectoryEntryFromDTO(BicDirectoryEntryCreateRequestDTO requestDTO, Principal principal)
             throws RootNotFoundException {
-        RootEntity rootEntity = rootService.findRootEntityByUuid(requestDTO.getRootId());
+        logger.debug("createBICDirectoryEntryFromDTO start");
+
+        ED807Entity ed807Entity = rootService.findRootEntityByUuid(requestDTO.getRootId());
 
         BICDirectoryEntryEntity bicDirectoryEntry = bicDirectoryEntryEntityMapper.toEntity(requestDTO);
 
@@ -105,14 +102,11 @@ public class BICDirectoryEntryService {
                     .createSWBICSList(bicDirectoryEntry, requestDTO.getSwbics()));
         }
 
-        rootEntity.getBicDirectoryEntry().add(bicDirectoryEntry);
-        bicDirectoryEntry.setRootEntity(rootEntity);
-
-        rootService.setAuditFieldsOnUpdateRootEntity(rootEntity, principal);
+        ed807Entity.getBicDirectoryEntry().add(bicDirectoryEntry);
 
         bicDirectoryEntryRepository.save(bicDirectoryEntry);
 
-        log.debug(bicDirectoryEntry + "created");
+        logger.debug("createBICDirectoryEntryFromDTO end");
 
         return bicDirectoryEntryEntityMapper.toCreateResponse(bicDirectoryEntry);
     }

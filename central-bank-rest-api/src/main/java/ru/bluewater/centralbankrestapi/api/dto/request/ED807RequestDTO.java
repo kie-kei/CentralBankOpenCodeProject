@@ -1,18 +1,17 @@
-package ru.bluewater.centralbankrestapi.api.dto.response;
-
+package ru.bluewater.centralbankrestapi.api.dto.request;
 
 import lombok.*;
+import ru.bluewater.centralbankrestapi.api.dto.response.BICDirectoryEntryResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.InitialEDResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.PartInfoResponseDTO;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.UUID;
-
 
 @Getter
 @Setter
-public class RootResponseDTO {
-    private UUID uuid;
+public class ED807RequestDTO {
     private String fileName;
     private LocalDate createdAt;
     private String createdBy;

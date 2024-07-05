@@ -75,16 +75,17 @@ public class ParticipantInfoEntity {
     private String xchType;
 
     @NotNull(message = "uid should be not null")
-    @Pattern(regexp = "[0-9]{10}", message = "uid should constraint only numbers")
+    @Pattern(regexp = "[0-9]{10}", message = "uid should constraint only numbers or length should be 10")
     private String uid;
 
     @Size(max = 4, message = "ParticipantStatus length should be 4")
     private String participantStatus;
 
-    @OneToMany(mappedBy = "participantInfo", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "participant_info_uuid")
     private List<RstrListEntity> rstrList;
 
-    @OneToOne
-    @JoinColumn(name = "bic_directory_entry_uuid")
-    private BICDirectoryEntryEntity bicDirectoryEntry;
+//    @OneToOne
+//    @JoinColumn(name = "bic_directory_entry_uuid")
+//    private BICDirectoryEntryEntity bicDirectoryEntry;
 }

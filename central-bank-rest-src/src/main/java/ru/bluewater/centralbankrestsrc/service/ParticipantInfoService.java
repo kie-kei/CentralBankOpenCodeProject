@@ -40,7 +40,6 @@ public class ParticipantInfoService {
 
         if (participantInfo == null) {
             participantInfo = new ParticipantInfoEntity();
-            participantInfo.setBicDirectoryEntry(existingEntity);
             existingEntity.setParticipantInfo(participantInfo);
         }
 
@@ -54,7 +53,6 @@ public class ParticipantInfoService {
     public ParticipantInfoEntity createParticipantInfoFromDTO(ParticipantInfoRequestDTO requestDTO, BICDirectoryEntryEntity bicDirectoryEntryEntity) {
         ParticipantInfoEntity participantInfo = participantInfoEntityMapper.toEntity(requestDTO);
 
-        participantInfo.setBicDirectoryEntry(bicDirectoryEntryEntity);
 
         if (requestDTO.getRstrList() != null) {
             participantInfo.setRstrList(rstrListService.createRstrLists(participantInfo, requestDTO.getRstrList()));

@@ -34,10 +34,7 @@ public class AccountsService {
         List<AccRstrListEntity> accRstrListEntityList = accountsEntity.getAccRstrList();
 
         if (accRstrListEntityList != null)
-            accRstrListEntityList.forEach(accRstrList -> {
-                accRstrList.setAccounts(accountsEntity);
-                accRstrListService.createAccRstrList(accRstrList);
-            });
+            accRstrListEntityList.forEach(accRstrListService::createAccRstrList);
 
         accountsRepository.save(accountsEntity);
     }
@@ -52,14 +49,12 @@ public class AccountsService {
         requestDTOs.forEach(accountDTO -> {
             AccountsEntity accountsEntity = accountsEntityMapper.toEntity(accountDTO);
 
-            accountsEntity.setBicDirectoryEntry(bicDirectoryEntry);
 
             List<AccRstrListEntity> accRstrListEntityList = new ArrayList<>();
 
             if (accountDTO.getAccRstrList() != null) {
                 accountDTO.getAccRstrList().forEach(accRstrDTO -> {
                     AccRstrListEntity accRstrListEntity = accRstrListEntityMapper.toEntity(accRstrDTO);
-                    accRstrListEntity.setAccounts(accountsEntity);
                     accRstrListEntityList.add(accRstrListEntity);
                 });
             }

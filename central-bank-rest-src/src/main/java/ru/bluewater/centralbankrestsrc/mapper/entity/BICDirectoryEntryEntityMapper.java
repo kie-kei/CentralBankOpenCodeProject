@@ -15,9 +15,9 @@ public interface BICDirectoryEntryEntityMapper {
     BICDirectoryEntryResponseDTO toBICDirectoryEntryResponseDTO(BICDirectoryEntryEntity bicDirectoryEntryEntity);
 
     @Mapping(target = "uuid", ignore = true)
-    @Mapping(target = "participantInfo", ignore = true)
-    @Mapping(target = "accounts", ignore = true)
-    @Mapping(target = "swbics", ignore = true)
+//    @Mapping(target = "participantInfo", ignore = true)
+//    @Mapping(target = "accounts", ignore = true)
+//    @Mapping(target = "swbics", ignore = true)
     void updateFromDto(BicDirectoryEntryUpdateRequestDTO updateRequestDTO, @MappingTarget BICDirectoryEntryEntity bicDirectoryEntry);
 
     BicDirectoryEntryUpdateResponseDTO toUpdateResponse(BICDirectoryEntryEntity bicDirectoryEntryEntity);

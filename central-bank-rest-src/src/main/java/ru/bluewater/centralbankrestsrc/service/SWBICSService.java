@@ -36,7 +36,6 @@ public class SWBICSService {
 
         swbicsRequestDTOS.forEach(swbicsRequestDTO -> {
             SWBICSEntity swbicsEntity = swbicsEntityMapper.toEntity(swbicsRequestDTO);
-            swbicsEntity.setBicDirectoryEntry(bicDirectoryEntryEntity);
             newEntities.add(swbicsEntity);
         });
 

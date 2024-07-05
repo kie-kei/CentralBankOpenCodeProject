@@ -1,15 +1,15 @@
 package ru.bluewater.centralbankrestsrc.mapper.xml;
 
 import org.mapstruct.Mapper;
-import ru.bluewater.centralbankrestapi.api.dto.response.RootResponseDTO;
-import ru.bluewater.centralbankrestsrc.entity.RootEntity;
+import ru.bluewater.centralbankrestapi.api.dto.response.ED807ResponseDTO;
+import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.entity.xml.ED807;
 
 @Mapper(componentModel = "spring")
 public interface ED807Mapper {
-    RootEntity toRootEntity(ED807 ed807);
+    ED807Entity toRootEntity(ED807 ed807);
 
-    ED807 entityToED807(RootEntity rootEntity);
+    ED807 entityToED807(ED807Entity ED807Entity);
 
-    ED807 dtoToED807(RootResponseDTO rootResponseDTO);
+    ED807 dtoToED807(ED807ResponseDTO ED807ResponseDTO);
 }

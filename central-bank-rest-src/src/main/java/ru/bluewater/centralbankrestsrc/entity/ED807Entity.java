@@ -17,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "ed807")
-public class RootEntity {
+public class ED807Entity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
 //    @Column(name = "ed807_uuid")
@@ -32,18 +32,9 @@ public class RootEntity {
     @NotNull
     private String createdBy;
 
-    private LocalDateTime updatedAt;
-
-    private String updatedBy;
-
-    @OneToMany(mappedBy = "rootEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<BICDirectoryEntryEntity> bicDirectoryEntry;
-
-    @OneToOne(mappedBy = "rootEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private PartInfoEntity partInfo;
-
-    @OneToOne(mappedBy = "rootEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private InitialEDEntity initialED;
+//    private LocalDateTime updatedAt;
+//
+//    private String updatedBy;
 
     @Column(nullable = false)
 //    @Min(value = 1, message = "number of electronic message (EDNo) should be in 0 to 999999999 range")
@@ -85,27 +76,15 @@ public class RootEntity {
     @Max(value = 99, message = "directory BIC Version (DirectoryVersion) should be in range 0 to 99")
     private Integer directoryVersion; // directoryBICVersion, nullable since [0..1]
 
-    @Override
-    public String toString() {
-        return "RootEntity{" +
-                "uuid=" + uuid +
-                ", fileName='" + fileName + '\'' +
-                ", createdAt=" + createdAt +
-                ", createdBy='" + createdBy + '\'' +
-                ", updatedAt=" + updatedAt +
-                ", updatedBy='" + updatedBy + '\'' +
-                ", bicDirectoryEntry=" + bicDirectoryEntry +
-                ", partInfo=" + partInfo +
-                ", initialED=" + initialED +
-                ", edNo=" + edNo +
-                ", edDate=" + edDate +
-                ", edAuthor=" + edAuthor +
-                ", edReceiver=" + edReceiver +
-                ", creationReason='" + creationReason + '\'' +
-                ", creationDateTime=" + creationDateTime +
-                ", infoTypeCode='" + infoTypeCode + '\'' +
-                ", businessDay=" + businessDay +
-                ", directoryVersion=" + directoryVersion +
-                '}';
-    }
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "ed807_uuid")
+    private List<BICDirectoryEntryEntity> bicDirectoryEntry;
+
+    @OneToOne(mappedBy = "ed807Entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private PartInfoEntity partInfo;
+
+    @OneToOne(mappedBy = "ed807Entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private InitialEDEntity initialED;
 }
+
+// rootEntity.getBicDIck bicDick.getRootEntity()

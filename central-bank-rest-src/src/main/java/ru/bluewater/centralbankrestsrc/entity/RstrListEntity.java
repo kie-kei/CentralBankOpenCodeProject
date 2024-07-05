@@ -28,7 +28,4 @@ public class RstrListEntity {
     @NotNull(message = "rstrDate should be not null")
     private LocalDate rstrDate;
 
-    @ManyToOne
-    @JoinColumn(name = "participant_info_uuid")
-    private ParticipantInfoEntity participantInfo;
 }

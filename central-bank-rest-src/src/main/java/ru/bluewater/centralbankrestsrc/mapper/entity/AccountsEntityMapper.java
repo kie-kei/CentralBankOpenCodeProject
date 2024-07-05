@@ -12,6 +12,5 @@ public interface AccountsEntityMapper {
 
     @Mapping(target = "uuid", ignore = true)
     @Mapping(target = "accRstrList", ignore = true)
-    @Mapping(target = "bicDirectoryEntry", ignore = true)
     AccountsEntity toEntity(AccountsRequestDTO requestDTO);
 }

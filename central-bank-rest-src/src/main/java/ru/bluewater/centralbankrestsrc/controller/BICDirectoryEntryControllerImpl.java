@@ -28,17 +28,20 @@ public class BICDirectoryEntryControllerImpl implements BICDirectoryEntryControl
     }
 
     @PostMapping
-    public ResponseEntity<BicDirectoryEntryCreateResponseDTO> createBICDirectoryEntry
-            (@RequestBody BicDirectoryEntryCreateRequestDTO requestDTO, Principal principal)
+    public ResponseEntity<BicDirectoryEntryCreateResponseDTO> createBICDirectoryEntry(
+            @RequestBody BicDirectoryEntryCreateRequestDTO requestDTO,
+            Principal principal
+    )
             throws RootNotFoundException {
         return ResponseEntity.ok(bicDirectoryEntryService.createBICDirectoryEntryFromDTO(requestDTO, principal));
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<BicDirectoryEntryUpdateResponseDTO> updateBICDirectoryEntry
-            (@PathVariable("uuid") UUID uuid,
-             @RequestBody BicDirectoryEntryUpdateRequestDTO requestDTO,
-             Principal principal)
+    public ResponseEntity<BicDirectoryEntryUpdateResponseDTO> updateBICDirectoryEntry(
+            @PathVariable("uuid") UUID uuid,
+            @RequestBody BicDirectoryEntryUpdateRequestDTO requestDTO,
+            Principal principal
+    )
             throws BicDirectoryEntryNotFoundException, RootNotFoundException {
         return ResponseEntity.ok(bicDirectoryEntryService.updateBicDirectoryEntry(uuid, requestDTO, principal));
     }

@@ -12,7 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@EqualsAndHashCode(exclude = "rootEntity")
+@EqualsAndHashCode(exclude = "ed807Entity")
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "initial_ed")
@@ -38,5 +38,5 @@ public class InitialEDEntity {
 
     @OneToOne
     @JoinColumn(name = "ed807_uuid")
-    private RootEntity rootEntity;
+    private ED807Entity ed807Entity;
 }

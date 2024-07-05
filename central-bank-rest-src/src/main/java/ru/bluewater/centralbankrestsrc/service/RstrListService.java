@@ -35,12 +35,6 @@ public class RstrListService {
 
         List<RstrListEntity> newEntities = new ArrayList<>();
 
-        rstrListRequestDTOS.forEach(rstrListRequestDTO -> {
-            RstrListEntity rstrListEntity = rstrListEntityMapper.toEntity(rstrListRequestDTO);
-            rstrListEntity.setParticipantInfo(participantInfo);
-            newEntities.add(rstrListEntity);
-        });
-
         return newEntities;
     }
 }

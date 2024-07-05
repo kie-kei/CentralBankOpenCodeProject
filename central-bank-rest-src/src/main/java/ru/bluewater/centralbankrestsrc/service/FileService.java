@@ -18,9 +18,9 @@ import ru.bluewater.centralbankrestapi.api.dto.service.FileResourceWithNameDTO;
 import ru.bluewater.centralbankrestapi.api.exception.CbrException;
 import ru.bluewater.centralbankrestapi.api.exception.IncorrectFileTypeException;
 import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
-import ru.bluewater.centralbankrestsrc.entity.RootEntity;
+import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.entity.xml.ED807;
-import ru.bluewater.centralbankrestsrc.mapper.entity.RootEntityMapper;
+import ru.bluewater.centralbankrestsrc.mapper.entity.ED807EntityMapper;
 import ru.bluewater.centralbankrestsrc.mapper.xml.ED807Mapper;
 import ru.bluewater.centralbankrestsrc.util.FileUtil;
 import ru.bluewater.centralbankrestsrc.util.XmlParser;
@@ -38,42 +38,42 @@ public class FileService {
     private final BICDirectoryEntryService bicDirectoryEntryService;
     private final FileUtil fileUtil;
     private final ED807Mapper ed807Mapper;
-    private final RootEntityMapper rootEntityMapper;
+    private final ED807EntityMapper ED807EntityMapper;
     private final URI centralBankURI = URI.create("https://cbr.ru/s/newbik");
     private final Logger logger = LoggerFactory.getLogger("fileService logger");
 
 
     @Autowired
-    public FileService(RootService rootService, ParticipantInfoService participantInfoService, BICDirectoryEntryService bicDirectoryEntryService, ED807Mapper ed807Mapper, RootEntityMapper rootEntityMapper, FileUtil fileUtil) {
+    public FileService(RootService rootService, ParticipantInfoService participantInfoService, BICDirectoryEntryService bicDirectoryEntryService, ED807Mapper ed807Mapper, ED807EntityMapper ED807EntityMapper, FileUtil fileUtil) {
         this.rootService = rootService;
         this.participantInfoService = participantInfoService;
         this.bicDirectoryEntryService = bicDirectoryEntryService;
         this.ed807Mapper = ed807Mapper;
-        this.rootEntityMapper = rootEntityMapper;
+        this.ED807EntityMapper = ED807EntityMapper;
         this.fileUtil = fileUtil;
     }
 
     @Transactional
     public FileUploadResponseDTO createRootFromFile(FileRequestDTO requestDTO, Principal principal) throws
             JAXBException, IOException, IncorrectFileTypeException {
-        RootEntity rootEntity = rootFromMultipart(requestDTO.getFile());
-        rootService.createRootEntity(rootEntity, principal);
+        ED807Entity ED807Entity = rootFromMultipart(requestDTO.getFile());
+        rootService.createRootEntity(ED807Entity, principal);
 
         return FileUploadResponseDTO.builder()
-                .uuid(rootEntity.getUuid())
+                .uuid(ED807Entity.getUuid())
                 .build();
     }
 
-    private RootEntity rootFromMultipart(MultipartFile multipartFile) throws IncorrectFileTypeException, IOException, JAXBException {
+    private ED807Entity rootFromMultipart(MultipartFile multipartFile) throws IncorrectFileTypeException, IOException, JAXBException {
         String originalFileName = multipartFile.getOriginalFilename();
         String fileType = originalFileName.substring(originalFileName.lastIndexOf("."));
         if (!fileType.equals(".xml"))
             throw new IncorrectFileTypeException(fileType);
 
         ED807 ed807 = XmlParser.fromXmlFile(multipartFile.getInputStream());
-        RootEntity rootEntity = ed807Mapper.toRootEntity(ed807);
-        rootEntity.setFileName(multipartFile.getOriginalFilename());
-        return rootEntity;
+        ED807Entity ED807Entity = ed807Mapper.toRootEntity(ed807);
+        ED807Entity.setFileName(multipartFile.getOriginalFilename());
+        return ED807Entity;
     }
 
 
@@ -100,11 +100,11 @@ public class FileService {
 
         MultipartFile xmlFile = fileUtil.extractXMLMultipartFileFromZIPByteArray(response.getBody());
 
-        RootEntity rootEntity = rootFromMultipart(xmlFile);
-        rootService.createRootEntity(rootEntity, principal);
+        ED807Entity ED807Entity = rootFromMultipart(xmlFile);
+        rootService.createRootEntity(ED807Entity, principal);
 
         return FileUploadResponseDTO.builder()
-                .uuid(rootEntity.getUuid())
+                .uuid(ED807Entity.getUuid())
                 .build();
     }
 

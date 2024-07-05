@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import ru.bluewater.centralbankrestapi.api.dto.request.update.RootUpdateRequestDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.RootResponseDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.list.RootListResponseDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.read.RootGetResponseDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.update.RootUpdateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.update.ED807UpdateRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.ED807ResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.list.ED807ListResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.read.ED807GetResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.update.ED807UpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.*;
-import ru.bluewater.centralbankrestsrc.mapper.entity.RootEntityMapper;
+import ru.bluewater.centralbankrestsrc.mapper.entity.ED807EntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.RootRepository;
 
 import java.security.Principal;
@@ -23,118 +23,65 @@ import java.util.UUID;
 @Validated
 public class RootService {
     private final RootRepository rootRepository;
-    private final ParticipantInfoService participantInfoService;
-    private final AccountsService accountsService;
-    private final InitialEDService initialEDService;
-    private final PartInfoService partInfoService;
-    private final RootEntityMapper rootEntityMapper;
-    private final RstrListService rstrListService;
-    private final AccRstrListService accRstrListService;
+
+    private final ED807EntityMapper ED807EntityMapper;
+
 
     @Autowired
-    public RootService(RootRepository repository, ParticipantInfoService participantInfoService, AccountsService accountsService, InitialEDService initialEDService, PartInfoService partInfoService, RootEntityMapper rootEntityMapper, RstrListService rstrListService, AccRstrListService accRstrListService) {
+    public RootService(RootRepository repository, ED807EntityMapper ED807EntityMapper) {
         this.rootRepository = repository;
-        this.participantInfoService = participantInfoService;
-        this.accountsService = accountsService;
-        this.initialEDService = initialEDService;
-        this.partInfoService = partInfoService;
-        this.rootEntityMapper = rootEntityMapper;
-        this.rstrListService = rstrListService;
-        this.accRstrListService = accRstrListService;
+        this.ED807EntityMapper = ED807EntityMapper;
     }
 
     @Transactional
-    public RootEntity createRootEntity(RootEntity rootEntity, Principal principal) {
-        InitialEDEntity initialEDEntity = rootEntity.getInitialED();
-        PartInfoEntity partInfoEntity = rootEntity.getPartInfo();
+    public ED807Entity createRootEntity(ED807Entity ed807Entity, Principal principal) {
+        InitialEDEntity initialEDEntity = ed807Entity.getInitialED();
+        PartInfoEntity partInfoEntity = ed807Entity.getPartInfo();
 
-        setAuditFieldsOnCreateRootEntity(rootEntity, principal);
+//        setAuditFieldsOnCreateRootEntity(ED807Entity.getUuid(), principal);
+
 
         if (initialEDEntity != null) {
-            initialEDEntity.setRootEntity(rootEntity);
+            initialEDEntity.setEd807Entity(ed807Entity);
         }
 
         if (partInfoEntity != null) {
-            partInfoEntity.setRootEntity(rootEntity);
+            partInfoEntity.setEd807Entity(ed807Entity);
         }
 
-        rootEntity.getBicDirectoryEntry().forEach(entry -> {
-            entry.setRootEntity(rootEntity);
+        ed807Entity.setCreatedBy(principal.getName());
+        ed807Entity.setCreatedAt(LocalDateTime.now());
 
-            ParticipantInfoEntity participantInfoEntity = entry.getParticipantInfo();
-            List<AccountsEntity> accounts = entry.getAccounts();
-
-            List<SWBICSEntity> swbicsEntities = entry.getSwbics(); // не факт
-
-            if (swbicsEntities != null && !swbicsEntities.isEmpty()) {
-                swbicsEntities.forEach(
-                        swbicsEntity -> {
-                            swbicsEntity.setBicDirectoryEntry(entry);
-                        });
-            }
-
-            if (participantInfoEntity != null && participantInfoEntity.getUuid() == null) {
-                participantInfoEntity.setBicDirectoryEntry(entry);
-                List<RstrListEntity> rstrListEntities = participantInfoEntity.getRstrList();
-
-                if (rstrListEntities != null && !rstrListEntities.isEmpty()) {
-                    rstrListEntities.forEach(
-                            rstrListEntity -> {
-                                rstrListEntity.setParticipantInfo(participantInfoEntity);
-                            }
-                    );
-                }
-
-            }
-
-            if (accounts != null) {
-                accounts.forEach(acc -> {
-                    acc.setBicDirectoryEntry(entry);
-                    List<AccRstrListEntity> accRstrListEntities = acc.getAccRstrList(); //убрать начиная отсюда вроде без этого работает
-                    if (accRstrListEntities != null && !accRstrListEntities.isEmpty()) {
-                        accRstrListEntities.forEach(
-                                accRstrListEntity -> {
-                                    accRstrListEntity.setAccounts(acc);
-                                });
-                    }
-                });
-            }
-        });
-
-        return rootRepository.save(rootEntity);
+        return rootRepository.save(ed807Entity);
     }
 
     @Transactional
-    public RootUpdateResponseDTO updateRoot(UUID uuid, RootUpdateRequestDTO requestDTO) throws RootNotFoundException {
+    public ED807UpdateResponseDTO updateRoot(UUID uuid, ED807UpdateRequestDTO requestDTO) throws RootNotFoundException {
         var rootEntity = rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
-        rootEntityMapper.updateFromDto(requestDTO, rootEntity);
-        return rootEntityMapper.toRootUpdateResponseDTO(rootEntity);
+        ED807EntityMapper.updateFromDto(requestDTO, rootEntity);
+        return ED807EntityMapper.toRootUpdateResponseDTO(rootEntity);
 
     }
 
 
-    public RootResponseDTO findRootByUuid(UUID uuid) throws RootNotFoundException {
-        RootEntity rootEntity = rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
-        return rootEntityMapper.toRootResponseDTO(rootEntity);
+    public ED807ResponseDTO findRootByUuid(UUID uuid) throws RootNotFoundException {
+        ED807Entity ED807Entity = rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
+        return ED807EntityMapper.toRootResponseDTO(ED807Entity);
     }
 
-    public RootEntity findRootEntityByUuid(UUID uuid) throws RootNotFoundException {
+    public ED807Entity findRootEntityByUuid(UUID uuid) throws RootNotFoundException {
         return rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
     }
 
-    public RootListResponseDTO findRootList(){
+    public ED807ListResponseDTO findRootList(){
         var list = rootRepository.findAll();
-        List<RootGetResponseDTO> rootGetResponseDTOS = rootEntityMapper.toListRootGetResponseDTO(list);
-        return new RootListResponseDTO(rootGetResponseDTOS);
+        List<ED807GetResponseDTO> ED807GetResponseDTOS = ED807EntityMapper.toListRootGetResponseDTO(list);
+        return new ED807ListResponseDTO(ED807GetResponseDTOS);
     }
 
-    private void setAuditFieldsOnCreateRootEntity(RootEntity rootEntity, Principal principal) {
-        rootEntity.setCreatedBy(principal.getName());
-        rootEntity.setCreatedAt(LocalDateTime.now());
-    }
+//    @Transactional
+//    public void setAuditFieldsOnCreateRootEntity(UUID uuid, Principal principal) {
+////        rootRepository.createAuditFields(uuid, LocalDateTime.now(), principal.getName());
+//    }
 
-    public void setAuditFieldsOnUpdateRootEntity(RootEntity rootEntity, Principal principal) {
-        rootEntity.setUpdatedAt(LocalDateTime.now());
-        rootEntity.setUpdatedBy(principal.getName());
-    }
 }
