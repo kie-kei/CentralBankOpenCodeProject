@@ -27,7 +27,7 @@ public class RootControllerImpl implements RootController {
         return rootService.findRootByUuid(uuid);
     }
 
-    @PatchMapping(value = "/{uuid}") //заменить на RootUpdateResponseDTO
+    @PutMapping(value = "/{uuid}") //заменить на RootUpdateResponseDTO
     public RootUpdateResponseDTO updateRoot(@PathVariable("uuid") UUID uuid, @RequestBody RootUpdateRequestDTO requestDTO)
             throws RootNotFoundException
     {
