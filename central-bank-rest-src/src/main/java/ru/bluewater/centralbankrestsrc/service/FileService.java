@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -33,19 +34,22 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class FileService {
-    private final RootService rootService;
+    private final ED807Service ED807Service;
     private final ParticipantInfoService participantInfoService;
     private final BICDirectoryEntryService bicDirectoryEntryService;
     private final FileUtil fileUtil;
     private final ED807Mapper ed807Mapper;
     private final ED807EntityMapper ED807EntityMapper;
-    private final URI centralBankURI = URI.create("https://cbr.ru/s/newbik");
+
+    @Value("${central-bank-uri}")
+    private String centralBankURI;
+    //private final URI centralBankURI = URI.create("https://cbr.ru/s/newbik");
     private final Logger logger = LoggerFactory.getLogger("fileService logger");
 
 
     @Autowired
-    public FileService(RootService rootService, ParticipantInfoService participantInfoService, BICDirectoryEntryService bicDirectoryEntryService, ED807Mapper ed807Mapper, ED807EntityMapper ED807EntityMapper, FileUtil fileUtil) {
-        this.rootService = rootService;
+    public FileService(ED807Service ED807Service, ParticipantInfoService participantInfoService, BICDirectoryEntryService bicDirectoryEntryService, ED807Mapper ed807Mapper, ED807EntityMapper ED807EntityMapper, FileUtil fileUtil) {
+        this.ED807Service = ED807Service;
         this.participantInfoService = participantInfoService;
         this.bicDirectoryEntryService = bicDirectoryEntryService;
         this.ed807Mapper = ed807Mapper;
@@ -57,7 +61,7 @@ public class FileService {
     public FileUploadResponseDTO createRootFromFile(FileRequestDTO requestDTO, Principal principal) throws
             JAXBException, IOException, IncorrectFileTypeException {
         ED807Entity ED807Entity = rootFromMultipart(requestDTO.getFile());
-        rootService.createRootEntity(ED807Entity, principal);
+        ED807Service.createRootEntity(ED807Entity, principal);
 
         return FileUploadResponseDTO.builder()
                 .uuid(ED807Entity.getUuid())
@@ -78,7 +82,7 @@ public class FileService {
 
 
     public FileResourceWithNameDTO getFileByRootUuid(UUID uuid) throws RootNotFoundException, JAXBException {
-        var rootEntity = rootService.findRootByUuid(uuid);
+        var rootEntity = ED807Service.findRootByUuid(uuid);
         var content = XmlParser.toXml(ed807Mapper.dtoToED807(rootEntity));
         var resource = new ByteArrayResource(content.getBytes());
         return FileResourceWithNameDTO.builder()
@@ -93,7 +97,7 @@ public class FileService {
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<byte[]> response = restTemplate.exchange(
-                centralBankURI, HttpMethod.GET, null, byte[].class);
+                URI.create(centralBankURI), HttpMethod.GET, null, byte[].class);
 
         if (response.getBody() == null || response.getBody().length == 0)
             throw new CbrException(response.getStatusCode());
@@ -101,7 +105,7 @@ public class FileService {
         MultipartFile xmlFile = fileUtil.extractXMLMultipartFileFromZIPByteArray(response.getBody());
 
         ED807Entity ED807Entity = rootFromMultipart(xmlFile);
-        rootService.createRootEntity(ED807Entity, principal);
+        ED807Service.createRootEntity(ED807Entity, principal);
 
         return FileUploadResponseDTO.builder()
                 .uuid(ED807Entity.getUuid())

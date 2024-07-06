@@ -17,6 +17,5 @@ public class BicDirectoryEntryUpdateRequestDTO {
     private String BIC;
     private String changeType;
     private ParticipantInfoRequestDTO participantInfo;
-    private List<AccountsRequestDTO> accounts;
-    private List<SWBICSRequestDTO> swbics;
+
 }

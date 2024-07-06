@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import ru.bluewater.centralbankrestapi.api.dto.request.ParticipantInfoRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.create.ParticipantInfoCreateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.ParticipantInfoResponseDTO;
 import ru.bluewater.centralbankrestsrc.entity.ParticipantInfoEntity;
 
@@ -16,7 +17,9 @@ public interface ParticipantInfoEntityMapper {
     void updateFromDTO(ParticipantInfoRequestDTO requestDTO, @MappingTarget ParticipantInfoEntity participantInfo);
 
     @Mapping(target = "uuid", ignore = true)
-    @Mapping(target = "rstrList", ignore = true)
+//    @Mapping(target = "rstrList", ignore = true)
     ParticipantInfoEntity toEntity(ParticipantInfoRequestDTO requestDTO);
+
+    ParticipantInfoEntity fromCreateRequestToEntity(ParticipantInfoCreateRequestDTO requestDTO);
 }
 

@@ -8,21 +8,16 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.xml.bind.JAXBException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.bluewater.centralbankrestapi.api.dto.request.FileRequestDTO;
-import ru.bluewater.centralbankrestapi.api.dto.request.create.BicDirectoryEntryCreateRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.create.BICDirectoryEntryCreateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.BicDirectoryEntryUpdateRequestDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.FileUploadResponseDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.create.BicDirectoryEntryCreateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.create.BICDirectoryEntryCreateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.error.ErrorResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.BicDirectoryEntryUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
-import ru.bluewater.centralbankrestapi.api.exception.IncorrectFileTypeException;
 import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.UUID;
 
@@ -34,18 +29,18 @@ public interface BICDirectoryEntryController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "BIC directory entry created",
                     content = { @Content(mediaType = "application/hal+json",
-                            schema = @Schema(implementation = BicDirectoryEntryCreateResponseDTO.class)) }),
+                            schema = @Schema(implementation = BICDirectoryEntryCreateResponseDTO.class)) }),
             @ApiResponse(responseCode = "400", description = "Invalid input",
                     content =  { @Content(mediaType = "application/hal+json",
                             schema = @Schema(implementation = ErrorResponseDTO.class)) }),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "text/plain"))})
     @PostMapping
-    ResponseEntity<BicDirectoryEntryCreateResponseDTO> createBICDirectoryEntry(
+    ResponseEntity<BICDirectoryEntryCreateResponseDTO> createBICDirectoryEntry(
             @RequestBody(description = "BIC directory entry create request",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BicDirectoryEntryCreateRequestDTO.class)))
-            BicDirectoryEntryCreateRequestDTO requestDTO, @Parameter(hidden = true) Principal principal) throws
+                            schema = @Schema(implementation = BICDirectoryEntryCreateRequestDTO.class)))
+            BICDirectoryEntryCreateRequestDTO requestDTO, @Parameter(hidden = true) Principal principal) throws
             RootNotFoundException;
 
 

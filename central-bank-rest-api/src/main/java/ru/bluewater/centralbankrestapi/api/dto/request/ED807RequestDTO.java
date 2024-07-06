@@ -15,11 +15,6 @@ public class ED807RequestDTO {
     private String fileName;
     private LocalDate createdAt;
     private String createdBy;
-    private LocalDate updatedAt;
-    private String updatedBy;
-    private List<BICDirectoryEntryResponseDTO> bicDirectoryEntry;
-    private PartInfoResponseDTO partInfo;
-    private InitialEDResponseDTO initialED;
     private Integer edNo; // numberOfElectronicMessage
     private LocalDate edDate; // dateOfCompilationElectronicMessage format YYYY-MM-DD
     private Long edAuthor; // electronicMessageAuthorId unique
@@ -29,5 +24,4 @@ public class ED807RequestDTO {
     private String infoTypeCode; // typeOfInformationPresentationCode
     private LocalDate businessDay; // format YYYY-MM-DD
     private Integer directoryVersion; // directoryBICVersion, nullable since [0..1]
-
 }

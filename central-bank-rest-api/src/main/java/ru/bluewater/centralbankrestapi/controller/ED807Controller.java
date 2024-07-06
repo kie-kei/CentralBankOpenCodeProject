@@ -17,9 +17,9 @@ import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/root")
-@Tag(name = "Root")
-public interface RootController {
+@RequestMapping("/api/v1/ed807")
+@Tag(name = "ED807")
+public interface ED807Controller {
     @Operation(summary = "Get ed807 by uuid")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "ed807 is received",
@@ -31,7 +31,7 @@ public interface RootController {
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "text/plain"))})
     @GetMapping(value = "/{uuid}")
-    ED807ResponseDTO findRootByUuid(@PathVariable("uuid") UUID uuid)
+    ED807ResponseDTO findED807ByUuid(@PathVariable("uuid") UUID uuid)
             throws RootNotFoundException;
 
     @Operation(summary = "Update ed807 by uuid")
@@ -45,7 +45,7 @@ public interface RootController {
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "text/plain"))})
     @GetMapping(value = "/{uuid}")
-    ED807UpdateResponseDTO updateRoot(@PathVariable("uuid") UUID uuid, @RequestBody ED807UpdateRequestDTO requestDTO)
+    ED807UpdateResponseDTO updateED807(@PathVariable("uuid") UUID uuid, @RequestBody ED807UpdateRequestDTO requestDTO)
             throws RootNotFoundException;
 
     @Operation(summary = "List ed807")
@@ -56,5 +56,5 @@ public interface RootController {
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "text/plain"))})
     @GetMapping
-    ED807ListResponseDTO findRootList() throws RootNotFoundException;
+    ED807ListResponseDTO findED807List() throws RootNotFoundException;
 }

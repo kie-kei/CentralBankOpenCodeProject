@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import ru.bluewater.centralbankrestapi.api.dto.request.create.ED807CreateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.ED807UpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.ED807ResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.delete.ED807DeleteResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.list.ED807ListResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.ED807GetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.ED807UpdateResponseDTO;
@@ -21,16 +23,16 @@ import java.util.UUID;
 
 @Service
 @Validated
-public class RootService {
+public class ED807Service {
     private final RootRepository rootRepository;
 
-    private final ED807EntityMapper ED807EntityMapper;
+    private final ED807EntityMapper ed807EntityMapper;
 
 
     @Autowired
-    public RootService(RootRepository repository, ED807EntityMapper ED807EntityMapper) {
+    public ED807Service(RootRepository repository, ED807EntityMapper ed807EntityMapper) {
         this.rootRepository = repository;
-        this.ED807EntityMapper = ED807EntityMapper;
+        this.ed807EntityMapper = ed807EntityMapper;
     }
 
     @Transactional
@@ -38,7 +40,8 @@ public class RootService {
         InitialEDEntity initialEDEntity = ed807Entity.getInitialED();
         PartInfoEntity partInfoEntity = ed807Entity.getPartInfo();
 
-//        setAuditFieldsOnCreateRootEntity(ED807Entity.getUuid(), principal);
+
+        setAuditFieldsOnCreateRootEntity(ed807Entity, principal);
 
 
         if (initialEDEntity != null) {
@@ -58,15 +61,15 @@ public class RootService {
     @Transactional
     public ED807UpdateResponseDTO updateRoot(UUID uuid, ED807UpdateRequestDTO requestDTO) throws RootNotFoundException {
         var rootEntity = rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
-        ED807EntityMapper.updateFromDto(requestDTO, rootEntity);
-        return ED807EntityMapper.toRootUpdateResponseDTO(rootEntity);
+        ed807EntityMapper.updateFromDto(requestDTO, rootEntity);
+        return ed807EntityMapper.toRootUpdateResponseDTO(rootEntity);
 
     }
 
 
     public ED807ResponseDTO findRootByUuid(UUID uuid) throws RootNotFoundException {
         ED807Entity ED807Entity = rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
-        return ED807EntityMapper.toRootResponseDTO(ED807Entity);
+        return ed807EntityMapper.toRootResponseDTO(ED807Entity);
     }
 
     public ED807Entity findRootEntityByUuid(UUID uuid) throws RootNotFoundException {
@@ -75,13 +78,27 @@ public class RootService {
 
     public ED807ListResponseDTO findRootList(){
         var list = rootRepository.findAll();
-        List<ED807GetResponseDTO> ED807GetResponseDTOS = ED807EntityMapper.toListRootGetResponseDTO(list);
+        List<ED807GetResponseDTO> ED807GetResponseDTOS = ed807EntityMapper.toListRootGetResponseDTO(list);
         return new ED807ListResponseDTO(ED807GetResponseDTOS);
     }
 
-//    @Transactional
-//    public void setAuditFieldsOnCreateRootEntity(UUID uuid, Principal principal) {
-////        rootRepository.createAuditFields(uuid, LocalDateTime.now(), principal.getName());
-//    }
+    @Transactional
+    public ED807ResponseDTO createED807(ED807CreateRequestDTO requestDTO, Principal principal){
+        ED807Entity entity = ed807EntityMapper.fromCreateRequestToEntity(requestDTO);
+        setAuditFieldsOnCreateRootEntity(entity, principal);
+        rootRepository.save(entity);
+        return ed807EntityMapper.toRootResponseDTO(entity);
+    }
+
+    @Transactional
+    public void deleteED807(UUID uuid) throws RootNotFoundException {
+        var ed807 = rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
+        rootRepository.delete(ed807);
+    }
+
+    public void setAuditFieldsOnCreateRootEntity(ED807Entity ed807Entity, Principal principal) {
+        ed807Entity.setCreatedBy(principal.getName());
+        ed807Entity.setCreatedAt(LocalDateTime.now());
+    }
 
 }

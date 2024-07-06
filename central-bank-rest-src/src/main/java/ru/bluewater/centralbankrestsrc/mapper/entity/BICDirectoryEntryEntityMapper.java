@@ -3,12 +3,16 @@ package ru.bluewater.centralbankrestsrc.mapper.entity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import ru.bluewater.centralbankrestapi.api.dto.request.create.BicDirectoryEntryCreateRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.create.BICDirectoryEntryCreateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.BicDirectoryEntryUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.BICDirectoryEntryResponseDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.create.BicDirectoryEntryCreateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.create.BICDirectoryEntryCreateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.list.BICDirectoryEntryListResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.read.BICDirectoryEntryGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.BicDirectoryEntryUpdateResponseDTO;
 import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface BICDirectoryEntryEntityMapper {
@@ -22,10 +26,16 @@ public interface BICDirectoryEntryEntityMapper {
 
     BicDirectoryEntryUpdateResponseDTO toUpdateResponse(BICDirectoryEntryEntity bicDirectoryEntryEntity);
 
-    @Mapping(target = "participantInfo", ignore = true)
-    @Mapping(target = "accounts", ignore = true)
-    @Mapping(target = "swbics", ignore = true)
-    BICDirectoryEntryEntity toEntity(BicDirectoryEntryCreateRequestDTO bicDirectoryEntryCreateRequestDTO);
+//    @Mapping(target = "participantInfo", ignore = true)
+//    @Mapping(target = "accounts", ignore = true)
+//    @Mapping(target = "swbics", ignore = true)
+    BICDirectoryEntryEntity fromCreateRequestToEntity(
+            BICDirectoryEntryCreateRequestDTO bicDirectoryEntryCreateRequestDTO
+    );
 
-    BicDirectoryEntryCreateResponseDTO toCreateResponse(BICDirectoryEntryEntity bicDirectoryEntryEntity);
+    BICDirectoryEntryCreateResponseDTO toCreateResponse(BICDirectoryEntryEntity bicDirectoryEntryEntity);
+    BICDirectoryEntryEntity fromUpdateRequestToEntity(BicDirectoryEntryUpdateRequestDTO requestDTO);
+    BICDirectoryEntryGetResponseDTO toGetResponse(BICDirectoryEntryEntity entity);
+
+    List<BICDirectoryEntryGetResponseDTO> toListGetResponse(List<BICDirectoryEntryEntity> entryEntityList);
 }

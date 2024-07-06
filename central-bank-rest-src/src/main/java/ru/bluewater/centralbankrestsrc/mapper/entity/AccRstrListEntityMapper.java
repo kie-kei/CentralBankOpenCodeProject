@@ -3,6 +3,7 @@ package ru.bluewater.centralbankrestsrc.mapper.entity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.bluewater.centralbankrestapi.api.dto.request.AccRstrListRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.create.AccRstrListCreateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.AccRstrListResponseDTO;
 import ru.bluewater.centralbankrestsrc.entity.AccRstrListEntity;
 
@@ -12,4 +13,6 @@ public interface AccRstrListEntityMapper {
 
     @Mapping(target = "uuid", ignore = true)
     AccRstrListEntity toEntity(AccRstrListRequestDTO requestDTO);
+
+    AccRstrListEntity fromCreateRequestToEntity(AccRstrListCreateRequestDTO requestDTO);
 }

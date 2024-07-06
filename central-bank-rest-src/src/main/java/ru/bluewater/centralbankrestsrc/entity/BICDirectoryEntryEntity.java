@@ -39,4 +39,8 @@ public class BICDirectoryEntryEntity {
     @JoinColumn(name = "bic_directory_entry_uuid")
     private List<SWBICSEntity> swbics;
 
+//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "ed807_uuid")
+//    private ED807Entity ed807Entity;
+
 }
