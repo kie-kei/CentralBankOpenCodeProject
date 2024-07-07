@@ -27,8 +27,7 @@ public class BICDirectoryEntryEntity {
     private String changeType;
 
     @NotNull(message = "participantInfo should be not null")
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bic_directory_entry_uuid")
+    @OneToOne(mappedBy = "bicDirectoryEntry",cascade = CascadeType.ALL)
     private ParticipantInfoEntity participantInfo;
 
     @OneToMany(cascade = CascadeType.ALL)

@@ -24,10 +24,10 @@ public class ED807ControllerImpl implements ED807Controller {
         this.ed807Service = ed807Service;
     }
 
-    @PostMapping
-    public ED807ResponseDTO createED807(@RequestBody ED807CreateRequestDTO requestDTO, Principal principal){
-        return ed807Service.createED807(requestDTO, principal);
-    }
+//    @PostMapping
+//    public ED807ResponseDTO createED807(@RequestBody ED807CreateRequestDTO requestDTO, Principal principal){
+//        return ed807Service.createED807(requestDTO, principal);
+//    }
 
     @GetMapping(value = "/{uuid}")
     public ED807ResponseDTO findED807ByUuid(@PathVariable("uuid") UUID uuid) throws RootNotFoundException {

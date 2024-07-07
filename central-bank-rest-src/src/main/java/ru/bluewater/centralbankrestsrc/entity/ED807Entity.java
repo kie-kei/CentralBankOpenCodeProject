@@ -80,11 +80,11 @@ public class ED807Entity {
     @JoinColumn(name = "ed807_uuid")
     private List<BICDirectoryEntryEntity> bicDirectoryEntry;
 
-    @OneToOne(mappedBy = "ed807Entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private PartInfoEntity partInfo;
-
-    @OneToOne(mappedBy = "ed807Entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private InitialEDEntity initialED;
+//    @OneToOne(mappedBy = "ed807Entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private PartInfoEntity partInfo;
+//
+//    @OneToOne(mappedBy = "ed807Entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private InitialEDEntity initialED;
 }
 
 // rootEntity.getBicDIck bicDick.getRootEntity()

@@ -16,7 +16,7 @@ import java.util.UUID;
 @Entity(name = "part_info")
 public class PartInfoEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+//    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
     //    @Min(1)
@@ -37,6 +37,8 @@ public class PartInfoEntity {
     private BigDecimal partAggregateID;
 
     @OneToOne
-    @JoinColumn(name = "ed807_uuid")
+    @MapsId
+    @JoinColumn(name = "uuid")
+//    @JoinColumn(name = "ed807_uuid")
     private ED807Entity ed807Entity;
 }

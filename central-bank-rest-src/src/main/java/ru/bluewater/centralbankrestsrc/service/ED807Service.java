@@ -7,13 +7,20 @@ import org.springframework.validation.annotation.Validated;
 import ru.bluewater.centralbankrestapi.api.dto.request.create.ED807CreateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.ED807UpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.ED807ResponseDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.delete.ED807DeleteResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.list.ED807ListResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.ED807GetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.ED807UpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
+import ru.bluewater.centralbankrestsrc.dto.FileDTO;
 import ru.bluewater.centralbankrestsrc.entity.*;
+import ru.bluewater.centralbankrestsrc.entity.xml.BICDirectoryEntry;
+import ru.bluewater.centralbankrestsrc.entity.xml.ED807;
 import ru.bluewater.centralbankrestsrc.mapper.entity.ED807EntityMapper;
+import ru.bluewater.centralbankrestsrc.mapper.xml.ED807Mapper;
+import ru.bluewater.centralbankrestsrc.mapper.xml.InitialEDMapper;
+import ru.bluewater.centralbankrestsrc.mapper.xml.PartInfoMapper;
+import ru.bluewater.centralbankrestsrc.respository.InitialEDRepository;
+import ru.bluewater.centralbankrestsrc.respository.PartInfoRepository;
 import ru.bluewater.centralbankrestsrc.respository.RootRepository;
 
 import java.security.Principal;
@@ -27,36 +34,82 @@ public class ED807Service {
     private final RootRepository rootRepository;
 
     private final ED807EntityMapper ed807EntityMapper;
+    private final ED807Mapper ed807Mapper;
+    private final PartInfoMapper partInfoMapper;
+    private final InitialEDMapper initialEDMapper;
+    private final InitialEDRepository initialEDRepository;
+    private final PartInfoRepository partInfoRepository;
 
 
     @Autowired
-    public ED807Service(RootRepository repository, ED807EntityMapper ed807EntityMapper) {
+    public ED807Service(RootRepository repository, ED807EntityMapper ed807EntityMapper, ED807Mapper ed807Mapper, PartInfoMapper partInfoMapper, InitialEDMapper initialEDMapper, InitialEDRepository initialEDRepository, PartInfoRepository partInfoRepository) {
         this.rootRepository = repository;
         this.ed807EntityMapper = ed807EntityMapper;
+        this.ed807Mapper = ed807Mapper;
+        this.partInfoMapper = partInfoMapper;
+        this.initialEDMapper = initialEDMapper;
+        this.initialEDRepository = initialEDRepository;
+        this.partInfoRepository = partInfoRepository;
     }
+
 
     @Transactional
-    public ED807Entity createRootEntity(ED807Entity ed807Entity, Principal principal) {
-        InitialEDEntity initialEDEntity = ed807Entity.getInitialED();
-        PartInfoEntity partInfoEntity = ed807Entity.getPartInfo();
+    public ED807Entity createED807FromFileDTO(FileDTO fileDTO, Principal principal){
+        ED807 ed807 = fileDTO.getEd807();
+        String filename = fileDTO.getFilename();
 
-
+        ED807Entity ed807Entity =  ed807Mapper.toRootEntity(ed807);
         setAuditFieldsOnCreateRootEntity(ed807Entity, principal);
+        ed807Entity.setFileName(filename);
 
-
-        if (initialEDEntity != null) {
-            initialEDEntity.setEd807Entity(ed807Entity);
+        if (ed807.getPartInfo() != null){
+            PartInfoEntity partInfoEntity = partInfoMapper.toPartInfoEntity(ed807.getPartInfo());
+            partInfoRepository.save(partInfoEntity);
         }
 
-        if (partInfoEntity != null) {
-            partInfoEntity.setEd807Entity(ed807Entity);
+        if(ed807.getInitialED() != null){
+            InitialEDEntity initialEDEntity = initialEDMapper.toInitialEDEntity(ed807.getInitialED());
+            initialEDRepository.save(initialEDEntity);
         }
 
-        ed807Entity.setCreatedBy(principal.getName());
-        ed807Entity.setCreatedAt(LocalDateTime.now());
+        if (ed807Entity.getBicDirectoryEntry() != null) {
+            List<BICDirectoryEntryEntity> bicDicList = ed807Entity.getBicDirectoryEntry();
+            bicDicList.forEach(x -> {
+                ParticipantInfoEntity participantInfoEntity = x.getParticipantInfo();
+                participantInfoEntity.setBicDirectoryEntry(x);
+            });
+        }
 
-        return rootRepository.save(ed807Entity);
+
+        rootRepository.save(ed807Entity);
+
+        return ed807Entity;
     }
+
+
+//    @Transactional
+//    public ED807Entity createRootEntity(ED807Entity ed807Entity, Principal principal) {
+//        setAuditFieldsOnCreateRootEntity(ed807Entity, principal);
+//
+//        InitialEDEntity initialEDEntity = ed807Entity.getInitialED();
+//        PartInfoEntity partInfoEntity = ed807Entity.getPartInfo();
+//        List<BICDirectoryEntryEntity> bicDicList = ed807Entity.getBicDirectoryEntry();
+//
+//        if (bicDicList != null){
+//            bicDicList.forEach(x -> {
+//                ParticipantInfoEntity participantInfoEntity = x.getParticipantInfo();
+//                participantInfoEntity.setBicDirectoryEntry(x);
+//            });
+//
+//        }
+//        if (initialEDEntity != null) {
+//            initialEDEntity.setEd807Entity(ed807Entity);
+//        }
+//        if (partInfoEntity != null) {
+//            partInfoEntity.setEd807Entity(ed807Entity);
+//        }
+//        return rootRepository.save(ed807Entity);
+//    }
 
     @Transactional
     public ED807UpdateResponseDTO updateRoot(UUID uuid, ED807UpdateRequestDTO requestDTO) throws RootNotFoundException {

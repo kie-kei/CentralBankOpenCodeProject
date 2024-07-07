@@ -19,7 +19,7 @@ import java.util.UUID;
 @Entity(name = "participant_info")
 public class ParticipantInfoEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+//    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
     @Size(min = 1, max = 160, message = "NameP length should be from 1 to 160")
@@ -85,7 +85,9 @@ public class ParticipantInfoEntity {
     @JoinColumn(name = "participant_info_uuid")
     private List<RstrListEntity> rstrList;
 
-//    @OneToOne
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "uuid")
 //    @JoinColumn(name = "bic_directory_entry_uuid")
-//    private BICDirectoryEntryEntity bicDirectoryEntry;
+    private BICDirectoryEntryEntity bicDirectoryEntry;
 }

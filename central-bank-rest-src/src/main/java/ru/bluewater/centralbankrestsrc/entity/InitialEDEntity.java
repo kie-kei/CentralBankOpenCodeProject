@@ -18,7 +18,7 @@ import java.util.UUID;
 @Entity(name = "initial_ed")
 public class InitialEDEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+//    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
     @Min(value = 1, message = "number of electronic message (EDNo) should be in 0 to 999999999 range")
@@ -37,6 +37,8 @@ public class InitialEDEntity {
     private Long edAuthor; // electronicMessageAuthorId unique
 
     @OneToOne
-    @JoinColumn(name = "ed807_uuid")
+    @MapsId
+    @JoinColumn(name = "uuid")
+//    @JoinColumn(name = "ed807_uuid")
     private ED807Entity ed807Entity;
 }
