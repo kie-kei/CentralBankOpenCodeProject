@@ -29,5 +29,4 @@ public class ParticipantInfoGetResponseDTO {
     private String xchType;
     private String uid;
     private String participantStatus;
-    private List<RstrListResponseDTO> rstrList;
 }

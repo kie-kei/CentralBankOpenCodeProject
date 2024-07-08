@@ -2,7 +2,7 @@ package ru.bluewater.centralbankrestsrc.mapper.xml;
 
 import org.mapstruct.Mapper;
 import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
-import ru.bluewater.centralbankrestsrc.entity.xml.BICDirectoryEntry;
+import ru.bluewater.centralbankrestsrc.dto.xml.BICDirectoryEntry;
 
 @Mapper(componentModel = "spring")
 public interface BICDirectoryEntryMapper {

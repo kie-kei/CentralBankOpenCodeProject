@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.bluewater.centralbankrestapi.api.dto.response.error.ErrorResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.error.ValidationErrorResponse;
 import ru.bluewater.centralbankrestapi.api.dto.response.error.ViolationResponseDTO;
-import ru.bluewater.centralbankrestapi.api.exception.CbrException;
-import ru.bluewater.centralbankrestapi.api.exception.IncorrectFileTypeException;
-import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
-import ru.bluewater.centralbankrestapi.api.exception.UsernameAlreadyExistsException;
+import ru.bluewater.centralbankrestapi.api.exception.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -75,10 +72,52 @@ public class ErrorHandlingControllerAdvice {
         return new ErrorResponseDTO(e.getMessage());
     }
 
-    @ExceptionHandler(RootNotFoundException.class)
+    @ExceptionHandler(ED807NotFoundException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponseDTO onFileNotFoundException(RootNotFoundException e){
+    public ErrorResponseDTO onFileNotFoundException(ED807NotFoundException e){
+        return new ErrorResponseDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(PartInfoNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDTO onPartInfoNotFoundException(PartInfoNotFoundException e){
+        return new ErrorResponseDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(AccountsNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDTO onAccountsNotFoundException(AccountsNotFoundException e){
+        return new ErrorResponseDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(ParticipantInfoNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDTO onParticipantInfoNotFoundException(ParticipantInfoNotFoundException e){
+        return new ErrorResponseDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(RstrListNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDTO onRstrListNotFoundException(RstrListNotFoundException e){
+        return new ErrorResponseDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(AccRstrListNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDTO onAccRstrListNotFoundException(AccRstrListNotFoundException e){
+        return new ErrorResponseDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(InitialEDNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDTO onInitialEdNotFoundException(InitialEDNotFoundException e){
         return new ErrorResponseDTO(e.getMessage());
     }
 

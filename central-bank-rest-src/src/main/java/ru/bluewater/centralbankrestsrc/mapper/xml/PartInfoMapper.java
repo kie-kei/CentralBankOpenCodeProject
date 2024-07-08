@@ -2,7 +2,7 @@ package ru.bluewater.centralbankrestsrc.mapper.xml;
 
 import org.mapstruct.Mapper;
 import ru.bluewater.centralbankrestsrc.entity.PartInfoEntity;
-import ru.bluewater.centralbankrestsrc.entity.xml.PartInfo;
+import ru.bluewater.centralbankrestsrc.dto.xml.PartInfo;
 
 @Mapper(componentModel = "spring")
 public interface PartInfoMapper {

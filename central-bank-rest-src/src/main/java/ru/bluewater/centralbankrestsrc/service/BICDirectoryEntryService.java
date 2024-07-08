@@ -1,5 +1,6 @@
 package ru.bluewater.centralbankrestsrc.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +11,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.list.BICDirectoryEntryLi
 import ru.bluewater.centralbankrestapi.api.dto.response.read.BICDirectoryEntryGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.BicDirectoryEntryUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
-import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
 import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.mapper.entity.BICDirectoryEntryEntityMapper;
@@ -20,44 +21,28 @@ import ru.bluewater.centralbankrestsrc.respository.RootRepository;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class BICDirectoryEntryService {
     private final BICDirectoryEntryRepository bicDirectoryEntryRepository;
-    private final SWBICSService swbicsService;
-    private final ParticipantInfoService participantInfoService;
     private final BICDirectoryEntryEntityMapper bicDirectoryEntryEntityMapper;
-    private final AccountsService accountsService;
-    private final ED807Service ed807Service;
     private final RootRepository rootRepository;
-    @Autowired
-    public BICDirectoryEntryService(
-            BICDirectoryEntryRepository bicDirectoryEntryRepository,
-            SWBICSService swbicsService, ParticipantInfoService participantInfoService,
-            BICDirectoryEntryEntityMapper bicDirectoryEntryEntityMapper,
-            AccountsService accountsService,
-            ED807Service ed807Service,
-            RootRepository rootRepository) {
-        this.bicDirectoryEntryRepository = bicDirectoryEntryRepository;
-        this.swbicsService = swbicsService;
-        this.participantInfoService = participantInfoService;
-        this.bicDirectoryEntryEntityMapper = bicDirectoryEntryEntityMapper;
-        this.accountsService = accountsService;
-        this.ed807Service = ed807Service;
-        this.rootRepository = rootRepository;
-    }
 
     @Transactional
-    public BICDirectoryEntryCreateResponseDTO createBICDirectoryEntry(BICDirectoryEntryCreateRequestDTO requestDTO) throws RootNotFoundException {
+    public BICDirectoryEntryCreateResponseDTO createBICDirectoryEntry(
+            UUID ed807Uuid,
+            BICDirectoryEntryCreateRequestDTO requestDTO
+    ) throws ED807NotFoundException {
         var bicDir = bicDirectoryEntryEntityMapper.fromCreateRequestToEntity(requestDTO);
-        var ed807 = rootRepository.findById(requestDTO.getRootId()).orElseThrow(() ->
-                new RootNotFoundException(requestDTO.getRootId())
+        var ed807 = rootRepository.findById(ed807Uuid).orElseThrow(() ->
+                new ED807NotFoundException(ed807Uuid)
         );
         ed807.getBicDirectoryEntry().add(bicDir);
         bicDirectoryEntryRepository.save(bicDir);
         return bicDirectoryEntryEntityMapper.toCreateResponse(bicDir);
     }
 
-    public BICDirectoryEntryListResponseDTO findBICDirectoryEntryListByEd807Uuid(UUID ed807Uuid) throws RootNotFoundException {
-        ED807Entity ed807 = rootRepository.findById(ed807Uuid).orElseThrow(() -> new RootNotFoundException(ed807Uuid));
+    public BICDirectoryEntryListResponseDTO findBICDirectoryEntryListByEd807Uuid(UUID ed807Uuid) throws ED807NotFoundException {
+        ED807Entity ed807 = rootRepository.findById(ed807Uuid).orElseThrow(() -> new ED807NotFoundException(ed807Uuid));
         var bicList = ed807.getBicDirectoryEntry();
         return new BICDirectoryEntryListResponseDTO(bicDirectoryEntryEntityMapper.toListGetResponse(bicList));
     }

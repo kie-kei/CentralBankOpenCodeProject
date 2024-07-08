@@ -1,5 +1,4 @@
-package ru.bluewater.centralbankrestsrc.entity.xml;
-
+package ru.bluewater.centralbankrestsrc.dto.xml;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -11,15 +10,17 @@ import ru.bluewater.centralbankrestsrc.util.adapter.LocalDateAdapter;
 
 import java.time.LocalDate;
 
-
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data
-public class RstrList {
-    @XmlAttribute(name = "Rstr")
-    private String rstr;
+public class InitialED {
+    @XmlAttribute(name = "EDNo")
+    private Integer edNo;
 
-    @XmlAttribute(name = "RstrDate")
+    @XmlAttribute(name = "EDDate")
     @XmlSchemaType(name = "date")
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
-    private LocalDate rstrDate;
+    private LocalDate edDate;
+
+    @XmlAttribute(name = "EDAuthor")
+    private Long edAuthor; // electronicMessageAuthorId unique
 }

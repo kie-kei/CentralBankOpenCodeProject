@@ -12,6 +12,6 @@ public class BICDirectoryEntryCreateRequestDTO {
     private String BIC;
     private String changeType;
     private ParticipantInfoCreateRequestDTO participantInfo;
-    private List<AccountsCreateRequestDTO> accounts;
-    private List<SWBICSCreateRequestDTO> swbics;
+//    private List<AccountsCreateRequestDTO> accounts;
+//    private List<SWBICSCreateRequestDTO> swbics;
 }

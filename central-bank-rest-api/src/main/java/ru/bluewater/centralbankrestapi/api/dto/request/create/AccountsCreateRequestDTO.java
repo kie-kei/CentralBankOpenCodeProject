@@ -11,6 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class AccountsCreateRequestDTO {
+    private UUID bicDirectoryEntryUuid;
     private String account;
     private String regulationAccountType;
     private String CK;
@@ -18,5 +19,4 @@ public class AccountsCreateRequestDTO {
     private LocalDate dateIn;
     private LocalDate dateOut;
     private String accountStatus;
-    private List<AccRstrListCreateRequestDTO> accRstrList;
 }

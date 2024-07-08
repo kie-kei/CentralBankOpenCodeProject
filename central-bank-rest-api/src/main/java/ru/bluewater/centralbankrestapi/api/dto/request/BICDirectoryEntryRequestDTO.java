@@ -10,7 +10,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class BICDirectoryEntryRequestDTO {
-    private UUID uuid;
     private String BIC;
     private String changeType;
     private ParticipantInfoResponseDTO participantInfo;

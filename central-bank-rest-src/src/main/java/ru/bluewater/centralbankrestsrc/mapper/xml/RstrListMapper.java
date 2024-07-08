@@ -2,7 +2,7 @@ package ru.bluewater.centralbankrestsrc.mapper.xml;
 
 import org.mapstruct.Mapper;
 import ru.bluewater.centralbankrestsrc.entity.RstrListEntity;
-import ru.bluewater.centralbankrestsrc.entity.xml.RstrList;
+import ru.bluewater.centralbankrestsrc.dto.xml.RstrList;
 
 @Mapper(componentModel = "spring")
 public interface RstrListMapper {

@@ -16,7 +16,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.create.BICDirectoryEntry
 import ru.bluewater.centralbankrestapi.api.dto.response.error.ErrorResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.BicDirectoryEntryUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
-import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 
 import java.security.Principal;
 import java.util.UUID;
@@ -41,7 +41,7 @@ public interface BICDirectoryEntryController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = BICDirectoryEntryCreateRequestDTO.class)))
             BICDirectoryEntryCreateRequestDTO requestDTO, @Parameter(hidden = true) Principal principal) throws
-            RootNotFoundException;
+            ED807NotFoundException;
 
 
     @Operation(summary = "Update BIC directory entry")
@@ -61,7 +61,7 @@ public interface BICDirectoryEntryController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = BicDirectoryEntryUpdateRequestDTO.class)))
             BicDirectoryEntryUpdateRequestDTO requestDTO, @Parameter(hidden = true) Principal principal) throws
-            BicDirectoryEntryNotFoundException, RootNotFoundException;
+            BicDirectoryEntryNotFoundException, ED807NotFoundException;
 
     @Operation(summary = "Delete BIC directory entry")
     @ApiResponses(value = {

@@ -27,5 +27,4 @@ public class ParticipantInfoCreateRequestDTO {
     private String xchType;
     private String uid;
     private String participantStatus;
-    private List<RstrListCreateRequestDTO> rstrList;
 }

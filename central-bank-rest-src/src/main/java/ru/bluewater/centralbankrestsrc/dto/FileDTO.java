@@ -2,7 +2,7 @@ package ru.bluewater.centralbankrestsrc.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.bluewater.centralbankrestsrc.entity.xml.ED807;
+import ru.bluewater.centralbankrestsrc.dto.xml.ED807;
 
 @Setter
 @Getter

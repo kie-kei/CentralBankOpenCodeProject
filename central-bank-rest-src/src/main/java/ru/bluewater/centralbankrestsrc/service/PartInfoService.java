@@ -8,7 +8,8 @@ import ru.bluewater.centralbankrestapi.api.dto.request.update.PartInfoUpdateRequ
 import ru.bluewater.centralbankrestapi.api.dto.response.create.PartInfoCreateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.PartInfoGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.PartInfoUpdateResponseDTO;
-import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.PartInfoNotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.entity.PartInfoEntity;
 import ru.bluewater.centralbankrestsrc.mapper.entity.PartInfoEntityMapper;
@@ -26,9 +27,9 @@ public class PartInfoService {
 
 
     @Transactional
-    public PartInfoCreateResponseDTO createPartInfoByEd807Uuid(PartInfoCreateRequestDTO requestDTO) throws RootNotFoundException {
-        ED807Entity ed807Entity = ed807Repository.findById(requestDTO.getEd807Uuid()).orElseThrow(() ->
-                new RootNotFoundException(requestDTO.getEd807Uuid()));
+    public PartInfoCreateResponseDTO createPartInfoByEd807Uuid(UUID ed807Uuid, PartInfoCreateRequestDTO requestDTO) throws ED807NotFoundException {
+        ED807Entity ed807Entity = ed807Repository.findById(ed807Uuid).orElseThrow(() ->
+                new ED807NotFoundException(ed807Uuid));
 
         PartInfoEntity partInfoEntity = partInfoEntityMapper.fromCreateRequestToEntity(requestDTO);
         partInfoEntity.setEd807Entity(ed807Entity);
@@ -36,19 +37,20 @@ public class PartInfoService {
         return partInfoEntityMapper.toCreateResponse(partInfoRepository.save(partInfoEntity));
     }
 
-    public PartInfoGetResponseDTO findPartInfoByEd807Uuid(UUID ed807Uuid) throws RootNotFoundException {
+    public PartInfoGetResponseDTO findPartInfoByEd807Uuid(UUID ed807Uuid) throws ED807NotFoundException {
         PartInfoEntity partInfo = partInfoRepository.findById(ed807Uuid).orElseThrow(() ->
-                new RootNotFoundException(ed807Uuid));
+                new ED807NotFoundException(ed807Uuid));
 
         return partInfoEntityMapper.toGetResponse(partInfo);
     }
 
     @Transactional
     public PartInfoUpdateResponseDTO updatePartInfoByEd807Uuid(
+            UUID uuid,
             PartInfoUpdateRequestDTO requestDTO
-    ) throws RootNotFoundException {
-        PartInfoEntity partInfoEntity = partInfoRepository.findById(requestDTO.getEd807Uuid()).orElseThrow(() ->
-                new RootNotFoundException(requestDTO.getEd807Uuid()));
+    ) throws PartInfoNotFoundException {
+        PartInfoEntity partInfoEntity = partInfoRepository.findById(uuid).orElseThrow(() ->
+                new PartInfoNotFoundException(uuid));
 
         partInfoEntityMapper.updateFromRequest(requestDTO, partInfoEntity);
 

@@ -18,10 +18,10 @@ import ru.bluewater.centralbankrestapi.api.dto.response.FileUploadResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.service.FileResourceWithNameDTO;
 import ru.bluewater.centralbankrestapi.api.exception.CbrException;
 import ru.bluewater.centralbankrestapi.api.exception.IncorrectFileTypeException;
-import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestsrc.dto.FileDTO;
 import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
-import ru.bluewater.centralbankrestsrc.entity.xml.ED807;
+import ru.bluewater.centralbankrestsrc.dto.xml.ED807;
 import ru.bluewater.centralbankrestsrc.mapper.entity.ED807EntityMapper;
 import ru.bluewater.centralbankrestsrc.mapper.xml.ED807Mapper;
 import ru.bluewater.centralbankrestsrc.util.FileUtil;
@@ -82,7 +82,7 @@ public class FileService {
     }
 
 
-    public FileResourceWithNameDTO getFileByRootUuid(UUID uuid) throws RootNotFoundException, JAXBException {
+    public FileResourceWithNameDTO getFileByRootUuid(UUID uuid) throws ED807NotFoundException, JAXBException {
         var rootEntity = ed807Service.findRootByUuid(uuid);
         var content = XmlParser.toXml(ed807Mapper.dtoToED807(rootEntity));
         var resource = new ByteArrayResource(content.getBytes());

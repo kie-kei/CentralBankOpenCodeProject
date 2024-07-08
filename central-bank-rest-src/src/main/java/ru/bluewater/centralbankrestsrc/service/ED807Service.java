@@ -10,11 +10,10 @@ import ru.bluewater.centralbankrestapi.api.dto.response.ED807ResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.list.ED807ListResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.ED807GetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.ED807UpdateResponseDTO;
-import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestsrc.dto.FileDTO;
 import ru.bluewater.centralbankrestsrc.entity.*;
-import ru.bluewater.centralbankrestsrc.entity.xml.BICDirectoryEntry;
-import ru.bluewater.centralbankrestsrc.entity.xml.ED807;
+import ru.bluewater.centralbankrestsrc.dto.xml.ED807;
 import ru.bluewater.centralbankrestsrc.mapper.entity.ED807EntityMapper;
 import ru.bluewater.centralbankrestsrc.mapper.xml.ED807Mapper;
 import ru.bluewater.centralbankrestsrc.mapper.xml.InitialEDMapper;
@@ -112,21 +111,21 @@ public class ED807Service {
 //    }
 
     @Transactional
-    public ED807UpdateResponseDTO updateRoot(UUID uuid, ED807UpdateRequestDTO requestDTO) throws RootNotFoundException {
-        var rootEntity = rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
+    public ED807UpdateResponseDTO updateRoot(UUID uuid, ED807UpdateRequestDTO requestDTO) throws ED807NotFoundException {
+        var rootEntity = rootRepository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
         ed807EntityMapper.updateFromDto(requestDTO, rootEntity);
         return ed807EntityMapper.toRootUpdateResponseDTO(rootEntity);
 
     }
 
 
-    public ED807ResponseDTO findRootByUuid(UUID uuid) throws RootNotFoundException {
-        ED807Entity ED807Entity = rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
+    public ED807ResponseDTO findRootByUuid(UUID uuid) throws ED807NotFoundException {
+        ED807Entity ED807Entity = rootRepository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
         return ed807EntityMapper.toRootResponseDTO(ED807Entity);
     }
 
-    public ED807Entity findRootEntityByUuid(UUID uuid) throws RootNotFoundException {
-        return rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
+    public ED807Entity findRootEntityByUuid(UUID uuid) throws ED807NotFoundException {
+        return rootRepository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
     }
 
     public ED807ListResponseDTO findRootList(){
@@ -144,8 +143,8 @@ public class ED807Service {
     }
 
     @Transactional
-    public void deleteED807(UUID uuid) throws RootNotFoundException {
-        var ed807 = rootRepository.findById(uuid).orElseThrow(() -> new RootNotFoundException(uuid));
+    public void deleteED807(UUID uuid) throws ED807NotFoundException {
+        var ed807 = rootRepository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
         rootRepository.delete(ed807);
     }
 
