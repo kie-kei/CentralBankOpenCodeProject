@@ -19,5 +19,4 @@ public class AccountsGetResponseDTO {
     private LocalDate dateIn;
     private LocalDate dateOut;
     private String accountStatus;
-    private List<AccRstrListResponseDTO> accRstrList;
 }

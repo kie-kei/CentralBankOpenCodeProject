@@ -1,4 +1,4 @@
-package ru.bluewater.centralbankrestsrc.mapper.entity;
+package ru.bluewater.centralbankrestsrc.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -9,12 +9,18 @@ import ru.bluewater.centralbankrestapi.api.dto.request.update.ED807UpdateRequest
 import ru.bluewater.centralbankrestapi.api.dto.response.ED807ResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.ED807GetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.ED807UpdateResponseDTO;
+import ru.bluewater.centralbankrestsrc.dto.xml.ED807;
 import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ED807EntityMapper {
+    ED807Entity toRootEntity(ED807 ed807);
+
+    ED807 entityToED807(ED807Entity ED807Entity);
+
+    ED807 dtoToED807(ED807ResponseDTO ED807ResponseDTO);
     ED807ResponseDTO toRootResponseDTO(ED807Entity ed807Entity);
 
     ED807Entity toRootEntity(ED807RequestDTO requestDTO);

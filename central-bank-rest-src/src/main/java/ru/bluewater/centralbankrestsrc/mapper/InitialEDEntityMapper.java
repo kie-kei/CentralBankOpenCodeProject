@@ -1,4 +1,4 @@
-package ru.bluewater.centralbankrestsrc.mapper.entity;
+package ru.bluewater.centralbankrestsrc.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -9,10 +9,13 @@ import ru.bluewater.centralbankrestapi.api.dto.response.InitialEDResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.create.InitialEDCreateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.InitialEDGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.InitialEDUpdateResponseDTO;
+import ru.bluewater.centralbankrestsrc.dto.xml.InitialED;
 import ru.bluewater.centralbankrestsrc.entity.InitialEDEntity;
 
 @Mapper(componentModel = "spring")
 public interface InitialEDEntityMapper {
+    InitialED toInitialED(InitialEDEntity initialEDEntity);
+    InitialEDEntity toInitialEDEntity(InitialED initialED);
     InitialEDResponseDTO toResponse(InitialEDEntity initialEDEntity);
     @Mapping(target = "uuid", ignore = true)
     InitialEDEntity fromCreateRequestToEntity(InitialEDCreateRequestDTO requestDTO);

@@ -32,7 +32,7 @@ public class InitialEDController {
     public InitialEDUpdateResponseDTO updateInitialEd(
             @PathVariable("uuid") UUID uuid,
             @RequestBody InitialEDUpdateRequestDTO requestDTO
-    ) throws ED807NotFoundException {
+    ) throws InitialEDNotFoundException {
         return initialEDService.updateInitialEdByEd807Uuid(uuid, requestDTO);
     }
 

@@ -32,13 +32,8 @@ public class ED807Entity {
     @NotNull
     private String createdBy;
 
-//    private LocalDateTime updatedAt;
-//
-//    private String updatedBy;
 
     @Column(nullable = false)
-//    @Min(value = 1, message = "number of electronic message (EDNo) should be in 0 to 999999999 range")
-//    @Max(value = 999999999, message = "number of electronic message (EDNo) should be in 0 to 999999999 range")
     @Digits(integer = 9, fraction = 0, message = "EDNo should have up to 9 digits")
     @NotNull(message = "EDNo should be not null")
     private Integer edNo; // numberOfElectronicMessage
@@ -86,5 +81,3 @@ public class ED807Entity {
 //    @OneToOne(mappedBy = "ed807Entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private InitialEDEntity initialED;
 }
-
-// rootEntity.getBicDIck bicDick.getRootEntity()

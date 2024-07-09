@@ -27,7 +27,7 @@ public class BICDirectoryEntryEntity {
     private String changeType;
 
     @NotNull(message = "participantInfo should be not null")
-    @OneToOne(mappedBy = "bicDirectoryEntry",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "bicDirectoryEntry",cascade = CascadeType.ALL, optional = false)
     private ParticipantInfoEntity participantInfo;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -37,9 +37,5 @@ public class BICDirectoryEntryEntity {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "bic_directory_entry_uuid")
     private List<SWBICSEntity> swbics;
-
-//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "ed807_uuid")
-//    private ED807Entity ed807Entity;
 
 }

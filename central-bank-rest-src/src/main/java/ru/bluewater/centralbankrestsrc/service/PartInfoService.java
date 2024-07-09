@@ -12,9 +12,9 @@ import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.PartInfoNotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.entity.PartInfoEntity;
-import ru.bluewater.centralbankrestsrc.mapper.entity.PartInfoEntityMapper;
+import ru.bluewater.centralbankrestsrc.mapper.PartInfoEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.PartInfoRepository;
-import ru.bluewater.centralbankrestsrc.respository.RootRepository;
+import ru.bluewater.centralbankrestsrc.respository.ED807Repository;
 
 import java.util.UUID;
 
@@ -23,7 +23,7 @@ import java.util.UUID;
 public class PartInfoService {
     private final PartInfoRepository partInfoRepository;
     private final PartInfoEntityMapper partInfoEntityMapper;
-    private final RootRepository ed807Repository;
+    private final ED807Repository ed807Repository;
 
 
     @Transactional
@@ -37,9 +37,9 @@ public class PartInfoService {
         return partInfoEntityMapper.toCreateResponse(partInfoRepository.save(partInfoEntity));
     }
 
-    public PartInfoGetResponseDTO findPartInfoByEd807Uuid(UUID ed807Uuid) throws ED807NotFoundException {
+    public PartInfoGetResponseDTO findPartInfoByEd807Uuid(UUID ed807Uuid) throws PartInfoNotFoundException {
         PartInfoEntity partInfo = partInfoRepository.findById(ed807Uuid).orElseThrow(() ->
-                new ED807NotFoundException(ed807Uuid));
+                new PartInfoNotFoundException(ed807Uuid));
 
         return partInfoEntityMapper.toGetResponse(partInfo);
     }

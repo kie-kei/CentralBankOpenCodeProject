@@ -21,25 +21,20 @@ public class ED807ControllerImpl implements ED807Controller {
         this.ed807Service = ed807Service;
     }
 
-//    @PostMapping
-//    public ED807ResponseDTO createED807(@RequestBody ED807CreateRequestDTO requestDTO, Principal principal){
-//        return ed807Service.createED807(requestDTO, principal);
-//    }
-
-    @GetMapping(value = "/{uuid}")
+    @GetMapping("/{uuid}")
     public ED807ResponseDTO findED807ByUuid(@PathVariable("uuid") UUID uuid) throws ED807NotFoundException {
         return ed807Service.findRootByUuid(uuid);
     }
-
-    @PutMapping(value = "/{uuid}") // заменить на RootUpdateResponseDTO
-    public ED807UpdateResponseDTO updateED807(@PathVariable("uuid") UUID uuid, @RequestBody ED807UpdateRequestDTO requestDTO)
-            throws ED807NotFoundException
-    {
+    @PutMapping("/{uuid}")
+    public ED807UpdateResponseDTO updateED807(
+            @PathVariable("uuid") UUID uuid,
+            @RequestBody ED807UpdateRequestDTO requestDTO
+    ) throws ED807NotFoundException {
         return ed807Service.updateRoot(uuid, requestDTO);
     }
     @GetMapping
     public ED807ListResponseDTO findED807List(){ // public List<RootGetResponseDTO> findRootList() hz kak pravil`no
-        return ed807Service.findRootList();
+        return ed807Service.findEd807List();
     }
     @DeleteMapping("/{uuid}")
     public void deleteED807(@PathVariable("uuid") UUID uuid) throws ED807NotFoundException {

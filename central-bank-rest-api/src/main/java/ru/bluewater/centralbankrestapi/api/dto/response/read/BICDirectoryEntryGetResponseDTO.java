@@ -12,5 +12,5 @@ public class BICDirectoryEntryGetResponseDTO {
     private UUID uuid;
     private String BIC;
     private String changeType;
-    private ParticipantInfoResponseDTO participantInfo;
+    private ParticipantInfoGetResponseDTO participantInfo;
 }

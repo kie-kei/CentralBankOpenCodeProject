@@ -8,10 +8,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class BICDirectoryEntryCreateRequestDTO {
-    private UUID rootId;
     private String BIC;
     private String changeType;
     private ParticipantInfoCreateRequestDTO participantInfo;
-//    private List<AccountsCreateRequestDTO> accounts;
-//    private List<SWBICSCreateRequestDTO> swbics;
 }

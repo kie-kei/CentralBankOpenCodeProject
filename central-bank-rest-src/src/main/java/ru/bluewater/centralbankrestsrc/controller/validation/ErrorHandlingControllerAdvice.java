@@ -100,6 +100,13 @@ public class ErrorHandlingControllerAdvice {
         return new ErrorResponseDTO(e.getMessage());
     }
 
+    @ExceptionHandler(BicDirectoryEntryNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDTO onBicDirectoryEntryNotFoundException(BicDirectoryEntryNotFoundException e){
+        return new ErrorResponseDTO(e.getMessage());
+    }
+
     @ExceptionHandler(RstrListNotFoundException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)

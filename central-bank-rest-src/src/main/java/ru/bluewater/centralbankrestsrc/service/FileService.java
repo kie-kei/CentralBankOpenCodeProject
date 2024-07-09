@@ -1,9 +1,8 @@
 package ru.bluewater.centralbankrestsrc.service;
 
 import jakarta.xml.bind.JAXBException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -22,8 +21,8 @@ import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestsrc.dto.FileDTO;
 import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.dto.xml.ED807;
-import ru.bluewater.centralbankrestsrc.mapper.entity.ED807EntityMapper;
-import ru.bluewater.centralbankrestsrc.mapper.xml.ED807Mapper;
+import ru.bluewater.centralbankrestsrc.mapper.ED807EntityMapper;
+import ru.bluewater.centralbankrestsrc.respository.ED807Repository;
 import ru.bluewater.centralbankrestsrc.util.FileUtil;
 import ru.bluewater.centralbankrestsrc.util.XmlParser;
 
@@ -33,30 +32,16 @@ import java.security.Principal;
 import java.util.UUID;
 
 @Service
-@Slf4j
+@RequiredArgsConstructor
 public class FileService {
     private final ED807Service ed807Service;
-    private final ParticipantInfoService participantInfoService;
-    private final BICDirectoryEntryService bicDirectoryEntryService;
+    private final ED807Repository ed807Repository;
     private final FileUtil fileUtil;
-    private final ED807Mapper ed807Mapper;
-    private final ED807EntityMapper ed807EntityMapper;
+    private final ED807EntityMapper ed807Mapper;
 
     @Value("${central-bank-uri}")
     private String centralBankURI;
-    //private final URI centralBankURI = URI.create("https://cbr.ru/s/newbik");
-    private final Logger logger = LoggerFactory.getLogger("fileService logger");
 
-
-    @Autowired
-    public FileService(ED807Service ed807Service, ParticipantInfoService participantInfoService, BICDirectoryEntryService bicDirectoryEntryService, ED807Mapper ed807Mapper, ED807EntityMapper ed807EntityMapper, FileUtil fileUtil) {
-        this.ed807Service = ed807Service;
-        this.participantInfoService = participantInfoService;
-        this.bicDirectoryEntryService = bicDirectoryEntryService;
-        this.ed807Mapper = ed807Mapper;
-        this.ed807EntityMapper = ed807EntityMapper;
-        this.fileUtil = fileUtil;
-    }
 
     @Transactional
     public FileUploadResponseDTO createRootFromFile(FileRequestDTO requestDTO, Principal principal) throws

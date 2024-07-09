@@ -22,7 +22,7 @@ public class PartInfoController {
     @GetMapping("/ed807/{ed807_uuid}/partInfo")
     public PartInfoGetResponseDTO findPartInfoByEd807Uuid(
             @PathVariable("ed807_uuid") UUID uuid
-    ) throws ED807NotFoundException {
+    ) throws PartInfoNotFoundException {
         return partInfoService.findPartInfoByEd807Uuid(uuid);
     }
 

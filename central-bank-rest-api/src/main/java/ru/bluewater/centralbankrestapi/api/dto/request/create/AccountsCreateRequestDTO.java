@@ -11,7 +11,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class AccountsCreateRequestDTO {
-    private UUID bicDirectoryEntryUuid;
     private String account;
     private String regulationAccountType;
     private String CK;

@@ -6,17 +6,18 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.bluewater.centralbankrestapi.api.dto.request.create.SWBICSCreateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.SWBICSUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.create.SWBICSCreateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.list.SWBICSListResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.SWBICSGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.SWBICSUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.SWBICSNotFoundException;
-import ru.bluewater.centralbankrestsrc.dto.xml.SWBICS;
 import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
 import ru.bluewater.centralbankrestsrc.entity.SWBICSEntity;
-import ru.bluewater.centralbankrestsrc.mapper.entity.SWBICSEntityMapper;
+import ru.bluewater.centralbankrestsrc.mapper.SWBICSEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.BICDirectoryEntryRepository;
 import ru.bluewater.centralbankrestsrc.respository.SWBICSRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -65,23 +66,14 @@ public class SWBICSService {
         return swbicsEntityMapper.toGetResponse(swbicsEntity);
     }
 
+    public SWBICSListResponseDTO findListSWBICS(UUID uuid) throws BicDirectoryEntryNotFoundException {
+        BICDirectoryEntryEntity bicDirectoryEntry = bicDirectoryEntryRepository.findById(uuid)
+                .orElseThrow(() -> new BicDirectoryEntryNotFoundException(uuid));
 
-//    @Transactional
-//    public void createSWBICS(SWBICSEntity swbicsEntity) {
-//        repository.save(swbicsEntity);
-//    }
-//
-//    public List<SWBICSEntity> createSWBICSList(BICDirectoryEntryEntity bicDirectoryEntryEntity, List<SWBICSRequestDTO> swbicsRequestDTOS) {
-//        if (bicDirectoryEntryEntity.getSwbics() != null) {
-//            repository.deleteAll(bicDirectoryEntryEntity.getSwbics());
-//        }
-//        List<SWBICSEntity> newEntities = new ArrayList<>();
-//
-//        swbicsRequestDTOS.forEach(swbicsRequestDTO -> {
-//            SWBICSEntity swbicsEntity = swbicsEntityMapper.toEntity(swbicsRequestDTO);
-//            newEntities.add(swbicsEntity);
-//        });
-//
-//        return newEntities;
-//    }
+        List<SWBICSEntity> swbicsEntityList = bicDirectoryEntry.getSwbics();
+        if (swbicsEntityList == null || swbicsEntityList.isEmpty())
+            return new SWBICSListResponseDTO();
+
+        return new SWBICSListResponseDTO(swbicsEntityMapper.toList(swbicsEntityList));
+    }
 }

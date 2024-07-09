@@ -8,6 +8,5 @@ import ru.bluewater.centralbankrestapi.api.dto.request.ParticipantInfoRequestDTO
 public class BicDirectoryEntryUpdateRequestDTO {
     private String BIC;
     private String changeType;
-    private ParticipantInfoRequestDTO participantInfo;
 
 }

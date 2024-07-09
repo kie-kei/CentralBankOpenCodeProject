@@ -12,9 +12,9 @@ import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.InitialEDNotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.entity.InitialEDEntity;
-import ru.bluewater.centralbankrestsrc.mapper.entity.InitialEDEntityMapper;
+import ru.bluewater.centralbankrestsrc.mapper.InitialEDEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.InitialEDRepository;
-import ru.bluewater.centralbankrestsrc.respository.RootRepository;
+import ru.bluewater.centralbankrestsrc.respository.ED807Repository;
 
 import java.util.UUID;
 
@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class InitialEDService {
     private final InitialEDRepository initialEDRepository;
-    private final RootRepository ed807Repository;
+    private final ED807Repository ed807Repository;
     private final InitialEDEntityMapper initialEDEntityMapper;
     @Transactional
     public InitialEDCreateResponseDTO createInitialEdByEd807Uuid(UUID ed807Uuid, InitialEDCreateRequestDTO requestDTO) throws ED807NotFoundException {
@@ -46,9 +46,9 @@ public class InitialEDService {
     public InitialEDUpdateResponseDTO updateInitialEdByEd807Uuid(
             UUID uuid,
             InitialEDUpdateRequestDTO requestDTO
-    ) throws ED807NotFoundException {
+    ) throws InitialEDNotFoundException {
         InitialEDEntity initialEDEntity = initialEDRepository.findById(uuid).orElseThrow(() ->
-                new ED807NotFoundException(uuid));
+                new InitialEDNotFoundException(uuid));
 
         initialEDEntityMapper.updateFromRequest(requestDTO, initialEDEntity);
 

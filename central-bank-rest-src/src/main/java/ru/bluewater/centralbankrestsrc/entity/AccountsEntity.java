@@ -2,6 +2,7 @@ package ru.bluewater.centralbankrestsrc.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class AccountsEntity {
     private UUID uuid;
 
     @Size(min = 20, max = 20, message = "Account length should be 20")
+    @Pattern(regexp = "[0-9]{20}", message = "account length should be 20 and contains only number")
     @NotNull(message = "account should be not null")
     private String account;
 

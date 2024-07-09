@@ -1,5 +1,6 @@
 package ru.bluewater.centralbankrestsrc.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,13 +15,12 @@ import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestsrc.dto.FileDTO;
 import ru.bluewater.centralbankrestsrc.entity.*;
 import ru.bluewater.centralbankrestsrc.dto.xml.ED807;
-import ru.bluewater.centralbankrestsrc.mapper.entity.ED807EntityMapper;
-import ru.bluewater.centralbankrestsrc.mapper.xml.ED807Mapper;
-import ru.bluewater.centralbankrestsrc.mapper.xml.InitialEDMapper;
-import ru.bluewater.centralbankrestsrc.mapper.xml.PartInfoMapper;
+import ru.bluewater.centralbankrestsrc.mapper.ED807EntityMapper;
+import ru.bluewater.centralbankrestsrc.mapper.InitialEDEntityMapper;
+import ru.bluewater.centralbankrestsrc.mapper.PartInfoEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.InitialEDRepository;
 import ru.bluewater.centralbankrestsrc.respository.PartInfoRepository;
-import ru.bluewater.centralbankrestsrc.respository.RootRepository;
+import ru.bluewater.centralbankrestsrc.respository.ED807Repository;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -28,28 +28,15 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Validated
+@RequiredArgsConstructor
 public class ED807Service {
-    private final RootRepository rootRepository;
+    private final ED807Repository ed807Repository;
 
     private final ED807EntityMapper ed807EntityMapper;
-    private final ED807Mapper ed807Mapper;
-    private final PartInfoMapper partInfoMapper;
-    private final InitialEDMapper initialEDMapper;
+    private final PartInfoEntityMapper partInfoMapper;
+    private final InitialEDEntityMapper initialEDMapper;
     private final InitialEDRepository initialEDRepository;
     private final PartInfoRepository partInfoRepository;
-
-
-    @Autowired
-    public ED807Service(RootRepository repository, ED807EntityMapper ed807EntityMapper, ED807Mapper ed807Mapper, PartInfoMapper partInfoMapper, InitialEDMapper initialEDMapper, InitialEDRepository initialEDRepository, PartInfoRepository partInfoRepository) {
-        this.rootRepository = repository;
-        this.ed807EntityMapper = ed807EntityMapper;
-        this.ed807Mapper = ed807Mapper;
-        this.partInfoMapper = partInfoMapper;
-        this.initialEDMapper = initialEDMapper;
-        this.initialEDRepository = initialEDRepository;
-        this.partInfoRepository = partInfoRepository;
-    }
 
 
     @Transactional
@@ -57,7 +44,7 @@ public class ED807Service {
         ED807 ed807 = fileDTO.getEd807();
         String filename = fileDTO.getFilename();
 
-        ED807Entity ed807Entity =  ed807Mapper.toRootEntity(ed807);
+        ED807Entity ed807Entity = ed807EntityMapper.toRootEntity(ed807);
         setAuditFieldsOnCreateRootEntity(ed807Entity, principal);
         ed807Entity.setFileName(filename);
 
@@ -80,56 +67,35 @@ public class ED807Service {
         }
 
 
-        rootRepository.save(ed807Entity);
+        ed807Repository.save(ed807Entity);
 
         return ed807Entity;
     }
 
-
-//    @Transactional
-//    public ED807Entity createRootEntity(ED807Entity ed807Entity, Principal principal) {
-//        setAuditFieldsOnCreateRootEntity(ed807Entity, principal);
-//
-//        InitialEDEntity initialEDEntity = ed807Entity.getInitialED();
-//        PartInfoEntity partInfoEntity = ed807Entity.getPartInfo();
-//        List<BICDirectoryEntryEntity> bicDicList = ed807Entity.getBicDirectoryEntry();
-//
-//        if (bicDicList != null){
-//            bicDicList.forEach(x -> {
-//                ParticipantInfoEntity participantInfoEntity = x.getParticipantInfo();
-//                participantInfoEntity.setBicDirectoryEntry(x);
-//            });
-//
-//        }
-//        if (initialEDEntity != null) {
-//            initialEDEntity.setEd807Entity(ed807Entity);
-//        }
-//        if (partInfoEntity != null) {
-//            partInfoEntity.setEd807Entity(ed807Entity);
-//        }
-//        return rootRepository.save(ed807Entity);
-//    }
-
     @Transactional
     public ED807UpdateResponseDTO updateRoot(UUID uuid, ED807UpdateRequestDTO requestDTO) throws ED807NotFoundException {
-        var rootEntity = rootRepository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
+        var rootEntity = ed807Repository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
         ed807EntityMapper.updateFromDto(requestDTO, rootEntity);
         return ed807EntityMapper.toRootUpdateResponseDTO(rootEntity);
 
     }
 
+//    public ED807ResponseDTO findEd807Full(UUID uuid) throws ED807NotFoundException {
+//        ED807Entity ed807Entity = ed807Repository.findById(uuid)
+//                .orElseThrow(() -> new ED807NotFoundException(uuid));
+//    }
 
     public ED807ResponseDTO findRootByUuid(UUID uuid) throws ED807NotFoundException {
-        ED807Entity ED807Entity = rootRepository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
+        ED807Entity ED807Entity = ed807Repository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
         return ed807EntityMapper.toRootResponseDTO(ED807Entity);
     }
 
     public ED807Entity findRootEntityByUuid(UUID uuid) throws ED807NotFoundException {
-        return rootRepository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
+        return ed807Repository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
     }
 
-    public ED807ListResponseDTO findRootList(){
-        var list = rootRepository.findAll();
+    public ED807ListResponseDTO findEd807List(){
+        var list = ed807Repository.findAll();
         List<ED807GetResponseDTO> ED807GetResponseDTOS = ed807EntityMapper.toListRootGetResponseDTO(list);
         return new ED807ListResponseDTO(ED807GetResponseDTOS);
     }
@@ -138,14 +104,14 @@ public class ED807Service {
     public ED807ResponseDTO createED807(ED807CreateRequestDTO requestDTO, Principal principal){
         ED807Entity entity = ed807EntityMapper.fromCreateRequestToEntity(requestDTO);
         setAuditFieldsOnCreateRootEntity(entity, principal);
-        rootRepository.save(entity);
+        ed807Repository.save(entity);
         return ed807EntityMapper.toRootResponseDTO(entity);
     }
 
     @Transactional
     public void deleteED807(UUID uuid) throws ED807NotFoundException {
-        var ed807 = rootRepository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
-        rootRepository.delete(ed807);
+        var ed807 = ed807Repository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
+        ed807Repository.delete(ed807);
     }
 
     public void setAuditFieldsOnCreateRootEntity(ED807Entity ed807Entity, Principal principal) {

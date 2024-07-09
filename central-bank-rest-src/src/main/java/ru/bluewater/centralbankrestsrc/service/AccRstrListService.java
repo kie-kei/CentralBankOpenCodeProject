@@ -7,16 +7,18 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.bluewater.centralbankrestapi.api.dto.request.create.AccRstrListCreateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.AccRstrListUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.create.AccRstrListCreateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.list.AccRstrListListResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.AccRstrListGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.AccRstrListUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.AccRstrListNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.AccountsNotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.AccRstrListEntity;
 import ru.bluewater.centralbankrestsrc.entity.AccountsEntity;
-import ru.bluewater.centralbankrestsrc.mapper.xml.AccRstrListMapper;
+import ru.bluewater.centralbankrestsrc.mapper.AccRstrListEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.AccRstrListRepository;
 import ru.bluewater.centralbankrestsrc.respository.AccountsRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,7 +26,7 @@ import java.util.UUID;
 public class AccRstrListService {
     private final AccRstrListRepository accRstrListRepository;
     private final AccountsRepository accountsRepository;
-    private final AccRstrListMapper accRstrListMapper;
+    private final AccRstrListEntityMapper accRstrListMapper;
 
     @Transactional
     public AccRstrListCreateResponseDTO createAccRstrList(
@@ -63,8 +65,16 @@ public class AccRstrListService {
         return accRstrListMapper.toGetResponse(accRstrListEntity);
     }
 
-//    @Transactional
-//    public void createAccRstrList(AccRstrListEntity accRstrList) {
-//        repository.save(accRstrList);
-//    }
+    public AccRstrListListResponseDTO findListAccRstrList(UUID uuid) throws AccountsNotFoundException {
+        AccountsEntity accountsEntity = accountsRepository.findById(uuid)
+                .orElseThrow(() -> new AccountsNotFoundException(uuid));
+        List<AccRstrListEntity> accRstrListEntityList = accountsEntity.getAccRstrList();
+
+        if (accRstrListEntityList == null || accRstrListEntityList.isEmpty())
+            return new AccRstrListListResponseDTO();
+
+        return new AccRstrListListResponseDTO(
+                accRstrListMapper.toListResponse(accRstrListEntityList)
+        );
+    }
 }
