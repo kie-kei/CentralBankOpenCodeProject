@@ -16,13 +16,10 @@ import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundEx
 import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
 import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
-import ru.bluewater.centralbankrestsrc.mapper.BICDirectoryEntryEntityMapper;
+import ru.bluewater.centralbankrestsrc.mapper.*;
 import ru.bluewater.centralbankrestsrc.respository.BICDirectoryEntryRepository;
 import ru.bluewater.centralbankrestsrc.respository.ED807Repository;
 import ru.bluewater.centralbankrestsrc.entity.*;
-import ru.bluewater.centralbankrestsrc.mapper.entity.*;
-import ru.bluewater.centralbankrestsrc.mapper.xml.AccRstrListMapper;
-import ru.bluewater.centralbankrestsrc.mapper.xml.AccountsMapper;
 import ru.bluewater.centralbankrestsrc.respository.*;
 
 import java.util.List;
@@ -35,7 +32,6 @@ public class BICDirectoryEntryService {
     private final BICDirectoryEntryRepository bicDirectoryEntryRepository;
     private final BICDirectoryEntryEntityMapper bicDirectoryEntryEntityMapper;
     private final ED807Repository ed807Repository;
-    private final RootRepository rootRepository;
     private final AccRstrListRepository accRstrListRepository;
     private final AccRstrListEntityMapper accRstrListMapper;
     private final AccountsEntityMapper accountsEntityMapper;
@@ -144,6 +140,6 @@ public class BICDirectoryEntryService {
         });
 
         return bicDirectoryEntryEntityMapper
-                .toListResponse(bicDirectoryEntryRepository.saveAll(bicDirectoryEntryEntityList));
+                .toFullListResponse(bicDirectoryEntryRepository.saveAll(bicDirectoryEntryEntityList));
     }
 }

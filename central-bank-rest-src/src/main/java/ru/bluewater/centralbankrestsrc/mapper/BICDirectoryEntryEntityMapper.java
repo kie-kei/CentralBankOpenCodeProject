@@ -1,4 +1,4 @@
-package ru.bluewater.centralbankrestsrc.mapper.entity;
+package ru.bluewater.centralbankrestsrc.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
