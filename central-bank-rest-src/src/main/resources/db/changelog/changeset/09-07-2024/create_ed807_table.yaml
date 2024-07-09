@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: sklnrr
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: centralbankdb
+                tableName: ed807
+      changes:
+        - sqlFile:
+            relativeToChangelogFile: true
+            path: create_ed807_table.sql

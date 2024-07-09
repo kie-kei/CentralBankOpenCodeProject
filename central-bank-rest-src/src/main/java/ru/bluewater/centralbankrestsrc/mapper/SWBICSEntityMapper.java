@@ -29,6 +29,8 @@ public interface SWBICSEntityMapper {
     @Mapping(target = "uuid", ignore = true)
     void updateFromRequest(SWBICSUpdateRequestDTO requestDTO, @MappingTarget SWBICSEntity entity);
     @Mapping(target = "uuid", ignore = true)
+    void updateFromRequest(SWBICSRequestDTO requestDTO, @MappingTarget SWBICSEntity entity);
+    @Mapping(target = "uuid", ignore = true)
     SWBICSEntity toEntity(SWBICSRequestDTO requestDTO);
     SWBICSEntity fromCreateRequestToEntity(SWBICSCreateRequestDTO requestDTO);
 }

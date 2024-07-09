@@ -7,6 +7,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class RstrListRequestDTO {
+    private UUID uuid;
     private String rstr;
     private Date rstrDate;
 }

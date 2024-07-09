@@ -10,6 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class ParticipantInfoRequestDTO {
+    private UUID uuid;
     private String nameP;
     private String englName;
     private String regN;

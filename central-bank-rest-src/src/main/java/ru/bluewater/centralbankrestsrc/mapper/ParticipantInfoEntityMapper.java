@@ -32,5 +32,8 @@ public interface ParticipantInfoEntityMapper {
     ParticipantInfoGetResponseDTO toGetResponse(ParticipantInfoEntity participantInfoEntity);
     @Mapping(target = "uuid", ignore = true)
     void updateFromRequest(ParticipantInfoUpdateRequestDTO requestDTO, @MappingTarget ParticipantInfoEntity entity);
+
+    @Mapping(target = "uuid", ignore = true)
+    void updateFromRequest(ParticipantInfoRequestDTO requestDTO, @MappingTarget ParticipantInfoEntity entity);
 }
 

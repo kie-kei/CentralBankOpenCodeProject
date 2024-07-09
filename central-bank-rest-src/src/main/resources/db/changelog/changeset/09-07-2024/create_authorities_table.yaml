@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: sklnrr
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: centralbankdb
+                tableName: authorities
+      changes:
+        - sqlFile:
+            relativeToChangelogFile: true
+            path: create_authorities_table.sql

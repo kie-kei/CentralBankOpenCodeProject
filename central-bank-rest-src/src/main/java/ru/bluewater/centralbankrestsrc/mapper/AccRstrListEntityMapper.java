@@ -10,6 +10,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.AccRstrListResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.create.AccRstrListCreateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.AccRstrListGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.AccRstrListUpdateResponseDTO;
+import ru.bluewater.centralbankrestsrc.entity.AccRstrListEntity;
 import ru.bluewater.centralbankrestsrc.dto.xml.AccRstrList;
 import ru.bluewater.centralbankrestsrc.entity.AccRstrListEntity;
 
@@ -28,6 +29,8 @@ public interface AccRstrListEntityMapper {
     List<AccRstrListGetResponseDTO> toListResponse(List<AccRstrListEntity> accRstrListEntityList);
     @Mapping(target = "uuid", ignore = true)
     void updateFromRequest(AccRstrListUpdateRequestDTO requestDTO, @MappingTarget AccRstrListEntity entity);
+    @Mapping(target = "uuid", ignore = true)
+    void updateFromRequest(AccRstrListRequestDTO requestDTO, @MappingTarget AccRstrListEntity entity);
 
     @Mapping(target = "uuid", ignore = true)
     AccRstrListEntity toEntity(AccRstrListRequestDTO requestDTO);

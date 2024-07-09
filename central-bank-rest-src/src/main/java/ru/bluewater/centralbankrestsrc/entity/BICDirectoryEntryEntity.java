@@ -8,12 +8,12 @@ import lombok.*;
 import java.util.List;
 import java.util.UUID;
 
-@Entity(name = "bic_directory_entry")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "bic_directory_entry")
 public class BICDirectoryEntryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

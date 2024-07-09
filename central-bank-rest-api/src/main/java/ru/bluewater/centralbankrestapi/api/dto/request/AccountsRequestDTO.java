@@ -10,6 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class AccountsRequestDTO {
+    private UUID uuid;
     private String account;
     private String regulationAccountType;
     private String CK;

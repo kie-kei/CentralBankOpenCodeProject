@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11
+      author: sklnrr
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: centralbankdb
+                tableName: swbics
+      changes:
+        - sqlFile:
+            relativeToChangelogFile: true
+            path: create_swbics_table.sql
