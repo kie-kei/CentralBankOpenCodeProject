@@ -5,19 +5,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bluewater.centralbankrestapi.api.dto.request.create.BICDirectoryEntryCreateRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.update.BicDirectoryEntryFullUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.BicDirectoryEntryUpdateRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.BICDirectoryEntryResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.create.BICDirectoryEntryCreateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.list.BICDirectoryEntryListResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.BICDirectoryEntryGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.BicDirectoryEntryUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
-import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
-import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
-import ru.bluewater.centralbankrestsrc.mapper.entity.BICDirectoryEntryEntityMapper;
-import ru.bluewater.centralbankrestsrc.respository.BICDirectoryEntryRepository;
-import ru.bluewater.centralbankrestsrc.respository.RootRepository;
+import ru.bluewater.centralbankrestsrc.entity.*;
+import ru.bluewater.centralbankrestsrc.mapper.entity.*;
+import ru.bluewater.centralbankrestsrc.mapper.xml.AccRstrListMapper;
+import ru.bluewater.centralbankrestsrc.mapper.xml.AccountsMapper;
+import ru.bluewater.centralbankrestsrc.respository.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,6 +30,14 @@ public class BICDirectoryEntryService {
     private final BICDirectoryEntryRepository bicDirectoryEntryRepository;
     private final BICDirectoryEntryEntityMapper bicDirectoryEntryEntityMapper;
     private final RootRepository rootRepository;
+    private final AccRstrListRepository accRstrListRepository;
+    private final AccRstrListMapper accRstrListMapper;
+    private final AccountsEntityMapper accountsEntityMapper;
+    private final AccountsRepository accountsRepository;
+    private final SWBICSRepository swbicsRepository;
+    private final SWBICSEntityMapper swbicsEntityMapper;
+    private final ParticipantInfoRepository participantInfoRepository;
+    private final ParticipantInfoEntityMapper participantInfoEntityMapper;
 
     @Transactional
     public BICDirectoryEntryCreateResponseDTO createBICDirectoryEntry(
@@ -57,6 +69,45 @@ public class BICDirectoryEntryService {
         );
         bicDirectoryEntryEntityMapper.updateFromDto(requestDTO, exitEntity);
         return bicDirectoryEntryEntityMapper.toUpdateResponse(exitEntity);
+    }
+
+    @Transactional
+    public List<BICDirectoryEntryResponseDTO> updateFullBicDirectoryEntry(
+            List<BicDirectoryEntryFullUpdateRequestDTO> BicDirectoryEntryDTOs) {
+
+        List<BICDirectoryEntryEntity> bicDirectoryEntryEntityList = new ArrayList<>();
+
+        BicDirectoryEntryDTOs.forEach(bicDirectoryEntryDTO -> {
+            BICDirectoryEntryEntity bicDirectoryEntryEntity = bicDirectoryEntryRepository.findById(bicDirectoryEntryDTO.getUuid()).get();
+
+            ParticipantInfoEntity participantInfoEntity = participantInfoRepository.findById(bicDirectoryEntryDTO.getUuid()).get();
+
+            participantInfoEntityMapper.updateFromRequest(bicDirectoryEntryDTO.getParticipantInfo(), participantInfoEntity);
+
+            bicDirectoryEntryDTO.getAccounts().forEach(accountsRequestDTO -> {
+                AccountsEntity accountsEntity = accountsRepository.findById(accountsRequestDTO.getUuid()).get();
+
+                accountsRequestDTO.getAccRstrList().forEach(accRstrListRequestDTO -> {
+                    AccRstrListEntity accRstrListEntity = accRstrListRepository.findById(accRstrListRequestDTO.getUuid()).get();
+                    accRstrListMapper.updateFromRequest(accRstrListRequestDTO, accRstrListEntity);
+                });
+
+                accountsEntityMapper.updateFromRequest(accountsRequestDTO, accountsEntity);
+            });
+
+            bicDirectoryEntryDTO.getSwbics().forEach(swbicsRequestDTO -> {
+                SWBICSEntity swbicsEntity = swbicsRepository.findById(swbicsRequestDTO.getUuid()).get();
+                swbicsEntityMapper.updateFromRequest(swbicsRequestDTO, swbicsEntity);
+            });
+
+            bicDirectoryEntryEntityMapper.updateFromDto(bicDirectoryEntryDTO, bicDirectoryEntryEntity);
+
+            bicDirectoryEntryEntityList.add(bicDirectoryEntryEntity);
+
+        });
+
+        return bicDirectoryEntryEntityMapper
+                .toListResponse(bicDirectoryEntryRepository.saveAll(bicDirectoryEntryEntityList));
     }
 
     public BICDirectoryEntryGetResponseDTO findBICDirectoryEntry(UUID uuid) throws BicDirectoryEntryNotFoundException {

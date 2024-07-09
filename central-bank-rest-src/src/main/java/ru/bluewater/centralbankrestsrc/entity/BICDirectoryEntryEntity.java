@@ -8,12 +8,12 @@ import lombok.*;
 import java.util.List;
 import java.util.UUID;
 
-@Entity(name = "bic_directory_entry")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "bic_directory_entry")
 public class BICDirectoryEntryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,9 +37,5 @@ public class BICDirectoryEntryEntity {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "bic_directory_entry_uuid")
     private List<SWBICSEntity> swbics;
-
-//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "ed807_uuid")
-//    private ED807Entity ed807Entity;
 
 }

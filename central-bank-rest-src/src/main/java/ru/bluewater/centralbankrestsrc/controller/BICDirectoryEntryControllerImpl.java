@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.bluewater.centralbankrestapi.api.dto.request.create.BICDirectoryEntryCreateRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.update.BicDirectoryEntryFullUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.BicDirectoryEntryUpdateRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.BICDirectoryEntryResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.create.BICDirectoryEntryCreateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.list.BICDirectoryEntryListResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.BicDirectoryEntryUpdateResponseDTO;
@@ -12,6 +14,7 @@ import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundEx
 import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestsrc.service.BICDirectoryEntryService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -48,6 +51,11 @@ public class BICDirectoryEntryControllerImpl  { // implements BICDirectoryEntryC
     )
             throws BicDirectoryEntryNotFoundException {
         return ResponseEntity.ok(bicDirectoryEntryService.updateBICDirectoryEntry(uuid, requestDTO));
+    }
+
+    @PutMapping("/bicDirectoryEntry")
+    public List<BICDirectoryEntryResponseDTO> updateFullBicDirectoryEntry(@RequestBody List<BicDirectoryEntryFullUpdateRequestDTO> requestDTO) {
+        return bicDirectoryEntryService.updateFullBicDirectoryEntry(requestDTO);
     }
 
     @DeleteMapping("/bicDirectoryEntry/{uuid}")

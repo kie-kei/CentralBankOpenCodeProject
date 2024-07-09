@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: sklnrr
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: centralbankdb
+                tableName: acc_rstr_list
+      changes:
+        - sqlFile:
+            relativeToChangelogFile: true
+            path: create_acc_rstr_list_table.sql

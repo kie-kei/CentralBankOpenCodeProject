@@ -20,7 +20,6 @@ import java.util.UUID;
 public class ED807Entity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-//    @Column(name = "ed807_uuid")
     private UUID uuid;
 
     @NotNull
@@ -32,13 +31,7 @@ public class ED807Entity {
     @NotNull
     private String createdBy;
 
-//    private LocalDateTime updatedAt;
-//
-//    private String updatedBy;
-
     @Column(nullable = false)
-//    @Min(value = 1, message = "number of electronic message (EDNo) should be in 0 to 999999999 range")
-//    @Max(value = 999999999, message = "number of electronic message (EDNo) should be in 0 to 999999999 range")
     @Digits(integer = 9, fraction = 0, message = "EDNo should have up to 9 digits")
     @NotNull(message = "EDNo should be not null")
     private Integer edNo; // numberOfElectronicMessage
@@ -72,19 +65,10 @@ public class ED807Entity {
     private LocalDate businessDay; // format YYYY-MM-DD
 
     @Column
-    @Min(value = 0, message = "directory BIC Version (DirectoryVersion) should be in range 0 to 99")
-    @Max(value = 99, message = "directory BIC Version (DirectoryVersion) should be in range 0 to 99")
+    @Digits(integer = 2, fraction = 0, message = "DirectoryVersion should be in range 0 to 99")
     private Integer directoryVersion; // directoryBICVersion, nullable since [0..1]
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "ed807_uuid")
     private List<BICDirectoryEntryEntity> bicDirectoryEntry;
-
-//    @OneToOne(mappedBy = "ed807Entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private PartInfoEntity partInfo;
-//
-//    @OneToOne(mappedBy = "ed807Entity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private InitialEDEntity initialED;
 }
-
-// rootEntity.getBicDIck bicDick.getRootEntity()

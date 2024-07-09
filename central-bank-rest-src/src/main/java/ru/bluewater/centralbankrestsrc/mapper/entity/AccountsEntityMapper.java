@@ -25,5 +25,7 @@ public interface AccountsEntityMapper {
     AccountsUpdateResponseDTO toUpdateResponse(AccountsEntity accountsEntity);
     @Mapping(target = "uuid", ignore = true)
     void updateFromRequest(AccountsUpdateRequestDTO requestDTO, @MappingTarget AccountsEntity entity);
+    @Mapping(target = "uuid", ignore = true)
+    void updateFromRequest(AccountsRequestDTO requestDTO, @MappingTarget AccountsEntity entity);
     AccountsGetResponseDTO toGetResponse(AccountsEntity accountsEntity);
 }
