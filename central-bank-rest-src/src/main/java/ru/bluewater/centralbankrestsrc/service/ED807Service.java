@@ -22,9 +22,11 @@ import ru.bluewater.centralbankrestsrc.respository.InitialEDRepository;
 import ru.bluewater.centralbankrestsrc.respository.PartInfoRepository;
 import ru.bluewater.centralbankrestsrc.respository.ED807Repository;
 
+import javax.swing.text.html.Option;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -37,6 +39,8 @@ public class ED807Service {
     private final InitialEDEntityMapper initialEDMapper;
     private final InitialEDRepository initialEDRepository;
     private final PartInfoRepository partInfoRepository;
+    private final PartInfoEntityMapper partInfoEntityMapper;
+    private final InitialEDEntityMapper initialEDEntityMapper;
 
 
     @Transactional
@@ -87,7 +91,14 @@ public class ED807Service {
 
     public ED807ResponseDTO findRootByUuid(UUID uuid) throws ED807NotFoundException {
         ED807Entity ED807Entity = ed807Repository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
-        return ed807EntityMapper.toRootResponseDTO(ED807Entity);
+        Optional<PartInfoEntity> partInfo = partInfoRepository.findById(uuid);
+        Optional<InitialEDEntity> initialEDEntity = initialEDRepository.findById(uuid);
+
+        ED807ResponseDTO responseDTO = ed807EntityMapper.toRootResponseDTO(ED807Entity);
+
+        partInfo.ifPresent(partInfoEntity -> responseDTO.setPartInfo(partInfoMapper.toPartInfoResponseDTO(partInfoEntity)));
+        initialEDEntity.ifPresent(entity -> responseDTO.setInitialED(initialEDMapper.toResponse(entity)));
+        return responseDTO;
     }
 
     public ED807Entity findRootEntityByUuid(UUID uuid) throws ED807NotFoundException {
