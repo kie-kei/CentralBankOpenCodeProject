@@ -7,6 +7,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.read.ParticipantInfoGetR
 import ru.bluewater.centralbankrestapi.api.dto.response.update.ParticipantInfoUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.InitialEDNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.ParticipantInfoNotFoundException;
+import ru.bluewater.centralbankrestapi.controller.ParticipantInfoController;
 import ru.bluewater.centralbankrestsrc.service.ParticipantInfoService;
 
 import java.util.UUID;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class ParticipantInfoControllerImpl {
+public class ParticipantInfoControllerImpl implements ParticipantInfoController {
     private final ParticipantInfoService participantInfoService;
 
     @GetMapping("/bicDirectoryEntry/{bic_directory_entry_uuid}/participantInfo")

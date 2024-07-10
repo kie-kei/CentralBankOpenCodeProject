@@ -11,6 +11,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.update.RstrListUpdateRes
 import ru.bluewater.centralbankrestapi.api.exception.PartInfoNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.ParticipantInfoNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.RstrListNotFoundException;
+import ru.bluewater.centralbankrestapi.controller.RstrListController;
 import ru.bluewater.centralbankrestsrc.service.RstrListService;
 
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class RstrListControllerImpl {
+public class RstrListControllerImpl implements RstrListController {
     private final RstrListService rstrListService;
 
     @GetMapping("/rstrList/{rstr_list_uuid}")

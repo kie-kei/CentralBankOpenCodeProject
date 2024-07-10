@@ -3,15 +3,13 @@ package ru.bluewater.centralbankrestsrc.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.bluewater.centralbankrestapi.api.dto.request.create.InitialEDCreateRequestDTO;
-import ru.bluewater.centralbankrestapi.api.dto.request.create.PartInfoCreateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.InitialEDUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.create.InitialEDCreateResponseDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.create.PartInfoCreateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.InitialEDGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.InitialEDUpdateResponseDTO;
-import ru.bluewater.centralbankrestapi.api.exception.AccRstrListNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.InitialEDNotFoundException;
+import ru.bluewater.centralbankrestapi.controller.InitialEDController;
 import ru.bluewater.centralbankrestsrc.service.InitialEDService;
 
 import java.util.UUID;
@@ -19,7 +17,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class InitialEDController {
+public class InitialEDControllerImpl implements InitialEDController {
     private final InitialEDService initialEDService;
 
     @GetMapping("/ed807/{ed807_uuid}/initialEd")

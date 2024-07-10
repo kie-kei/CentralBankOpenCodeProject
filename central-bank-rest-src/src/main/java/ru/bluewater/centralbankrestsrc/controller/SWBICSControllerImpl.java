@@ -11,6 +11,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.update.SWBICSUpdateRespo
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.RstrListNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.SWBICSNotFoundException;
+import ru.bluewater.centralbankrestapi.controller.SWBICSController;
 import ru.bluewater.centralbankrestsrc.service.SWBICSService;
 
 import java.util.UUID;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class SWBICSControllerImpl {
+public class SWBICSControllerImpl implements SWBICSController {
     private final SWBICSService swbicsService;
 
     @GetMapping("/swbics/{swbics_uuid}")

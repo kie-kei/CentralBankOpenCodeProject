@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.bluewater.centralbankrestapi.api.dto.request.create.BICDirectoryEntryCreateRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.update.BICDirectoryEntryFullUpdateRequestListDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.BicDirectoryEntryFullUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.BicDirectoryEntryUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.BICDirectoryEntryResponseDTO;
@@ -14,6 +15,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.read.BICDirectoryEntryGe
 import ru.bluewater.centralbankrestapi.api.dto.response.update.BicDirectoryEntryUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
+import ru.bluewater.centralbankrestapi.controller.BICDirectoryEntryController;
 import ru.bluewater.centralbankrestsrc.service.BICDirectoryEntryService;
 
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1")
 @CrossOrigin
-public class BICDirectoryEntryControllerImpl  { // implements BICDirectoryEntryController
+public class BICDirectoryEntryControllerImpl implements BICDirectoryEntryController {
 
     private final BICDirectoryEntryService bicDirectoryEntryService;
 
@@ -73,7 +75,8 @@ public class BICDirectoryEntryControllerImpl  { // implements BICDirectoryEntryC
         bicDirectoryEntryService.deleteBicDirectoryEntry(uuid);
     }
     @PutMapping("/bicDirectoryEntry")
-    public BICDirectoryEntryFullResponseDTO updateFullBicDirectoryEntry(@RequestBody List<BicDirectoryEntryFullUpdateRequestDTO> requestDTO) {
+    public BICDirectoryEntryFullResponseDTO updateFullBicDirectoryEntry(
+            @RequestBody BICDirectoryEntryFullUpdateRequestListDTO requestDTO) {
         return bicDirectoryEntryService.updateFullBicDirectoryEntry(requestDTO);
     }
 

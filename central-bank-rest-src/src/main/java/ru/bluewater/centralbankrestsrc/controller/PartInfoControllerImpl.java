@@ -9,7 +9,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.read.PartInfoGetResponse
 import ru.bluewater.centralbankrestapi.api.dto.response.update.PartInfoUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.PartInfoNotFoundException;
-import ru.bluewater.centralbankrestapi.api.exception.ParticipantInfoNotFoundException;
+import ru.bluewater.centralbankrestapi.controller.PartInfoController;
 import ru.bluewater.centralbankrestsrc.service.PartInfoService;
 
 import java.util.UUID;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class PartInfoController {
+public class PartInfoControllerImpl implements PartInfoController {
     private final PartInfoService partInfoService;
 
     @GetMapping("/ed807/{ed807_uuid}/partInfo")

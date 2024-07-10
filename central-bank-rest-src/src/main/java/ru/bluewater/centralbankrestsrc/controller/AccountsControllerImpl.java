@@ -11,6 +11,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.read.AccountsGetResponse
 import ru.bluewater.centralbankrestapi.api.dto.response.update.AccountsUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.AccountsNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
+import ru.bluewater.centralbankrestapi.controller.AccountsController;
 import ru.bluewater.centralbankrestsrc.service.AccountsService;
 
 import java.util.UUID;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class AccountsController {
+public class AccountsControllerImpl implements AccountsController {
     private final AccountsService accountsService;
 
     @GetMapping("/accounts/{accounts_uuid}")

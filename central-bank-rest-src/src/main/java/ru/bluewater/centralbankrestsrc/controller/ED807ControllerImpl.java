@@ -14,7 +14,7 @@ import ru.bluewater.centralbankrestsrc.service.ED807Service;
 import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/ed807")
-public class ED807ControllerImpl { //  implements ED807Controller
+public class ED807ControllerImpl implements ED807Controller {
     private final ED807Service ed807Service;
 
     @Autowired

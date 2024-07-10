@@ -10,6 +10,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.read.AccRstrListGetRespo
 import ru.bluewater.centralbankrestapi.api.dto.response.update.AccRstrListUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.AccRstrListNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.AccountsNotFoundException;
+import ru.bluewater.centralbankrestapi.controller.AccRstrListController;
 import ru.bluewater.centralbankrestsrc.service.AccRstrListService;
 
 import java.util.UUID;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class AccRstrListControllerImpl {
+public class AccRstrListControllerImpl implements AccRstrListController {
     private final AccRstrListService accRstrListService;
 
     @GetMapping("/accRstrList/{acc_rstr_list_uuid}")
