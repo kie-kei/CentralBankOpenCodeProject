@@ -1,10 +1,8 @@
 package ru.bluewater.centralbankrestsrc.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import ru.bluewater.centralbankrestapi.api.dto.request.create.ED807CreateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.ED807UpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.ED807ResponseDTO;
@@ -22,7 +20,6 @@ import ru.bluewater.centralbankrestsrc.respository.InitialEDRepository;
 import ru.bluewater.centralbankrestsrc.respository.PartInfoRepository;
 import ru.bluewater.centralbankrestsrc.respository.ED807Repository;
 
-import javax.swing.text.html.Option;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -45,7 +42,7 @@ public class ED807Service {
         ED807 ed807 = fileDTO.getEd807();
         String filename = fileDTO.getFilename();
 
-        ED807Entity ed807Entity = ed807EntityMapper.toRootEntity(ed807);
+        ED807Entity ed807Entity = ed807EntityMapper.toEd807Entity(ed807);
         setAuditFieldsOnCreateRootEntity(ed807Entity, principal);
         ed807Entity.setFileName(filename);
 
@@ -85,8 +82,12 @@ public class ED807Service {
 //        ED807Entity ed807Entity = ed807Repository.findById(uuid)
 //                .orElseThrow(() -> new ED807NotFoundException(uuid));
 //    }
+    public ED807GetResponseDTO findEd807ByUuid(UUID uuid) throws ED807NotFoundException{
+        ED807Entity ed807Entity = ed807Repository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
+        return ed807EntityMapper.toGetResponse(ed807Entity);
+    }
 
-    public ED807ResponseDTO findRootByUuid(UUID uuid) throws ED807NotFoundException {
+    public ED807ResponseDTO findFullEd807ByUuid(UUID uuid) throws ED807NotFoundException {
         ED807Entity ED807Entity = ed807Repository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
         Optional<PartInfoEntity> partInfo = partInfoRepository.findById(uuid);
         Optional<InitialEDEntity> initialEDEntity = initialEDRepository.findById(uuid);

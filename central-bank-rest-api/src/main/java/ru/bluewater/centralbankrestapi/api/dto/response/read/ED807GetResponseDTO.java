@@ -14,8 +14,6 @@ public class ED807GetResponseDTO {
     private String fileName;
     private LocalDate createdAt;
     private String createdBy;
-    private LocalDate updatedAt;
-    private String updatedBy;
     private Integer edNo; // numberOfElectronicMessage
     private LocalDate edDate; // dateOfCompilationElectronicMessage format YYYY-MM-DD
     private Long edAuthor; // electronicMessageAuthorId unique

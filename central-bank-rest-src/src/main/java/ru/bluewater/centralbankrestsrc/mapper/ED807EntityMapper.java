@@ -16,14 +16,15 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ED807EntityMapper {
-    ED807Entity toRootEntity(ED807 ed807);
+    ED807Entity toEd807Entity(ED807 ed807);
 
     ED807 entityToED807(ED807Entity ED807Entity);
 
     ED807 dtoToED807(ED807ResponseDTO ED807ResponseDTO);
     ED807ResponseDTO toRootResponseDTO(ED807Entity ed807Entity);
 
-    ED807Entity toRootEntity(ED807RequestDTO requestDTO);
+    ED807GetResponseDTO toGetResponse(ED807Entity ed807Entity);
+    ED807Entity toEd807Entity(ED807RequestDTO requestDTO);
 
     @Mapping(target = "uuid", ignore = true)
     void updateFromDto(ED807UpdateRequestDTO updateRequestDTO, @MappingTarget ED807Entity ed807Entity);

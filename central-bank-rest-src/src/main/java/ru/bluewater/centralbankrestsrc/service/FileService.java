@@ -2,8 +2,6 @@ package ru.bluewater.centralbankrestsrc.service;
 
 import jakarta.xml.bind.JAXBException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpMethod;
@@ -68,7 +66,7 @@ public class FileService {
 
 
     public FileResourceWithNameDTO getFileByRootUuid(UUID uuid) throws ED807NotFoundException, JAXBException {
-        var rootEntity = ed807Service.findRootByUuid(uuid);
+        var rootEntity = ed807Service.findFullEd807ByUuid(uuid);
         var content = XmlParser.toXml(ed807Mapper.dtoToED807(rootEntity));
         var resource = new ByteArrayResource(content.getBytes());
         return FileResourceWithNameDTO.builder()
