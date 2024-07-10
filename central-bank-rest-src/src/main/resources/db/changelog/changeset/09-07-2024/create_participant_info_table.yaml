@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 9
+      author: sklnrr
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: centralbankdb
+                tableName: participant_info
+      changes:
+        - sqlFile:
+            relativeToChangelogFile: true
+            path: create_participant_info_table.sql

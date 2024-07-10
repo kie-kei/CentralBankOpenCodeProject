@@ -4,7 +4,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
-import ru.bluewater.centralbankrestsrc.entity.xml.ED807;
+import ru.bluewater.centralbankrestsrc.dto.xml.ED807;
 
 import java.io.InputStream;
 import java.io.StringWriter;

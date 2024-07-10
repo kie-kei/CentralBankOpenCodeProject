@@ -2,6 +2,7 @@ package ru.bluewater.centralbankrestsrc.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -12,7 +13,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@EqualsAndHashCode(exclude = "bicDirectoryEntry")
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "accounts")
@@ -22,6 +22,7 @@ public class AccountsEntity {
     private UUID uuid;
 
     @Size(min = 20, max = 20, message = "Account length should be 20")
+    @Pattern(regexp = "[0-9]{20}", message = "account length should be 20 and contains only number")
     @NotNull(message = "account should be not null")
     private String account;
 
@@ -45,11 +46,9 @@ public class AccountsEntity {
     @Size(min = 4, max = 4, message = "AccountStatus length should be 4")
     private String accountStatus;
 
-    @OneToMany(mappedBy = "accounts", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "accounts_uuid")
     private List<AccRstrListEntity> accRstrList;
 
-    @ManyToOne
-    @JoinColumn(name = "bic_directory_entry_uuid")
-    private BICDirectoryEntryEntity bicDirectoryEntry;
 
 }

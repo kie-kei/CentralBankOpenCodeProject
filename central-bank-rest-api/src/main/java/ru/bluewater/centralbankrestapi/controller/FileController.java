@@ -16,7 +16,7 @@ import ru.bluewater.centralbankrestapi.api.dto.request.FileRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.*;
 import ru.bluewater.centralbankrestapi.api.dto.response.error.ErrorResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.CbrException;
-import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.IncorrectFileTypeException;
 
 import java.io.IOException;
@@ -75,7 +75,7 @@ public interface FileController {
                     content = @Content(mediaType = "text/plain"))})
     @GetMapping("/download/{uuid}")
     ResponseEntity<Resource> getFile(@PathVariable("uuid") UUID uuid)
-            throws RootNotFoundException, JAXBException;
+            throws ED807NotFoundException, JAXBException;
 
 
 }

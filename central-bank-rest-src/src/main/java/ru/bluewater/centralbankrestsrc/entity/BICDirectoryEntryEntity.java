@@ -8,13 +8,12 @@ import lombok.*;
 import java.util.List;
 import java.util.UUID;
 
-@Entity(name = "bic_directory_entry")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"rootEntity"})
+@Entity(name = "bic_directory_entry")
 public class BICDirectoryEntryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,17 +27,15 @@ public class BICDirectoryEntryEntity {
     private String changeType;
 
     @NotNull(message = "participantInfo should be not null")
-    @OneToOne(mappedBy = "bicDirectoryEntry", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "bicDirectoryEntry",cascade = CascadeType.ALL, optional = false)
     private ParticipantInfoEntity participantInfo;
 
-    @OneToMany(mappedBy = "bicDirectoryEntry", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "bic_directory_entry_uuid")
     private List<AccountsEntity> accounts;
 
-    @OneToMany(mappedBy = "bicDirectoryEntry", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "bic_directory_entry_uuid")
     private List<SWBICSEntity> swbics;
-
-    @ManyToOne
-    @JoinColumn(name = "ed807_uuid", referencedColumnName = "uuid")
-    private RootEntity rootEntity;
 
 }

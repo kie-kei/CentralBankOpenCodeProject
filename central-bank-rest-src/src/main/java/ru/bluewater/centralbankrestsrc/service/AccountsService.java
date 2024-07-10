@@ -1,74 +1,88 @@
 package ru.bluewater.centralbankrestsrc.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bluewater.centralbankrestapi.api.dto.request.AccountsRequestDTO;
-import ru.bluewater.centralbankrestsrc.entity.AccRstrListEntity;
+import ru.bluewater.centralbankrestapi.api.dto.request.create.AccountsCreateRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.update.AccountsUpdateRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.create.AccountsCreateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.list.AccountsListResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.read.AccountsGetResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.update.AccountsUpdateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.exception.AccountsNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.AccountsEntity;
 import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
-import ru.bluewater.centralbankrestsrc.mapper.entity.AccRstrListEntityMapper;
-import ru.bluewater.centralbankrestsrc.mapper.entity.AccountsEntityMapper;
+import ru.bluewater.centralbankrestsrc.mapper.AccountsEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.AccountsRepository;
+import ru.bluewater.centralbankrestsrc.respository.BICDirectoryEntryRepository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AccountsService {
     private final AccountsRepository accountsRepository;
-    private final AccRstrListService accRstrListService;
     private final AccountsEntityMapper accountsEntityMapper;
-    private final AccRstrListEntityMapper accRstrListEntityMapper;
+    private final BICDirectoryEntryRepository bicDirectoryEntryRepository;
 
-    @Autowired
-    public AccountsService(AccountsRepository accountsRepository, AccRstrListService accRstrListService, AccountsEntityMapper accountsEntityMapper, AccRstrListEntityMapper accRstrListEntityMapper) {
-        this.accountsRepository = accountsRepository;
-        this.accRstrListService = accRstrListService;
-        this.accountsEntityMapper = accountsEntityMapper;
-        this.accRstrListEntityMapper = accRstrListEntityMapper;
+    @Transactional
+    public AccountsCreateResponseDTO createAccounts(UUID bicDirectoryEntryUuid, AccountsCreateRequestDTO requestDTO) throws BicDirectoryEntryNotFoundException {
+        BICDirectoryEntryEntity bicDirectoryEntry = bicDirectoryEntryRepository.findById(bicDirectoryEntryUuid)
+                .orElseThrow(() -> new BicDirectoryEntryNotFoundException(bicDirectoryEntryUuid));
+        AccountsEntity accountsEntity = accountsRepository.save(
+                accountsEntityMapper.fromCreateRequestToEntity(requestDTO)
+        );
+
+        bicDirectoryEntry.getAccounts().add(accountsEntity);
+
+        return accountsEntityMapper.toCreateResponse(accountsEntity);
     }
 
     @Transactional
-    public void createAccounts(AccountsEntity accountsEntity) {
-        List<AccRstrListEntity> accRstrListEntityList = accountsEntity.getAccRstrList();
+    public AccountsUpdateResponseDTO updateAccounts(
+            UUID uuid,
+            AccountsUpdateRequestDTO requestDTO
+    ) throws AccountsNotFoundException {
+        AccountsEntity accountsEntity = accountsRepository.findById(uuid).orElseThrow(() ->
+                new AccountsNotFoundException(uuid)
+        );
 
-        if (accRstrListEntityList != null)
-            accRstrListEntityList.forEach(accRstrList -> {
-                accRstrList.setAccounts(accountsEntity);
-                accRstrListService.createAccRstrList(accRstrList);
-            });
+        accountsEntityMapper.updateFromRequest(requestDTO, accountsEntity);
 
-        accountsRepository.save(accountsEntity);
+        return accountsEntityMapper.toUpdateResponse(accountsRepository.save(accountsEntity));
     }
 
-    public List<AccountsEntity> createNewAccountsEntityList(BICDirectoryEntryEntity bicDirectoryEntry, List<AccountsRequestDTO> requestDTOs) {
-        if (bicDirectoryEntry.getAccounts() != null) {
-            accountsRepository.deleteAll(bicDirectoryEntry.getAccounts());
+    public AccountsGetResponseDTO findAccountsByUuid(UUID uuid) throws AccountsNotFoundException {
+        AccountsEntity accountsEntity = accountsRepository.findById(uuid).orElseThrow(() ->
+                new AccountsNotFoundException(uuid)
+        );
+        return accountsEntityMapper.toGetResponse(accountsEntity);
+    }
+
+    public AccountsListResponseDTO findListAccounts(UUID uuid) throws BicDirectoryEntryNotFoundException {
+        BICDirectoryEntryEntity bicDirectoryEntry = bicDirectoryEntryRepository.findById(uuid)
+                .orElseThrow(() -> new BicDirectoryEntryNotFoundException(uuid));
+
+        List<AccountsEntity> accountsEntities = bicDirectoryEntry.getAccounts();
+        if(accountsEntities == null || accountsEntities.isEmpty()){
+            return new AccountsListResponseDTO();
         }
 
-        List<AccountsEntity> newEntities = new ArrayList<>();
+        return new AccountsListResponseDTO(
+                accountsEntityMapper.toListResponse(accountsEntities)
+        );
+    }
 
-        requestDTOs.forEach(accountDTO -> {
-            AccountsEntity accountsEntity = accountsEntityMapper.toEntity(accountDTO);
-
-            accountsEntity.setBicDirectoryEntry(bicDirectoryEntry);
-
-            List<AccRstrListEntity> accRstrListEntityList = new ArrayList<>();
-
-            if (accountDTO.getAccRstrList() != null) {
-                accountDTO.getAccRstrList().forEach(accRstrDTO -> {
-                    AccRstrListEntity accRstrListEntity = accRstrListEntityMapper.toEntity(accRstrDTO);
-                    accRstrListEntity.setAccounts(accountsEntity);
-                    accRstrListEntityList.add(accRstrListEntity);
-                });
-            }
-
-            accountsEntity.setAccRstrList(accRstrListEntityList);
-
-            newEntities.add(accountsEntity);
-        });
-
-        return newEntities;
+    @Transactional
+    public void deleteAccounts(UUID uuid) throws AccountsNotFoundException {
+        AccountsEntity account = accountsRepository.findById(uuid).orElseThrow(AccountsNotFoundException::new);
+        BICDirectoryEntryEntity bicDirectoryEntry = bicDirectoryEntryRepository.findByAccount(account);
+        if (bicDirectoryEntry != null) {
+            bicDirectoryEntry.getAccounts().remove(account);
+            bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        }
+        accountsRepository.delete(account);
     }
 }

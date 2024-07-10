@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13
+      author: sklnrr
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: centralbankdb
+                tableName: users
+      changes:
+        - sqlFile:
+            relativeToChangelogFile: true
+            path: create_users_table.sql

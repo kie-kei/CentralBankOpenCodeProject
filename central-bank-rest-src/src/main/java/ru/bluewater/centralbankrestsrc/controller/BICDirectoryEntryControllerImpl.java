@@ -3,20 +3,26 @@ package ru.bluewater.centralbankrestsrc.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.bluewater.centralbankrestapi.api.dto.request.create.BicDirectoryEntryCreateRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.create.BICDirectoryEntryCreateRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.update.BICDirectoryEntryFullUpdateRequestListDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.update.BicDirectoryEntryFullUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.BicDirectoryEntryUpdateRequestDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.create.BicDirectoryEntryCreateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.BICDirectoryEntryResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.create.BICDirectoryEntryCreateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.full.BICDirectoryEntryFullResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.list.BICDirectoryEntryListResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.read.BICDirectoryEntryGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.BicDirectoryEntryUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
-import ru.bluewater.centralbankrestapi.api.exception.RootNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestapi.controller.BICDirectoryEntryController;
 import ru.bluewater.centralbankrestsrc.service.BICDirectoryEntryService;
 
-import java.security.Principal;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/bicDirectoryEntry")
+@RequestMapping("/api/v1")
 @CrossOrigin
 public class BICDirectoryEntryControllerImpl implements BICDirectoryEntryController {
 
@@ -27,27 +33,51 @@ public class BICDirectoryEntryControllerImpl implements BICDirectoryEntryControl
         this.bicDirectoryEntryService = bicDirectoryEntryService;
     }
 
-    @PostMapping
-    public ResponseEntity<BicDirectoryEntryCreateResponseDTO> createBICDirectoryEntry
-            (@RequestBody BicDirectoryEntryCreateRequestDTO requestDTO, Principal principal)
-            throws RootNotFoundException {
-        return ResponseEntity.ok(bicDirectoryEntryService.createBICDirectoryEntryFromDTO(requestDTO, principal));
+    @GetMapping("/bicDirectoryEntry/{bic_directory_entry_uuid}")
+    public BICDirectoryEntryGetResponseDTO findBicDirectoryEntryByUuid(
+            @PathVariable("bic_directory_entry_uuid") UUID uuid
+    ) throws BicDirectoryEntryNotFoundException {
+        return bicDirectoryEntryService.findBicDirectoryEntryByUuid(uuid);
     }
 
-    @PutMapping("/{uuid}")
-    public ResponseEntity<BicDirectoryEntryUpdateResponseDTO> updateBICDirectoryEntry
-            (@PathVariable("uuid") UUID uuid,
-             @RequestBody BicDirectoryEntryUpdateRequestDTO requestDTO,
-             Principal principal)
-            throws BicDirectoryEntryNotFoundException, RootNotFoundException {
-        return ResponseEntity.ok(bicDirectoryEntryService.updateBicDirectoryEntry(uuid, requestDTO, principal));
+    @GetMapping("/ed807/{ed807_uuid}/bicDirectoryEntry/full")
+    public BICDirectoryEntryFullResponseDTO findFullBicDirectoryEntryByEd807Uuid(
+            @PathVariable("ed807_uuid") UUID ed807Uuid) throws ED807NotFoundException {
+        return bicDirectoryEntryService.findBicDirectoryEntryFullByEd807Uuid(ed807Uuid);
     }
 
-    @DeleteMapping("/{uuid}")
-    public ResponseEntity<?> deleteBICDirectoryEntry(@PathVariable("uuid") UUID uuid)
+    @GetMapping("/ed807/{ed807_uuid}/bicDirectoryEntry")
+    public BICDirectoryEntryListResponseDTO findBicDirectoryEntryListByEd807Uuid(
+            @PathVariable("ed807_uuid") UUID ed807Uuid) throws ED807NotFoundException {
+        return bicDirectoryEntryService.findBicDirectoryEntryListByEd807Uuid(ed807Uuid);
+    }
+
+    @PostMapping("/ed807/{ed807_uuid}/bicDirectoryEntry")
+    public BICDirectoryEntryCreateResponseDTO createBicDirectoryEntry(
+            @PathVariable("ed807_uuid") UUID uuid,
+            @RequestBody BICDirectoryEntryCreateRequestDTO requestDTO
+    ) throws ED807NotFoundException {
+        return bicDirectoryEntryService.createBICDirectoryEntry(uuid, requestDTO);
+    }
+
+    @PutMapping("/bicDirectoryEntry/{bic_directory_entry_uuid}")
+    public BicDirectoryEntryUpdateResponseDTO updateBicDirectoryEntry(
+            @PathVariable("bic_directory_entry_uuid") UUID uuid,
+            @RequestBody BicDirectoryEntryUpdateRequestDTO requestDTO
+    )
             throws BicDirectoryEntryNotFoundException {
-        bicDirectoryEntryService.deleteBICDirectoryEntry(uuid);
-        return ResponseEntity.ok().build();
+        return bicDirectoryEntryService.updateBicDirectoryEntry(uuid, requestDTO);
+    }
+
+    @DeleteMapping("/bicDirectoryEntry/{bic_directory_entry_uuid}")
+    public void deleteBicDirectoryEntry(@PathVariable("bic_directory_entry_uuid") UUID uuid)
+            throws BicDirectoryEntryNotFoundException {
+        bicDirectoryEntryService.deleteBicDirectoryEntry(uuid);
+    }
+    @PutMapping("/bicDirectoryEntry")
+    public BICDirectoryEntryFullResponseDTO updateFullBicDirectoryEntry(
+            @RequestBody BICDirectoryEntryFullUpdateRequestListDTO requestDTO) {
+        return bicDirectoryEntryService.updateFullBicDirectoryEntry(requestDTO);
     }
 
 }

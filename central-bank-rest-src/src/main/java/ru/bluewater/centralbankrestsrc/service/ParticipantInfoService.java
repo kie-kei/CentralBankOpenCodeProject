@@ -1,65 +1,45 @@
 package ru.bluewater.centralbankrestsrc.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bluewater.centralbankrestapi.api.dto.request.ParticipantInfoRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.request.update.ParticipantInfoUpdateRequestDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.read.ParticipantInfoGetResponseDTO;
+import ru.bluewater.centralbankrestapi.api.dto.response.update.ParticipantInfoUpdateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.ParticipantInfoNotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
+import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.entity.ParticipantInfoEntity;
-import ru.bluewater.centralbankrestsrc.entity.RstrListEntity;
-import ru.bluewater.centralbankrestsrc.mapper.entity.ParticipantInfoEntityMapper;
+import ru.bluewater.centralbankrestsrc.mapper.ParticipantInfoEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.ParticipantInfoRepository;
 
-import java.util.List;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ParticipantInfoService {
-    private final ParticipantInfoRepository repository;
-    private final RstrListService rstrListService;
+    private final ParticipantInfoRepository participantInfoRepository;
     private final ParticipantInfoEntityMapper participantInfoEntityMapper;
 
-    @Autowired
-    public ParticipantInfoService(ParticipantInfoRepository repository, RstrListService rstrListService, ParticipantInfoEntityMapper participantInfoEntityMapper) {
-        this.repository = repository;
-        this.rstrListService = rstrListService;
-        this.participantInfoEntityMapper = participantInfoEntityMapper;
-    }
-
     @Transactional
-    public ParticipantInfoEntity createParticipantInfo(ParticipantInfoEntity participantInfoEntity){
-        List<RstrListEntity> list = participantInfoEntity.getRstrList();
+    public ParticipantInfoUpdateResponseDTO updateParticipantInfo(
+            UUID uuid,
+            ParticipantInfoUpdateRequestDTO requestDTO
+    ) throws ParticipantInfoNotFoundException {
+        ParticipantInfoEntity participantInfo = participantInfoRepository.findById(uuid).orElseThrow(() ->
+                new ParticipantInfoNotFoundException(uuid)
+        );
+        participantInfoEntityMapper.updateFromRequest(requestDTO, participantInfo);
 
-        if (list != null)
-            list.forEach(rstrListService::createRstrList);
-
-        return repository.save(participantInfoEntity);
+        return participantInfoEntityMapper.toUpdateResponse(participantInfo);
     }
 
-    public void updateParticipantInfo(BICDirectoryEntryEntity existingEntity, ParticipantInfoRequestDTO requestDTO) {
-        ParticipantInfoEntity participantInfo = existingEntity.getParticipantInfo();
-
-        if (participantInfo == null) {
-            participantInfo = new ParticipantInfoEntity();
-            participantInfo.setBicDirectoryEntry(existingEntity);
-            existingEntity.setParticipantInfo(participantInfo);
-        }
-
-        participantInfoEntityMapper.updateFromDTO(requestDTO, participantInfo);
-
-        if (requestDTO.getRstrList() != null) {
-            participantInfo.setRstrList(rstrListService.createRstrLists(participantInfo, requestDTO.getRstrList()));
-        }
+    public ParticipantInfoGetResponseDTO findParticipantInfoByUuid(UUID uuid) throws ParticipantInfoNotFoundException {
+        ParticipantInfoEntity participantInfo = participantInfoRepository.findById(uuid).orElseThrow(() ->
+                new ParticipantInfoNotFoundException(uuid)
+        );
+        return participantInfoEntityMapper.toGetResponse(participantInfo);
     }
 
-    public ParticipantInfoEntity createParticipantInfoFromDTO(ParticipantInfoRequestDTO requestDTO, BICDirectoryEntryEntity bicDirectoryEntryEntity) {
-        ParticipantInfoEntity participantInfo = participantInfoEntityMapper.toEntity(requestDTO);
-
-        participantInfo.setBicDirectoryEntry(bicDirectoryEntryEntity);
-
-        if (requestDTO.getRstrList() != null) {
-            participantInfo.setRstrList(rstrListService.createRstrLists(participantInfo, requestDTO.getRstrList()));
-        }
-
-        return participantInfo;
-    }
 }

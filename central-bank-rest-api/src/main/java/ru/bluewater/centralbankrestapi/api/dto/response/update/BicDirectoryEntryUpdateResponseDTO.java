@@ -13,7 +13,4 @@ public class BicDirectoryEntryUpdateResponseDTO {
     private UUID uuid;
     private String BIC;
     private String changeType;
-    private ParticipantInfoResponseDTO participantInfo;
-    private List<AccountsResponseDTO> accounts;
-    private List<SWBICSResponseDTO> swbics;
 }

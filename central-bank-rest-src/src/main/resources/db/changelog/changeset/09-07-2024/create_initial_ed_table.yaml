@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: sklnrr
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: centralbankdb
+                tableName: initial_ed
+      changes:
+        - sqlFile:
+            relativeToChangelogFile: true
+            path: create_initial_ed_table.sql

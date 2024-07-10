@@ -14,7 +14,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@RepositoryRestResource(exported = false)
 @Data
 @Builder
 @AllArgsConstructor
@@ -36,8 +35,4 @@ public class AccRstrListEntity {
     @Max(value = 999999999, message = "successorBIC range should be from 100000000 to 999999999")
     @Column(name = "successor_bic")
     private Integer successorBIC;
-
-    @ManyToOne
-    @JoinColumn(name = "accounts_uuid")
-    private AccountsEntity accounts;
 }

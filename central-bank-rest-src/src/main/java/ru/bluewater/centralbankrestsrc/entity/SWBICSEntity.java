@@ -13,7 +13,6 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"bicDirectoryEntry"})
 @Entity(name = "swbics")
 public class SWBICSEntity {
     @Id
@@ -27,8 +26,4 @@ public class SWBICSEntity {
     @NotNull(message = "defaultSWBIC should be not null")
     @Column(name = "default_swbic")
     private Boolean defaultSWBIC;
-
-    @ManyToOne
-    @JoinColumn(name = "bic_directory_entry_uuid")
-    private BICDirectoryEntryEntity bicDirectoryEntry;
 }

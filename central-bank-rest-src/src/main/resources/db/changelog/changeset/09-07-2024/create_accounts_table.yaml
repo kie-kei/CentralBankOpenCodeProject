@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: sklnrr
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                schemaName: centralbankdb
+                tableName: accounts
+      changes:
+        - sqlFile:
+            relativeToChangelogFile: true
+            path: create_accounts_table.sql

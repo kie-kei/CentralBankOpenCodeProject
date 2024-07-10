@@ -15,11 +15,9 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "bicDirectoryEntry")
 @Entity(name = "participant_info")
 public class ParticipantInfoEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
     @Size(min = 1, max = 160, message = "NameP length should be from 1 to 160")
@@ -75,16 +73,18 @@ public class ParticipantInfoEntity {
     private String xchType;
 
     @NotNull(message = "uid should be not null")
-    @Pattern(regexp = "[0-9]{10}", message = "uid should constraint only numbers")
+    @Pattern(regexp = "[0-9]{10}", message = "uid should constraint only numbers or length should be 10")
     private String uid;
 
     @Size(max = 4, message = "ParticipantStatus length should be 4")
     private String participantStatus;
 
-    @OneToMany(mappedBy = "participantInfo", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "participant_info_uuid")
     private List<RstrListEntity> rstrList;
 
     @OneToOne
-    @JoinColumn(name = "bic_directory_entry_uuid")
+    @MapsId
+    @JoinColumn(name = "uuid")
     private BICDirectoryEntryEntity bicDirectoryEntry;
 }
