@@ -111,9 +111,10 @@ public class BICDirectoryEntryService {
     }
     @Transactional
     public BICDirectoryEntryFullResponseDTO updateFullBicDirectoryEntry(
-            List<BicDirectoryEntryFullUpdateRequestDTO> BicDirectoryEntryDTOs) {
-
+            List<BicDirectoryEntryFullUpdateRequestDTO> BicDirectoryEntryDTOs
+    ) {
         List<BICDirectoryEntryEntity> bicDirectoryEntryEntityList = new ArrayList<>();
+
 
         BicDirectoryEntryDTOs.forEach(bicDirectoryEntryDTO -> {
             BICDirectoryEntryEntity bicDirectoryEntryEntity = bicDirectoryEntryRepository.findById(bicDirectoryEntryDTO.getUuid()).get();

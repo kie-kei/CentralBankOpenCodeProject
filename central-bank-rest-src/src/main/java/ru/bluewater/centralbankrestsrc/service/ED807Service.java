@@ -3,7 +3,6 @@ package ru.bluewater.centralbankrestsrc.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bluewater.centralbankrestapi.api.dto.request.create.ED807CreateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.ED807UpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.ED807ResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.list.ED807ListResponseDTO;
@@ -103,14 +102,6 @@ public class ED807Service {
         var list = ed807Repository.findAll();
         List<ED807GetResponseDTO> ED807GetResponseDTOS = ed807EntityMapper.toListRootGetResponseDTO(list);
         return new ED807ListResponseDTO(ED807GetResponseDTOS);
-    }
-
-    @Transactional
-    public ED807ResponseDTO createED807(ED807CreateRequestDTO requestDTO, Principal principal){
-        ED807Entity entity = ed807EntityMapper.fromCreateRequestToEntity(requestDTO);
-        setAuditFieldsOnCreateRootEntity(entity, principal);
-        ed807Repository.save(entity);
-        return ed807EntityMapper.toRootResponseDTO(entity);
     }
 
     @Transactional

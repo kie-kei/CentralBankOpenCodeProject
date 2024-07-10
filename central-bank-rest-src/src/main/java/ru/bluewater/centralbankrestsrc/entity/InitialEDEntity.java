@@ -29,7 +29,6 @@ public class InitialEDEntity {
     @NotNull(message = "edDate should be not null")
     private LocalDate edDate; // dateOfCompilationElectronicMessage format YYYY-MM-DD
 
-    @Column(unique = true)
     @Min(value = 1000000000L, message = "EDAuthor should be in 1000000000 to 9999999999")
     @Max(value = 9999999999L, message = "EDAuthor should be in 1000000000 to 9999999999")
     @NotNull(message = "edAuthor should be not null")

@@ -128,7 +128,7 @@ public class ErrorHandlingControllerAdvice {
         return new ErrorResponseDTO(e.getMessage());
     }
 
-    @ExceptionHandler({JAXBException.class, IOException.class})
+    @ExceptionHandler({JAXBException.class})
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDTO onJAXBException(Exception e){

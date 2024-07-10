@@ -1,5 +1,7 @@
 package ru.bluewater.centralbankrestapi.api.dto.request.update;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import ru.bluewater.centralbankrestapi.api.dto.request.AccountsRequestDTO;
@@ -16,7 +18,10 @@ import java.util.UUID;
 @Setter
 public class BicDirectoryEntryFullUpdateRequestDTO {
     private UUID uuid;
+    @Size(min = 9, max = 9, message = "BIC length should be 9")
+    @NotNull(message = "BIC should be not null")
     private String BIC;
+    @Size(min = 4, max = 4, message = "changeType length should be 4")
     private String changeType;
     private ParticipantInfoRequestDTO participantInfo;
     private List<AccountsRequestDTO> accounts;
