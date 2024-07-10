@@ -19,6 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@CrossOrigin
 public class AccountsControllerImpl implements AccountsController {
     private final AccountsService accountsService;
 

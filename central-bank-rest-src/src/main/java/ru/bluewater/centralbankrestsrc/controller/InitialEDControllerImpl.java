@@ -17,6 +17,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@CrossOrigin
 public class InitialEDControllerImpl implements InitialEDController {
     private final InitialEDService initialEDService;
 

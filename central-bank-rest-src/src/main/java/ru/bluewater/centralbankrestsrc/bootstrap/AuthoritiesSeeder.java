@@ -38,7 +38,11 @@ public class AuthoritiesSeeder implements ApplicationListener<ContextRefreshedEv
         try {
             this.loadSuperAdminUser();
         } catch (UsernameAlreadyExistsException e) {
-            System.out.println("Unluck bratan");
+           // System.out.println("Unluck bratan");
+        }
+        try {
+            this.loadUsers();
+        } catch (UsernameAlreadyExistsException ignored) {
         }
     }
 
@@ -70,5 +74,12 @@ public class AuthoritiesSeeder implements ApplicationListener<ContextRefreshedEv
 
         userEntity.setAuthorities(authorityEntitySet);
         userRepository.save(userEntity);
+    }
+    private void loadUsers() throws UsernameAlreadyExistsException {
+        authenticationService.registerUser(
+                RegistrationRequestDTO.builder().username("user1").password("user").build());
+
+        authenticationService.registerUser(
+                RegistrationRequestDTO.builder().username("user2").password("user").build());
     }
 }
