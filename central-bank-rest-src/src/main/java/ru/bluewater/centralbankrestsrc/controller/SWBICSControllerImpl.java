@@ -9,6 +9,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.list.SWBICSListResponseD
 import ru.bluewater.centralbankrestapi.api.dto.response.read.SWBICSGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.SWBICSUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.RstrListNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.SWBICSNotFoundException;
 import ru.bluewater.centralbankrestsrc.service.SWBICSService;
 
@@ -47,5 +48,11 @@ public class SWBICSControllerImpl {
             @RequestBody SWBICSCreateRequestDTO requestDTO
     ) throws BicDirectoryEntryNotFoundException {
         return swbicsService.createSwbics(uuid, requestDTO);
+    }
+
+    @DeleteMapping("/swbics/{uuid}")
+    public void deleteSWBICS(@PathVariable("uuid") UUID uuid)
+            throws SWBICSNotFoundException {
+        swbicsService.deleteSWBICS(uuid);
     }
 }

@@ -39,9 +39,6 @@ public class ED807Service {
     private final InitialEDEntityMapper initialEDMapper;
     private final InitialEDRepository initialEDRepository;
     private final PartInfoRepository partInfoRepository;
-    private final PartInfoEntityMapper partInfoEntityMapper;
-    private final InitialEDEntityMapper initialEDEntityMapper;
-
 
     @Transactional
     public ED807Entity createED807FromFileDTO(FileDTO fileDTO, Principal principal){
@@ -99,10 +96,6 @@ public class ED807Service {
         partInfo.ifPresent(partInfoEntity -> responseDTO.setPartInfo(partInfoMapper.toPartInfoResponseDTO(partInfoEntity)));
         initialEDEntity.ifPresent(entity -> responseDTO.setInitialED(initialEDMapper.toResponse(entity)));
         return responseDTO;
-    }
-
-    public ED807Entity findRootEntityByUuid(UUID uuid) throws ED807NotFoundException {
-        return ed807Repository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
     }
 
     public ED807ListResponseDTO findEd807List(){

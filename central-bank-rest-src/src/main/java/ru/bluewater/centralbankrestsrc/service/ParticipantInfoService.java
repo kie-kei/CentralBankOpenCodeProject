@@ -6,7 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.ParticipantInfoUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.ParticipantInfoGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.ParticipantInfoUpdateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.ParticipantInfoNotFoundException;
+import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
+import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.entity.ParticipantInfoEntity;
 import ru.bluewater.centralbankrestsrc.mapper.ParticipantInfoEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.ParticipantInfoRepository;
@@ -38,4 +41,5 @@ public class ParticipantInfoService {
         );
         return participantInfoEntityMapper.toGetResponse(participantInfo);
     }
+
 }

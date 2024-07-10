@@ -9,6 +9,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.read.PartInfoGetResponse
 import ru.bluewater.centralbankrestapi.api.dto.response.update.PartInfoUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.PartInfoNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.ParticipantInfoNotFoundException;
 import ru.bluewater.centralbankrestsrc.service.PartInfoService;
 
 import java.util.UUID;
@@ -40,5 +41,11 @@ public class PartInfoController {
             @RequestBody PartInfoCreateRequestDTO requestDTO
     ) throws ED807NotFoundException {
         return partInfoService.createPartInfoByEd807Uuid(uuid, requestDTO);
+    }
+
+    @DeleteMapping("/partInfo/{uuid}")
+    public void deletePartInfo(@PathVariable("uuid") UUID uuid)
+            throws PartInfoNotFoundException {
+        partInfoService.deletePartInfo(uuid);
     }
 }

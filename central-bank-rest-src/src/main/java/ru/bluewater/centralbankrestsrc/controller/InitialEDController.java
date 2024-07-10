@@ -9,6 +9,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.create.InitialEDCreateRe
 import ru.bluewater.centralbankrestapi.api.dto.response.create.PartInfoCreateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.InitialEDGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.InitialEDUpdateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.exception.AccRstrListNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.InitialEDNotFoundException;
 import ru.bluewater.centralbankrestsrc.service.InitialEDService;
@@ -42,5 +43,11 @@ public class InitialEDController {
             @RequestBody InitialEDCreateRequestDTO requestDTO
     ) throws ED807NotFoundException {
         return initialEDService.createInitialEdByEd807Uuid(ed807Uuid, requestDTO);
+    }
+
+    @DeleteMapping("/initialEd/{uuid}")
+    public void deleteInitialED(@PathVariable("uuid") UUID uuid)
+            throws InitialEDNotFoundException {
+        initialEDService.deleteInitialED(uuid);
     }
 }

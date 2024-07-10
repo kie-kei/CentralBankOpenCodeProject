@@ -10,8 +10,10 @@ import ru.bluewater.centralbankrestapi.api.dto.response.read.PartInfoGetResponse
 import ru.bluewater.centralbankrestapi.api.dto.response.update.PartInfoUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.PartInfoNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.ParticipantInfoNotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.entity.PartInfoEntity;
+import ru.bluewater.centralbankrestsrc.entity.ParticipantInfoEntity;
 import ru.bluewater.centralbankrestsrc.mapper.PartInfoEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.PartInfoRepository;
 import ru.bluewater.centralbankrestsrc.respository.ED807Repository;
@@ -56,5 +58,13 @@ public class PartInfoService {
 
         return partInfoEntityMapper.toUpdateResponse(partInfoRepository.save(partInfoEntity));
 
+    }
+
+    @Transactional
+    public void deletePartInfo(UUID uuid) throws PartInfoNotFoundException {
+        PartInfoEntity partInfo = partInfoRepository.findById(uuid)
+                .orElseThrow(() -> new PartInfoNotFoundException(uuid));
+
+        partInfoRepository.delete(partInfo);
     }
 }

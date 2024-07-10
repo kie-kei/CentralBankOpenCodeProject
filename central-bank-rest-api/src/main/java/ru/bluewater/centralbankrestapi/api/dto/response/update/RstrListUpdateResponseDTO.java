@@ -3,6 +3,7 @@ package ru.bluewater.centralbankrestapi.api.dto.response.update;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -11,5 +12,5 @@ import java.util.UUID;
 public class RstrListUpdateResponseDTO {
     private UUID uuid;
     private String rstr;
-    private Date rstrDate;
+    private LocalDate rstrDate;
 }

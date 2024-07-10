@@ -12,8 +12,11 @@ import ru.bluewater.centralbankrestapi.api.dto.response.read.AccRstrListGetRespo
 import ru.bluewater.centralbankrestapi.api.dto.response.update.AccRstrListUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.AccRstrListNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.AccountsNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.AccRstrListEntity;
 import ru.bluewater.centralbankrestsrc.entity.AccountsEntity;
+import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
+import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.mapper.AccRstrListEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.AccRstrListRepository;
 import ru.bluewater.centralbankrestsrc.respository.AccountsRepository;
@@ -76,5 +79,18 @@ public class AccRstrListService {
         return new AccRstrListListResponseDTO(
                 accRstrListMapper.toListResponse(accRstrListEntityList)
         );
+    }
+
+    @Transactional
+    public void deleteAccRstrList(UUID uuid) throws AccRstrListNotFoundException {
+        AccRstrListEntity accRstrListEntity = accRstrListRepository.findById(uuid)
+                .orElseThrow(() -> new AccRstrListNotFoundException(uuid));
+
+        AccountsEntity accounts = accountsRepository.findByAccRstrList(accRstrListEntity);
+        if (accounts != null) {
+            accounts.getAccRstrList().remove(accRstrListEntity);
+            accountsRepository.save(accounts);
+        }
+        accRstrListRepository.delete(accRstrListEntity);
     }
 }

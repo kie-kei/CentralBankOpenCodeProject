@@ -10,8 +10,11 @@ import ru.bluewater.centralbankrestapi.api.dto.response.list.SWBICSListResponseD
 import ru.bluewater.centralbankrestapi.api.dto.response.read.SWBICSGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.SWBICSUpdateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
+import ru.bluewater.centralbankrestapi.api.exception.RstrListNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.SWBICSNotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
+import ru.bluewater.centralbankrestsrc.entity.ParticipantInfoEntity;
+import ru.bluewater.centralbankrestsrc.entity.RstrListEntity;
 import ru.bluewater.centralbankrestsrc.entity.SWBICSEntity;
 import ru.bluewater.centralbankrestsrc.mapper.SWBICSEntityMapper;
 import ru.bluewater.centralbankrestsrc.respository.BICDirectoryEntryRepository;
@@ -75,5 +78,18 @@ public class SWBICSService {
             return new SWBICSListResponseDTO();
 
         return new SWBICSListResponseDTO(swbicsEntityMapper.toList(swbicsEntityList));
+    }
+
+    @Transactional
+    public void deleteSWBICS(UUID uuid) throws SWBICSNotFoundException {
+        SWBICSEntity swbics = swbicsRepository.findById(uuid)
+                .orElseThrow(() -> new SWBICSNotFoundException(uuid));
+
+        BICDirectoryEntryEntity bicDirectoryEntryEntity = bicDirectoryEntryRepository.findBySwbics(swbics);
+        if (bicDirectoryEntryEntity != null) {
+            bicDirectoryEntryEntity.getSwbics().remove(swbics);
+            bicDirectoryEntryRepository.save(bicDirectoryEntryEntity);
+        }
+        swbicsRepository.delete(swbics);
     }
 }

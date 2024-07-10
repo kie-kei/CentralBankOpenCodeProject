@@ -49,4 +49,10 @@ public class AccRstrListControllerImpl {
     ) throws AccountsNotFoundException {
         return accRstrListService.createAccRstrList(uuid, requestDTO);
     }
+
+    @DeleteMapping("/accRstrList/{acc_rstr_list_uuid}")
+    public void deleteAccRstrList(@PathVariable("acc_rstr_list_uuid") UUID uuid)
+            throws AccRstrListNotFoundException {
+        accRstrListService.deleteAccRstrList(uuid);
+    }
 }

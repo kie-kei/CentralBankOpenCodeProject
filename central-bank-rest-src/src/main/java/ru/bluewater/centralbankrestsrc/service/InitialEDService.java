@@ -8,8 +8,11 @@ import ru.bluewater.centralbankrestapi.api.dto.request.update.InitialEDUpdateReq
 import ru.bluewater.centralbankrestapi.api.dto.response.create.InitialEDCreateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.InitialEDGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.InitialEDUpdateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.exception.AccRstrListNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.InitialEDNotFoundException;
+import ru.bluewater.centralbankrestsrc.entity.AccRstrListEntity;
+import ru.bluewater.centralbankrestsrc.entity.AccountsEntity;
 import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.entity.InitialEDEntity;
 import ru.bluewater.centralbankrestsrc.mapper.InitialEDEntityMapper;
@@ -54,5 +57,13 @@ public class InitialEDService {
 
         return initialEDEntityMapper.toUpdateResponse(initialEDRepository.save(initialEDEntity));
 
+    }
+
+    @Transactional
+    public void deleteInitialED(UUID uuid) throws InitialEDNotFoundException {
+        InitialEDEntity initialEDEntity = initialEDRepository.findById(uuid)
+                .orElseThrow(() -> new InitialEDNotFoundException(uuid));
+
+        initialEDRepository.delete(initialEDEntity);
     }
 }

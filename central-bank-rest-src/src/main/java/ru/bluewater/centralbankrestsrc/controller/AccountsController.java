@@ -50,4 +50,10 @@ public class AccountsController {
     ) throws BicDirectoryEntryNotFoundException {
         return accountsService.createAccounts(uuid, requestDTO);
     }
+
+    @DeleteMapping("/accounts/{accounts_uuid}")
+    public void deleteAccounts(@PathVariable("accounts_uuid") UUID uuid)
+            throws AccountsNotFoundException {
+        accountsService.deleteAccounts(uuid);
+    }
 }

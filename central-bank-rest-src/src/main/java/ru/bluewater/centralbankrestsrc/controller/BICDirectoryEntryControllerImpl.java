@@ -73,7 +73,7 @@ public class BICDirectoryEntryControllerImpl  { // implements BICDirectoryEntryC
         bicDirectoryEntryService.deleteBicDirectoryEntry(uuid);
     }
     @PutMapping("/bicDirectoryEntry")
-    public List<BICDirectoryEntryResponseDTO> updateFullBicDirectoryEntry(@RequestBody List<BicDirectoryEntryFullUpdateRequestDTO> requestDTO) {
+    public BICDirectoryEntryFullResponseDTO updateFullBicDirectoryEntry(@RequestBody List<BicDirectoryEntryFullUpdateRequestDTO> requestDTO) {
         return bicDirectoryEntryService.updateFullBicDirectoryEntry(requestDTO);
     }
 

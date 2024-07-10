@@ -9,8 +9,11 @@ import ru.bluewater.centralbankrestapi.api.dto.response.create.RstrListCreateRes
 import ru.bluewater.centralbankrestapi.api.dto.response.list.RstrListListResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.RstrListGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.RstrListUpdateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.ParticipantInfoNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.RstrListNotFoundException;
+import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
+import ru.bluewater.centralbankrestsrc.entity.ED807Entity;
 import ru.bluewater.centralbankrestsrc.entity.ParticipantInfoEntity;
 import ru.bluewater.centralbankrestsrc.entity.RstrListEntity;
 import ru.bluewater.centralbankrestsrc.mapper.RstrListEntityMapper;
@@ -70,5 +73,18 @@ public class RstrListService {
                 new RstrListNotFoundException(uuid)
         );
         return rstrListEntityMapper.toGetResponse(rstrList);
+    }
+
+    @Transactional
+    public void deleteRstrList(UUID uuid) throws RstrListNotFoundException {
+        RstrListEntity rstrList = rstrListRepository.findById(uuid)
+                .orElseThrow(() -> new RstrListNotFoundException(uuid));
+
+        ParticipantInfoEntity participantInfoEntity = participantInfoRepository.findByRstrList(rstrList);
+        if (participantInfoEntity != null) {
+            participantInfoEntity.getRstrList().remove(rstrList);
+            participantInfoRepository.save(participantInfoEntity);
+        }
+        rstrListRepository.delete(rstrList);
     }
 }

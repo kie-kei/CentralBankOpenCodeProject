@@ -8,6 +8,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.create.RstrListCreateRes
 import ru.bluewater.centralbankrestapi.api.dto.response.list.RstrListListResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.RstrListGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.RstrListUpdateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.exception.PartInfoNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.ParticipantInfoNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.RstrListNotFoundException;
 import ru.bluewater.centralbankrestsrc.service.RstrListService;
@@ -49,5 +50,11 @@ public class RstrListControllerImpl {
             @RequestBody RstrListUpdateRequestDTO requestDTO
     ) throws RstrListNotFoundException {
         return rstrListService.updateRstrList(uuid, requestDTO);
+    }
+
+    @DeleteMapping("/rstrList/{uuid}")
+    public void deleteRstrList(@PathVariable("uuid") UUID uuid)
+            throws RstrListNotFoundException {
+        rstrListService.deleteRstrList(uuid);
     }
 }

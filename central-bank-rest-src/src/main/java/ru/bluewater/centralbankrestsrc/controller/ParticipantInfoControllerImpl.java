@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.ParticipantInfoUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.ParticipantInfoGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.ParticipantInfoUpdateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.exception.InitialEDNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.ParticipantInfoNotFoundException;
 import ru.bluewater.centralbankrestsrc.service.ParticipantInfoService;
 

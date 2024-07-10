@@ -12,6 +12,7 @@ import ru.bluewater.centralbankrestapi.api.dto.response.full.BICDirectoryEntryFu
 import ru.bluewater.centralbankrestapi.api.dto.response.list.BICDirectoryEntryListResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.read.BICDirectoryEntryGetResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.update.BicDirectoryEntryUpdateResponseDTO;
+import ru.bluewater.centralbankrestapi.api.exception.AccountsNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.BicDirectoryEntryNotFoundException;
 import ru.bluewater.centralbankrestapi.api.exception.ED807NotFoundException;
 import ru.bluewater.centralbankrestsrc.entity.BICDirectoryEntryEntity;
@@ -96,16 +97,20 @@ public class BICDirectoryEntryService {
         return bicDirectoryEntryEntityMapper.toGetResponse(entity);
     }
 
-
     @Transactional
     public void deleteBicDirectoryEntry(UUID uuid) throws BicDirectoryEntryNotFoundException {
         BICDirectoryEntryEntity bicDirectoryEntry = bicDirectoryEntryRepository.findById(uuid)
                 .orElseThrow(() -> new BicDirectoryEntryNotFoundException(uuid));
 
+        ED807Entity ed807Entity = ed807Repository.findByBicDirectoryEntry(bicDirectoryEntry);
+        if (ed807Entity != null) {
+            ed807Entity.getBicDirectoryEntry().remove(bicDirectoryEntry);
+            ed807Repository.save(ed807Entity);
+        }
         bicDirectoryEntryRepository.delete(bicDirectoryEntry);
     }
     @Transactional
-    public List<BICDirectoryEntryResponseDTO> updateFullBicDirectoryEntry(
+    public BICDirectoryEntryFullResponseDTO updateFullBicDirectoryEntry(
             List<BicDirectoryEntryFullUpdateRequestDTO> BicDirectoryEntryDTOs) {
 
         List<BICDirectoryEntryEntity> bicDirectoryEntryEntityList = new ArrayList<>();
@@ -139,7 +144,7 @@ public class BICDirectoryEntryService {
 
         });
 
-        return bicDirectoryEntryEntityMapper
-                .toFullListResponse(bicDirectoryEntryRepository.saveAll(bicDirectoryEntryEntityList));
+        return new BICDirectoryEntryFullResponseDTO(
+                bicDirectoryEntryEntityMapper.toFullListResponse(bicDirectoryEntryRepository.saveAll(bicDirectoryEntryEntityList)));
     }
 }

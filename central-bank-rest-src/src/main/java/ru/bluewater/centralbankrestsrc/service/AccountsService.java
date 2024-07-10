@@ -78,14 +78,12 @@ public class AccountsService {
 
     @Transactional
     public void deleteAccounts(UUID uuid) throws AccountsNotFoundException {
-        accountsRepository.findById(uuid).ifPresent(account -> {
-            BICDirectoryEntryEntity bicDirectoryEntry = bicDirectoryEntryRepository.findByAccount(account);
-            if (bicDirectoryEntry != null) {
-                bicDirectoryEntry.getAccounts().remove(account);
-                bicDirectoryEntryRepository.save(bicDirectoryEntry);
-            }
-            accountsRepository.delete(account);
-        });
-//        accountsRepository.deleteById(uuid);
+        AccountsEntity account = accountsRepository.findById(uuid).orElseThrow(AccountsNotFoundException::new);
+        BICDirectoryEntryEntity bicDirectoryEntry = bicDirectoryEntryRepository.findByAccount(account);
+        if (bicDirectoryEntry != null) {
+            bicDirectoryEntry.getAccounts().remove(account);
+            bicDirectoryEntryRepository.save(bicDirectoryEntry);
+        }
+        accountsRepository.delete(account);
     }
 }
