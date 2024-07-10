@@ -8,5 +8,5 @@ import java.util.List;
 @Getter
 @Setter
 public class BICDirectoryEntryFullUpdateRequestListDTO {
-    List<BicDirectoryEntryFullUpdateRequestDTO> bicDirectoryEntryFullUpdateRequestDTOList;
+    private List<BicDirectoryEntryFullUpdateRequestDTO> bicDirectoryEntryList;
 }

@@ -9,11 +9,11 @@ import java.util.List;
 @Getter
 @Setter
 public class BICDirectoryEntryFullResponseDTO {
-    private List<BICDirectoryEntryResponseDTO> bicDirectoryEntryGetResponseDTOS;
+    private List<BICDirectoryEntryResponseDTO> bicDirectoryEntryList;
     public BICDirectoryEntryFullResponseDTO(){}
     public BICDirectoryEntryFullResponseDTO(
-            List<BICDirectoryEntryResponseDTO> bicDirectoryEntryGetResponseDTOS
+            List<BICDirectoryEntryResponseDTO> bicDirectoryEntryList
     ){
-        this.bicDirectoryEntryGetResponseDTOS = bicDirectoryEntryGetResponseDTOS;
+        this.bicDirectoryEntryList = bicDirectoryEntryList;
     }
 }

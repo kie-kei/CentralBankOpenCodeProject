@@ -1,6 +1,5 @@
 package ru.bluewater.centralbankrestsrc.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import ru.bluewater.centralbankrestapi.api.dto.request.create.BICDirectoryEntryC
 import ru.bluewater.centralbankrestapi.api.dto.request.update.BICDirectoryEntryFullUpdateRequestListDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.BicDirectoryEntryFullUpdateRequestDTO;
 import ru.bluewater.centralbankrestapi.api.dto.request.update.BicDirectoryEntryUpdateRequestDTO;
-import ru.bluewater.centralbankrestapi.api.dto.response.BICDirectoryEntryResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.create.BICDirectoryEntryCreateResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.full.BICDirectoryEntryFullResponseDTO;
 import ru.bluewater.centralbankrestapi.api.dto.response.list.BICDirectoryEntryListResponseDTO;
@@ -122,7 +120,7 @@ public class BICDirectoryEntryService {
         List<BICDirectoryEntryEntity> bicDirectoryEntryEntityList = new ArrayList<>();
 
         for (BicDirectoryEntryFullUpdateRequestDTO bicDirectoryEntryDTO
-                : BicDirectoryEntryDTOs.getBicDirectoryEntryFullUpdateRequestDTOList()) {
+                : BicDirectoryEntryDTOs.getBicDirectoryEntryList()) {
 
             BICDirectoryEntryEntity bicDirectoryEntryEntity = bicDirectoryEntryRepository
                     .findById(bicDirectoryEntryDTO.getUuid())

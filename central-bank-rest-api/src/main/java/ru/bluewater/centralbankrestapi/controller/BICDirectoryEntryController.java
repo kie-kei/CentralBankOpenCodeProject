@@ -140,6 +140,6 @@ public interface BICDirectoryEntryController {
     BICDirectoryEntryFullResponseDTO updateFullBicDirectoryEntry(
             @RequestBody(description = "BIC directory entry full update request",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BICDirectoryEntryFullResponseDTO.class)))
+                            schema = @Schema(implementation = BICDirectoryEntryFullUpdateRequestListDTO.class)))
             BICDirectoryEntryFullUpdateRequestListDTO requestDTO);
 }
