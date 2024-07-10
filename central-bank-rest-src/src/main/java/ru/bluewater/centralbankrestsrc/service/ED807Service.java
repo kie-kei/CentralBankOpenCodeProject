@@ -77,10 +77,6 @@ public class ED807Service {
 
     }
 
-//    public ED807ResponseDTO findEd807Full(UUID uuid) throws ED807NotFoundException {
-//        ED807Entity ed807Entity = ed807Repository.findById(uuid)
-//                .orElseThrow(() -> new ED807NotFoundException(uuid));
-//    }
     public ED807GetResponseDTO findEd807ByUuid(UUID uuid) throws ED807NotFoundException{
         ED807Entity ed807Entity = ed807Repository.findById(uuid).orElseThrow(() -> new ED807NotFoundException(uuid));
         return ed807EntityMapper.toGetResponse(ed807Entity);

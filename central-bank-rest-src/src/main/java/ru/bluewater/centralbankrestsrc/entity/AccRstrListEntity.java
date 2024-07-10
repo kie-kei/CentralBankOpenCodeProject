@@ -14,7 +14,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@RepositoryRestResource(exported = false)
 @Data
 @Builder
 @AllArgsConstructor

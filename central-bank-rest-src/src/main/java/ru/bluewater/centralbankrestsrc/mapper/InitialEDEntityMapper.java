@@ -25,6 +25,5 @@ public interface InitialEDEntityMapper {
     InitialEDGetResponseDTO toGetResponse(InitialEDEntity entity);
     InitialEDUpdateResponseDTO toUpdateResponse(InitialEDEntity entity);
 
-//    @Mapping(target = "uuid", ignore = true)
-//    InitialEDEntity fromCreateRequestToEntity(InitialEDCreateRequestDTO requestDTO);
+
 }

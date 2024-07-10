@@ -15,7 +15,6 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "bicDirectoryEntry")
 @Entity(name = "participant_info")
 public class ParticipantInfoEntity {
     @Id

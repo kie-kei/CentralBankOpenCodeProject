@@ -10,12 +10,6 @@ import java.util.UUID;
 @RepositoryRestResource(exported = false)
 public interface ED807Repository extends JpaRepository<ED807Entity, UUID> {
 
-//    @Query("update ed807 ed set ed.createdAt = :createdAt, ed.createdBy = :createdBy where ed.uuid = :uuid")
-//    void createAuditFields(
-//            @Param("uuid") UUID uuid,
-//            @Param("createdAt") LocalDateTime createdAt,
-//            @Param("createdBy") String createdBy
-//    );
     @Query("SELECT b FROM ed807 b JOIN b.bicDirectoryEntry a WHERE a = :bicDirectoryEntry")
     ED807Entity findByBicDirectoryEntry(BICDirectoryEntryEntity bicDirectoryEntry);
 }

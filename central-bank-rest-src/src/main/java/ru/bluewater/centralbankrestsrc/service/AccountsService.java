@@ -25,7 +25,6 @@ import java.util.UUID;
 public class AccountsService {
     private final AccountsRepository accountsRepository;
     private final AccountsEntityMapper accountsEntityMapper;
-//    private final AccRstrListEntityMapper accRstrListEntityMapper;
     private final BICDirectoryEntryRepository bicDirectoryEntryRepository;
 
     @Transactional

@@ -13,7 +13,6 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Entity(name = "swbics")
 public class SWBICSEntity {
     @Id

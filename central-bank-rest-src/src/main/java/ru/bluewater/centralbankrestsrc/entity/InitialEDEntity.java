@@ -12,7 +12,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@EqualsAndHashCode(exclude = "ed807Entity")
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "initial_ed")
